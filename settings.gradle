@@ -1,0 +1,4 @@
+rootProject.name = 'bear-spendings'
+
+include 'spring-app'
+include 'angular-ui'
