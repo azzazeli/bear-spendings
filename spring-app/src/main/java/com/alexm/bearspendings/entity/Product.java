@@ -19,6 +19,7 @@ public class Product {
     private String name;
     private String comment;
     //todo: list of optional product properties
+    //todo product builder
 
     public Product() {
     }
