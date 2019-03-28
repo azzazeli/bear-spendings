@@ -16,13 +16,12 @@ repositories {
 dependencies {
 	implementation (project(':angular-ui'))
 	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation('org.springframework.boot:spring-boot-starter-web')
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 
 	runtimeOnly 'com.microsoft.sqlserver:mssql-jdbc:7.0.0.jre8'
 
-	testImplementation ('org.springframework.boot:spring-boot-starter-test') {
-		exclude group: 'junit', module: 'junit'
-	}
+	testImplementation ('org.springframework.boot:spring-boot-starter-test')
 	
 	testImplementation 'org.springframework.security:spring-security-test'
 	testImplementation 'org.junit.jupiter:junit-jupiter-engine:5.3.2'
