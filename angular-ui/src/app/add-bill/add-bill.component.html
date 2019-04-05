@@ -1,3 +1,16 @@
-<p>
-  add-bill works!
-</p>
+<div class="container">
+  <div class="row">
+    <div class="col-xs-12 col-sm-10 col-md-8 col-sm-offset-1 col-md-offset2">
+      <form [formGroup]="addBillForm" (ngSubmit)="onAddBill()">
+        <div class="form-group">
+          <label>Store:</label>
+          <select class="form-control" formControlName="store">
+            <option value="" [selected]="true">Please select a store</option>
+            <option *ngFor="let store of stores" [value]="store">{{store}}</option>
+          </select>
+        </div>
+        <button class="btn btn-primary" type="submit">Add Bill</button>
+      </form>
+    </div>
+  </div>
+</div>
