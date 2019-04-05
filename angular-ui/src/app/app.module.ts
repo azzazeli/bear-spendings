@@ -8,6 +8,8 @@ import { AddBillComponent } from './add-bill/add-bill.component';
 import { HeaderComponent } from './header/header.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { LoggerModule, NgxLoggerLevel } from 'ngx-logger';
+import { HttpClientModule } from '@angular/common/http';
+import { StoreService } from './store.service';
 
 @NgModule({
   declarations: [
@@ -20,9 +22,10 @@ import { LoggerModule, NgxLoggerLevel } from 'ngx-logger';
     BrowserModule,
     AppRoutingModule,
     ReactiveFormsModule,
+    HttpClientModule,
     LoggerModule.forRoot({level: NgxLoggerLevel.DEBUG} )
   ],
-  providers: [],
+  providers: [StoreService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
