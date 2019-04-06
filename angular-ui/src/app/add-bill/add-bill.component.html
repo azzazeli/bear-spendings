@@ -4,12 +4,15 @@
       <form [formGroup]="addBillForm" (ngSubmit)="onAddBill()">
         <div class="form-group">
           <label>Store:</label>
-          <select class="form-control" formControlName="store">
-            <option [value]="null" disabled="true">Please select a store</option>
+          <select class="form-control" formControlName="store" (change)="onStoreSelected()">
+            <option [value]="null" disabled="disabled">Please select a store</option>
             <option *ngFor="let store of stores" [value]="store.id">{{store.name}}</option>
           </select>
+          <span
+            *ngIf="!addBillForm.get('store').valid && addBillForm.get('store').touched"
+            class="help-block" style="color:#a94442">Please select a store!</span>
         </div>
-        <button class="btn btn-primary" type="submit">Add Bill</button>
+        <button class="btn btn-primary" type="submit" [disabled]="!addBillForm.valid">Add Bill</button>
       </form>
     </div>
   </div>

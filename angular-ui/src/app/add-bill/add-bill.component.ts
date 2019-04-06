@@ -27,8 +27,13 @@ export class AddBillComponent implements OnInit {
     });
   }
 
+  onStoreSelected() {
+    this.logger.debug('on store selected');
+  }
+
   onAddBill() {
     this.logger.debug("on add bill. addBillForm:", this.addBillForm );
+    // this.addBillForm.vali
   }
 
 }
