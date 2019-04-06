@@ -5,8 +5,8 @@
         <div class="form-group">
           <label>Store:</label>
           <select class="form-control" formControlName="store">
-            <option value="" [selected]="true">Please select a store</option>
-            <option *ngFor="let store of stores" [value]="store">{{store}}</option>
+            <option [value]="null" disabled="true">Please select a store</option>
+            <option *ngFor="let store of stores" [value]="store.id">{{store.name}}</option>
           </select>
         </div>
         <button class="btn btn-primary" type="submit">Add Bill</button>
