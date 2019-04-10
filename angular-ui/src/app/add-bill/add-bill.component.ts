@@ -1,8 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { NGXLogger } from 'ngx-logger';
-import { StoreService } from '../store.service';
+import { StoreService } from '../service/store.service';
 import { Store } from '../model/store.model';
+import { Product } from '../model/product.model';
+import { of, Observable } from 'rxjs';
+// import { of } from 'rxjs/internal/observable/of';
 
 @Component({
   selector: 'app-add-bill',
@@ -13,6 +16,7 @@ export class AddBillComponent implements OnInit {
 
   stores: Store[];
   addBillForm: FormGroup;
+  topStoreProducts: Observable<Product[]>;
 
   constructor(private logger: NGXLogger, private storeService: StoreService) { }
 
@@ -28,7 +32,9 @@ export class AddBillComponent implements OnInit {
   }
 
   onStoreSelected() {
-    this.logger.debug('on store selected');
+    const storeId: number = this.addBillForm.get('store').value;
+    this.logger.debug('on store selected. store id:' + storeId);
+    this.topStoreProducts = of([new Product(1, 'Chefir JLC 2.5%'), new Product(1, 'Chefir JLC 1.5%')])
   }
 
   onAddBill() {

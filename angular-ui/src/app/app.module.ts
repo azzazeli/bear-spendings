@@ -9,7 +9,7 @@ import { HeaderComponent } from './header/header.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { LoggerModule, NgxLoggerLevel } from 'ngx-logger';
 import { HttpClientModule } from '@angular/common/http';
-import { StoreService } from './store.service';
+import { StoreService } from './service/store.service';
 
 @NgModule({
   declarations: [

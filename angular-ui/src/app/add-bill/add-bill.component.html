@@ -3,14 +3,20 @@
     <div class="col-xs-12 col-sm-10 col-md-8 col-sm-offset-1 col-md-offset2">
       <form [formGroup]="addBillForm" (ngSubmit)="onAddBill()">
         <div class="form-group">
-          <label>Store:</label>
-          <select class="form-control" formControlName="store" (change)="onStoreSelected()">
+          <label for="store">Store:</label>
+          <select id="store" class="form-control" formControlName="store" (change)="onStoreSelected()">
             <option [value]="null" disabled="disabled">Please select a store</option>
             <option *ngFor="let store of stores" [value]="store.id">{{store.name}}</option>
           </select>
           <span
             *ngIf="!addBillForm.get('store').valid && addBillForm.get('store').touched"
             class="help-block" style="color:#a94442">Please select a store!</span>
+        </div>
+        <div class="form-group" *ngIf="addBillForm.get('store').valid">
+          <label>Top Store Products:</label>
+          <ul class="list-group">
+            <li *ngFor="let p of topStoreProducts | async" class="list-group-item">{{p.name}}</li>
+          </ul>
         </div>
         <button class="btn btn-primary" type="submit" [disabled]="!addBillForm.valid">Add Bill</button>
       </form>
