@@ -34,7 +34,8 @@ export class AddBillComponent implements OnInit {
   onStoreSelected() {
     const storeId: number = this.addBillForm.get('store').value;
     this.logger.debug('on store selected. store id:' + storeId);
-    this.topStoreProducts = of([new Product(1, 'Chefir JLC 2.5%'), new Product(1, 'Chefir JLC 1.5%')])
+    this.topStoreProducts = of([new Product(1, 'Chefir JLC 2.5%', 9.80),
+      new Product(1, 'Chefir JLC 1.5%', 7.85)]);
   }
 
   onAddBill() {

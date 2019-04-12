@@ -9,5 +9,6 @@ Simple app that monitor bear spendings.
      1. get top products from json
      2. display price on top products
      3. on top product select add to new form    
+     4. write test for form   
  4. test 'Add bill form'
 

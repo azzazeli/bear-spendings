@@ -15,8 +15,31 @@
         <div class="form-group" *ngIf="addBillForm.get('store').valid">
           <label>Top Store Products:</label>
           <ul class="list-group">
-            <li *ngFor="let p of topStoreProducts | async" class="list-group-item">{{p.name}}</li>
+            <li *ngFor="let p of topStoreProducts | async" class="list-group-item">{{p.name}} - {{p.price}} MDL</li>
           </ul>
+        </div>
+        <h4>Bill Item</h4>
+        <div class="form-group row">
+          <div class="col-xs-6">
+            <label for="bill-item-product">Product:</label>
+            <input id="bill-item-product" type="text" class="form-control">
+          </div>
+          <div class="col-xs-2">
+            <label for="bill-item-price">Price:</label>
+            <input id="bill-item-price" type="number" class="form-control">
+          </div>
+          <div class="col-xs-2">
+            <label for="bill-item-quantity">Quantity:</label>
+            <input id="bill-item-quantity" type="number" class="form-control" size="2">
+          </div>
+          <div class="col-xs-1">
+            <label for="add-to-bill-btn">&nbsp;</label>
+            <button type="button" class="btn btn-default btn-primary" aria-label="Bill Align"
+                    [disabled]="true"
+                    id="add-to-bill-btn">
+              <span class="btn-label glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
+            </button>
+          </div>
         </div>
         <button class="btn btn-primary" type="submit" [disabled]="!addBillForm.valid">Add Bill</button>
       </form>
