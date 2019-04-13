@@ -9,7 +9,7 @@ node {
 	download = true
 }
 
-jar.dependsOn 'npm_run_build'
+jar.dependsOn 'npm_run_build', 'npm_run_test-build'
 
 jar {
 	from 'dist/angular-ui' into 'static'
