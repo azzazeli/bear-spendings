@@ -11,4 +11,5 @@ Simple app that monitor bear spendings.
      3. on top product select add to new form    
      4. write test for form   
  4. test 'Add bill form'
-
+ 5. Fix one TODO
+ 6. run angular test in build 
