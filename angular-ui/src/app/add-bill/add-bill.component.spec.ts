@@ -46,8 +46,29 @@ describe('AddBillComponent', () => {
   it('on select item from top product populate bill item', () => {
     expect(component.topStoreProducts).toBeUndefined();
     fixture.detectChanges();
-    component.addBillForm.setValue({'store': '1'});
+    component.addBillForm.get('store').setValue(1);
     component.onStoreSelected();
     expect(component.topStoreProducts).toBeDefined();
+  });
+
+  it('on top product select populate bill item form', () => {
+    //given
+    let addToBillBtn = fixture.nativeElement.querySelector('#add-to-bill-btn');
+    fixture.detectChanges();
+    expect(addToBillBtn.disabled).toBe(true);
+    component.addBillForm.get('store').setValue(1);
+    component.onStoreSelected();
+
+    //when
+    component.onTopProductSelected(2);
+    fixture.detectChanges();
+
+    //then
+    expect(component.addBillForm.get('new-bill-item.product-id').value).toEqual(2);
+    expect(component.addBillForm.get('new-bill-item.product-name').value).toEqual('Chefir JLC 1.5%');
+    expect(component.addBillForm.get('new-bill-item.quantity').value).toEqual(1);
+    expect(component.addBillForm.get('new-bill-item.price').value).toEqual(7.85);
+
+    expect(addToBillBtn.disabled).toBe(false);
   })
 });
