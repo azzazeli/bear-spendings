@@ -9,7 +9,19 @@ node {
 	download = true
 }
 
-jar.dependsOn 'npm_run_build', 'npm_run_test-build'
+private dependsOnTasks () {
+  def dependsOnTasks = ['npm_run_build']
+  println '------------------'
+  println System.getProperty('skip.ui.test');
+  println '------------------'
+
+  if (!Boolean.valueOf(System.getProperty('skip.ui.test'))) {
+    dependsOnTasks.add('npm_run_test-build')
+  }
+  dependsOnTasks
+}
+
+jar.dependsOn dependsOnTasks()
 
 jar {
 	from 'dist/angular-ui' into 'static'

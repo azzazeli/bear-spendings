@@ -3,8 +3,9 @@ package com.alexm.bearspendings.entity;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.Date;
-import java.util.HashSet;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import java.time.LocalDate;
 import java.util.Set;
 
 /**
@@ -12,18 +13,24 @@ import java.util.Set;
  */
 @Entity
 @NoArgsConstructor
+@AllArgsConstructor
 @Getter @Setter
 @ToString
 @EqualsAndHashCode(of = {"id"})
+@Builder
 public class Bill {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    private Date orderDate;
-    @ManyToOne
+    @NotNull
+    private LocalDate orderDate;
+    @NotNull
+    @OneToOne
     private Store store;
 
+    @NotEmpty
+    @Singular
     @OneToMany
-    @JoinColumn(name = "bill_item_id")
-    Set<BillItem> items = new HashSet<>();
+    @JoinColumn(name = "bill_id")
+    Set<BillItem> items;
 }

@@ -13,6 +13,8 @@ import javax.persistence.Id;
 @Entity
 @Setter @Getter @ToString @NoArgsConstructor
 @EqualsAndHashCode(of = {"id"})
+@AllArgsConstructor
+@Builder
 public class Store {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
