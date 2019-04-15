@@ -21,7 +21,7 @@
                 class="list-group-item">{{p.name}} - {{p.price}} MDL</li>
           </ul>
         </div>
-        <h4>Bill Item</h4>
+        <h4>New Bill Item</h4>
         <div class="form-group row" formGroupName="new-bill-item">
           <div class="col-xs-6">
             <label for="bill-item-product">Product:</label>
@@ -40,11 +40,31 @@
             <label for="add-to-bill-btn">&nbsp;</label>
             <button type="button" class="btn btn-default btn-primary" aria-label="Bill Align"
                     [disabled]="!addBillForm.get('new-bill-item').valid"
+                    (click)="onAddBillItem()"
                     id="add-to-bill-btn">
               <span class="btn-label glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
             </button>
           </div>
         </div>
+        <table class="table table-hover" formArrayName="bill-items">
+          <caption>Bill Items</caption>
+          <thead>
+          <tr>
+            <th>#</th>
+            <th>Product Name</th>
+            <th>Price</th>
+            <th>Quantity</th>
+          </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let bill-item of billItemsControls; let i = index">
+              <td>{{i}}</td>
+              <td>{{billItemsControls[i].get('product-name').value}}</td>
+              <td>{{billItemsControls[i].get('price').value}}</td>
+              <td>{{billItemsControls[i].get('quantity').value}}</td>
+            </tr>
+          </tbody>
+        </table>
         <button class="btn btn-primary" type="submit" [disabled]="!addBillForm.valid">Add Bill</button>
       </form>
     </div>

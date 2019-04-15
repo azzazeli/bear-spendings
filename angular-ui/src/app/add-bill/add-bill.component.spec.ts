@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { AddBillComponent } from './add-bill.component';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormArray, ReactiveFormsModule } from '@angular/forms';
 import { LoggerModule, NgxLoggerLevel } from 'ngx-logger';
 import { StoreService } from '../service/store.service';
 import { Store } from '../model/store.model';
@@ -14,13 +14,13 @@ describe('AddBillComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [ReactiveFormsModule, LoggerModule.forRoot({level: NgxLoggerLevel.DEBUG} )],
+      imports: [ReactiveFormsModule, LoggerModule.forRoot({level: NgxLoggerLevel.DEBUG})],
       providers: [
         {provide: StoreService, useValue: jasmine.createSpyObj('StoreService', ['getStores'])}
       ],
-      declarations: [ AddBillComponent ]
+      declarations: [AddBillComponent]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {
@@ -40,7 +40,7 @@ describe('AddBillComponent', () => {
     fixture.detectChanges();
     expect(component.stores).toBeDefined();
     expect(component.addBillForm).toBeDefined();
-    expect(component.addBillForm.contains("store")).toEqual(true);
+    expect(component.addBillForm.contains('store')).toEqual(true);
   });
 
   it('on select item from top product populate bill item', () => {
@@ -70,5 +70,25 @@ describe('AddBillComponent', () => {
     expect(component.addBillForm.get('new-bill-item.price').value).toEqual(7.85);
 
     expect(addToBillBtn.disabled).toBe(false);
-  })
+  });
+
+  it('on add bill item from top store products', () => {
+    //given
+    fixture.detectChanges();
+    expect((<FormArray>component.addBillForm.get('bill-items')).length).toBe(0);
+    component.addBillForm.get('new-bill-item').setValue({
+      'product-id': 1,
+      'product-name': 'Chefir JLC 2.5%',
+      'quantity': 2,
+      'price': 7.85
+    });
+    //when
+    component.onAddBillItem();
+    //then
+    expect((<FormArray>component.addBillForm.get('bill-items')).length).toBe(1);
+    expect((<FormArray>component.addBillForm.get('bill-items')).at(0).get('product-id').value).toBe(1);
+    expect((<FormArray>component.addBillForm.get('bill-items')).at(0).get('quantity').value).toBe(2);
+    expect((<FormArray>component.addBillForm.get('bill-items')).at(0).get('product-name').value).toBe('Chefir JLC 2.5%');
+    expect((<FormArray>component.addBillForm.get('bill-items')).at(0).get('price').value).toBe(7.85);
+  });
 });
