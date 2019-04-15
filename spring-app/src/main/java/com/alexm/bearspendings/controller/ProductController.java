@@ -17,6 +17,6 @@ public class ProductController {
 
     @GetMapping("/products")
     public List<Product> products() {
-        return Stream.of(new Product("Lapte")).collect(Collectors.toList());
+        return Stream.of(Product.builder().name("Lapte").build()).collect(Collectors.toList());
     }
 }

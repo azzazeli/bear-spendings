@@ -2,7 +2,7 @@ package com.alexm.bearspendings.service;
 
 import com.alexm.bearspendings.entity.Product;
 import com.alexm.bearspendings.repository.ProductRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,6 +11,7 @@ import java.util.List;
  * @author AlexM
  */
 @Service
+@Slf4j()
 public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository repository;
@@ -21,6 +22,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<Product> products() {
+        log.debug("all products");
         return repository.findAll();
     }
 
