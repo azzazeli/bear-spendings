@@ -12,6 +12,15 @@ describe('AddBillComponent', () => {
   let fixture: ComponentFixture<AddBillComponent>;
   let storeServiceSpy: jasmine.SpyObj<StoreService>;
 
+  function sampleProduct(id: number) {
+    return {
+      'product-id': id,
+      'product-name': 'Chefir JLC 2.5%',
+      'quantity': 2,
+      'price': 7.85
+    };
+  }
+
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [ReactiveFormsModule, LoggerModule.forRoot({level: NgxLoggerLevel.DEBUG})],
@@ -76,12 +85,7 @@ describe('AddBillComponent', () => {
     //given
     fixture.detectChanges();
     expect((<FormArray>component.addBillForm.get('bill-items')).length).toBe(0);
-    component.addBillForm.get('new-bill-item').setValue({
-      'product-id': 1,
-      'product-name': 'Chefir JLC 2.5%',
-      'quantity': 2,
-      'price': 7.85
-    });
+    component.addBillForm.get('new-bill-item').setValue(sampleProduct(1));
     //when
     component.onAddBillItem();
     //then
@@ -90,5 +94,32 @@ describe('AddBillComponent', () => {
     expect((<FormArray>component.addBillForm.get('bill-items')).at(0).get('quantity').value).toBe(2);
     expect((<FormArray>component.addBillForm.get('bill-items')).at(0).get('product-name').value).toBe('Chefir JLC 2.5%');
     expect((<FormArray>component.addBillForm.get('bill-items')).at(0).get('price').value).toBe(7.85);
+
+    //given
+    component.addBillForm.get('new-bill-item').setValue(sampleProduct(2));
+    //when
+    component.onAddBillItem();
+    //then
+    expect((<FormArray>component.addBillForm.get('bill-items')).at(1).get('product-id').value).toBe(2)
   });
+
+  it(' on delete bill item - remove item from array form', ()=> {
+    //given
+    fixture.detectChanges();
+    component.addBillForm.get('new-bill-item').setValue(sampleProduct(1));
+    component.onAddBillItem();
+    component.addBillForm.get('new-bill-item').setValue(sampleProduct(2));
+    component.onAddBillItem();
+    //when
+    component.onDeleteBillItem(0);
+    //then
+    let billItems = <FormArray>component.addBillForm.get('bill-items');
+    expect((<FormArray>component.addBillForm.get('bill-items')).length).toBe(1);
+    expect((<FormArray>component.addBillForm.get('bill-items')).at(0).get('product-id').value).toBe(2);
+  });
+
+
+  it('on add bill item clean new-bill item form, and disable add bill item button', ()=> {
+    //todo; implement me:)
+  })
 });

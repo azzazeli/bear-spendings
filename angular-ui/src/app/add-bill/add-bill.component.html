@@ -38,7 +38,7 @@
           </div>
           <div class="col-xs-1">
             <label for="add-to-bill-btn">&nbsp;</label>
-            <button type="button" class="btn btn-default btn-primary" aria-label="Bill Align"
+            <button type="button" class="btn btn-default btn-success" aria-label="Bill Align"
                     [disabled]="!addBillForm.get('new-bill-item').valid"
                     (click)="onAddBillItem()"
                     id="add-to-bill-btn">
@@ -54,14 +54,21 @@
             <th>Product Name</th>
             <th>Price</th>
             <th>Quantity</th>
+            <th></th>
           </tr>
           </thead>
           <tbody>
             <tr *ngFor="let bill-item of billItemsControls; let i = index">
-              <td>{{i}}</td>
+              <td>{{i+1}}</td>
               <td>{{billItemsControls[i].get('product-name').value}}</td>
               <td>{{billItemsControls[i].get('price').value}}</td>
               <td>{{billItemsControls[i].get('quantity').value}}</td>
+              <td>
+                <button class="btn btn-danger" type="button"
+                        (click)="onDeleteBillItem(i)">
+                  <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                </button>
+              </td>
             </tr>
           </tbody>
         </table>

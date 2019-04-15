@@ -37,7 +37,7 @@ export class AddBillComponent implements OnInit {
   }
 
   get billItemsControls(): AbstractControl[] {
-    return (<FormArray>this.addBillForm.get('bill-items')).controls;
+    return this.billItems().controls;
   }
 
   onStoreSelected() {
@@ -61,7 +61,7 @@ export class AddBillComponent implements OnInit {
 
   onAddBillItem() {
     this.logger.debug('On add bill item: ', JSON.stringify(this.addBillForm.get('new-bill-item').value));
-    (<FormArray>this.addBillForm.get('bill-items')).push(new FormGroup(
+    this.billItems().push(new FormGroup(
       {
         'product-id': new FormControl(this.addBillForm.get('new-bill-item.product-id').value),
         'product-name': new FormControl(this.addBillForm.get('new-bill-item.product-name').value),
@@ -71,9 +71,19 @@ export class AddBillComponent implements OnInit {
     ));
   }
 
+  onDeleteBillItem(index: number) {
+    this.logger.debug('On delete bill item at index:', index);
+    this.billItems().removeAt(index);
+  }
+
   onAddBill() {
     this.logger.debug("On add bill. addBillForm:", this.addBillForm );
     // this.addBillForm.vali
   }
+
+  private billItems(): FormArray {
+    return <FormArray>this.addBillForm.get('bill-items');
+  }
+
 
 }
