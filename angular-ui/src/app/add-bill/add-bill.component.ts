@@ -11,9 +11,9 @@ import { Product } from '../model/product.model';
   styleUrls: ['./add-bill.component.css']
 })
 export class AddBillComponent implements OnInit {
-
   stores: Store[];
   addBillForm: FormGroup;
+  newBillItemForm: FormGroup;
   topStoreProducts: Product[];
   selectedProductId: number;
 
@@ -26,13 +26,13 @@ export class AddBillComponent implements OnInit {
     });
     this.addBillForm = new FormGroup({
       'store': new FormControl(null, Validators.required),
-      'new-bill-item': new FormGroup({
-        'product-id': new FormControl(null),
-        'product-name': new FormControl(null, Validators.required),
-        'price': new FormControl(null, Validators.required),
-        'quantity': new FormControl(null, Validators.required)
-      }),
-      'bill-items': new FormArray([])
+      'bill-items': new FormArray([], Validators.required)
+    });
+    this.newBillItemForm = new FormGroup({
+      'product-id': new FormControl(null),
+      'product-name': new FormControl(null, Validators.required),
+      'price': new FormControl(null, Validators.required),
+      'quantity': new FormControl(null, Validators.required)
     });
   }
 
@@ -52,7 +52,7 @@ export class AddBillComponent implements OnInit {
     this.selectedProductId = productId;
     this.logger.debug('On top store product selected. ProductId:', productId );
     const selectedProduct: Product = this.topStoreProducts.find(p => p.id == productId);
-    this.addBillForm.get('new-bill-item').setValue({
+    this.newBillItemForm.setValue({
       'product-id': selectedProduct.id,
       'product-name': selectedProduct.name,
       'quantity': 1,
@@ -61,13 +61,13 @@ export class AddBillComponent implements OnInit {
   }
 
   onAddBillItem() {
-    this.logger.debug('On add bill item: ', JSON.stringify(this.addBillForm.get('new-bill-item').value));
+    this.logger.debug('On add bill item: ', JSON.stringify(this.newBillItemForm.value));
     this.billItems().push(new FormGroup(
       {
-        'product-id': new FormControl(this.addBillForm.get('new-bill-item.product-id').value),
-        'product-name': new FormControl(this.addBillForm.get('new-bill-item.product-name').value),
-        'quantity': new FormControl(this.addBillForm.get('new-bill-item.quantity').value),
-        'price': new FormControl(this.addBillForm.get('new-bill-item.price').value)
+        'product-id': new FormControl(this.newBillItemForm.get('product-id').value),
+        'product-name': new FormControl(this.newBillItemForm.get('product-name').value),
+        'quantity': new FormControl(this.newBillItemForm.get('quantity').value),
+        'price': new FormControl(this.newBillItemForm.get('price').value)
       }
     ));
     this.resetNewBillItem();
@@ -88,7 +88,7 @@ export class AddBillComponent implements OnInit {
   }
 
   private resetNewBillItem() {
-    this.addBillForm.get('new-bill-item').reset();
+    this.newBillItemForm.reset();
     this.selectedProductId = null;
   }
 

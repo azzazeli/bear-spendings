@@ -23,10 +23,10 @@ describe('AddBillComponent', () => {
 
   function expectNewBillItemReset() {
     let addToBillBtn = fixture.nativeElement.querySelector('#add-to-bill-btn');
-    expect(component.addBillForm.get('new-bill-item.product-name').value).toBe(null);
-    expect(component.addBillForm.get('new-bill-item.product-id').value).toBe(null);
-    expect(component.addBillForm.get('new-bill-item.quantity').value).toBe(null);
-    expect(component.addBillForm.get('new-bill-item.price').value).toBe(null);
+    expect(component.newBillItemForm.get('product-name').value).toBe(null);
+    expect(component.newBillItemForm.get('product-id').value).toBe(null);
+    expect(component.newBillItemForm.get('quantity').value).toBe(null);
+    expect(component.newBillItemForm.get('price').value).toBe(null);
     expect(addToBillBtn.disabled).toBe(true);
   }
 
@@ -82,10 +82,10 @@ describe('AddBillComponent', () => {
     fixture.detectChanges();
 
     //then
-    expect(component.addBillForm.get('new-bill-item.product-id').value).toEqual(2);
-    expect(component.addBillForm.get('new-bill-item.product-name').value).toEqual('Chefir JLC 1.5%');
-    expect(component.addBillForm.get('new-bill-item.quantity').value).toEqual(1);
-    expect(component.addBillForm.get('new-bill-item.price').value).toEqual(7.85);
+    expect(component.newBillItemForm.get('product-id').value).toEqual(2);
+    expect(component.newBillItemForm.get('product-name').value).toEqual('Chefir JLC 1.5%');
+    expect(component.newBillItemForm.get('quantity').value).toEqual(1);
+    expect(component.newBillItemForm.get('price').value).toEqual(7.85);
 
     expect(addToBillBtn.disabled).toBe(false);
   });
@@ -94,7 +94,7 @@ describe('AddBillComponent', () => {
     //given
     fixture.detectChanges();
     expect((<FormArray>component.addBillForm.get('bill-items')).length).toBe(0);
-    component.addBillForm.get('new-bill-item').setValue(sampleProduct(1));
+    component.newBillItemForm.setValue(sampleProduct(1));
     //when
     component.onAddBillItem();
     //then
@@ -105,7 +105,7 @@ describe('AddBillComponent', () => {
     expect((<FormArray>component.addBillForm.get('bill-items')).at(0).get('price').value).toBe(7.85);
 
     //given
-    component.addBillForm.get('new-bill-item').setValue(sampleProduct(2));
+    component.newBillItemForm.setValue(sampleProduct(2));
     //when
     component.onAddBillItem();
     //then
@@ -115,9 +115,9 @@ describe('AddBillComponent', () => {
   it(' on delete bill item - remove item from array form', ()=> {
     //given
     fixture.detectChanges();
-    component.addBillForm.get('new-bill-item').setValue(sampleProduct(1));
+    component.newBillItemForm.setValue(sampleProduct(1));
     component.onAddBillItem();
-    component.addBillForm.get('new-bill-item').setValue(sampleProduct(2));
+    component.newBillItemForm.setValue(sampleProduct(2));
     component.onAddBillItem();
     //when
     component.onDeleteBillItem(0);
@@ -133,7 +133,7 @@ describe('AddBillComponent', () => {
     let addToBillBtn = fixture.nativeElement.querySelector('#add-to-bill-btn');
     fixture.detectChanges();
     expect(addToBillBtn.disabled).toBe(true);
-    component.addBillForm.get('new-bill-item').setValue(sampleProduct(1));
+    component.newBillItemForm.setValue(sampleProduct(1));
     fixture.detectChanges();
     expect(addToBillBtn.disabled).toBe(false);
 
@@ -153,6 +153,20 @@ describe('AddBillComponent', () => {
     //then
     expect(component.selectedProductId).toBe(null);
     expectNewBillItemReset();
+  });
+
+  it('enable \'add bill\' button when there at least on bill item', () => {
+    //given
+    fixture.detectChanges();
+    let addBillBtn = fixture.nativeElement.querySelector('#add-bill-btn');
+    expect(addBillBtn.disabled).toBe(true);
+    expect(component.addBillForm.valid).toBe(false);
+    //when
+    component.addBillForm.get('store').setValue('1');
+    component.newBillItemForm.setValue(sampleProduct(1));
+    component.onAddBillItem();
+    //then
+    expect(component.addBillForm.valid).toBe(true)
   });
 
 });
