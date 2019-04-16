@@ -21,6 +21,15 @@ describe('AddBillComponent', () => {
     };
   }
 
+  function expectNewBillItemReset() {
+    let addToBillBtn = fixture.nativeElement.querySelector('#add-to-bill-btn');
+    expect(component.addBillForm.get('new-bill-item.product-name').value).toBe(null);
+    expect(component.addBillForm.get('new-bill-item.product-id').value).toBe(null);
+    expect(component.addBillForm.get('new-bill-item.quantity').value).toBe(null);
+    expect(component.addBillForm.get('new-bill-item.price').value).toBe(null);
+    expect(addToBillBtn.disabled).toBe(true);
+  }
+
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [ReactiveFormsModule, LoggerModule.forRoot({level: NgxLoggerLevel.DEBUG})],
@@ -119,7 +128,31 @@ describe('AddBillComponent', () => {
   });
 
 
-  it('on add bill item clean new-bill item form, and disable add bill item button', ()=> {
-    //todo; implement me:)
-  })
+  it('on add bill item clean new-bill item form, disable add bill item button, top store product has no selected item', ()=> {
+    //given
+    let addToBillBtn = fixture.nativeElement.querySelector('#add-to-bill-btn');
+    fixture.detectChanges();
+    expect(addToBillBtn.disabled).toBe(true);
+    component.addBillForm.get('new-bill-item').setValue(sampleProduct(1));
+    fixture.detectChanges();
+    expect(addToBillBtn.disabled).toBe(false);
+
+    //when
+    component.onAddBillItem();
+    fixture.detectChanges();
+    //then
+    expectNewBillItemReset();
+    expect(component.selectedProductId).toBe(null);
+  });
+
+  it('on store select reset bill-item form and selected top product', () => {
+    //given
+    fixture.detectChanges();
+    //when
+    component.onStoreSelected();
+    //then
+    expect(component.selectedProductId).toBe(null);
+    expectNewBillItemReset();
+  });
+
 });

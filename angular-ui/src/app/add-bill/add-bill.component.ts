@@ -45,6 +45,7 @@ export class AddBillComponent implements OnInit {
     this.logger.debug('On store selected. store id:', storeId);
     this.topStoreProducts = [new Product(1, 'Chefir JLC 2.5%', 9.80),
       new Product(2, 'Chefir JLC 1.5%', 7.85)];
+    this.resetNewBillItem();
   }
 
   onTopProductSelected(productId: number) {
@@ -69,6 +70,7 @@ export class AddBillComponent implements OnInit {
         'price': new FormControl(this.addBillForm.get('new-bill-item.price').value)
       }
     ));
+    this.resetNewBillItem();
   }
 
   onDeleteBillItem(index: number) {
@@ -85,5 +87,9 @@ export class AddBillComponent implements OnInit {
     return <FormArray>this.addBillForm.get('bill-items');
   }
 
+  private resetNewBillItem() {
+    this.addBillForm.get('new-bill-item').reset();
+    this.selectedProductId = null;
+  }
 
 }

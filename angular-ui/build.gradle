@@ -12,7 +12,7 @@ node {
 private dependsOnTasks () {
   def dependsOnTasks = ['npm_run_build']
   println '------------------'
-  println System.getProperty('skip.ui.test');
+  println 'Skip UI test: ' + System.getProperty('skip.ui.test');
   println '------------------'
 
   if (!Boolean.valueOf(System.getProperty('skip.ui.test'))) {
