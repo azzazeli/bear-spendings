@@ -10,6 +10,8 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { LoggerModule, NgxLoggerLevel } from 'ngx-logger';
 import { HttpClientModule } from '@angular/common/http';
 import { StoreService } from './service/store.service';
+import { CalendarModule } from 'primeng/primeng';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -22,6 +24,8 @@ import { StoreService } from './service/store.service';
     BrowserModule,
     AppRoutingModule,
     ReactiveFormsModule,
+    CalendarModule,
+    BrowserAnimationsModule,
     HttpClientModule,
     LoggerModule.forRoot({level: NgxLoggerLevel.DEBUG} )
   ],

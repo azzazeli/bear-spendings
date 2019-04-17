@@ -2,15 +2,27 @@
   <div class="row">
     <div class="col-xs-12 col-sm-10 col-md-8 col-sm-offset-1 col-md-offset2">
       <form [formGroup]="addBillForm" (ngSubmit)="onAddBill()">
-        <div class="form-group">
-          <label for="store">Store:</label>
-          <select id="store" class="form-control" formControlName="store" (change)="onStoreSelected()">
-            <option [value]="null" disabled="disabled">Please select a store</option>
-            <option *ngFor="let store of stores" [value]="store.id">{{store.name}}</option>
-          </select>
-          <span
-            *ngIf="!addBillForm.get('store').valid && addBillForm.get('store').touched"
-            class="help-block" style="color:#a94442">Please select a store!</span>
+        <div class="form-group row">
+          <div class="col-xs-4">
+            <label for="bill-date">Date:</label><br/>
+            <p-calendar [required]="false"
+              id="bill-date" [showIcon]="true"
+              formControlName="bill-date">
+            </p-calendar>
+            <span
+              *ngIf="!addBillForm.get('bill-date').valid && addBillForm.get('bill-date').touched"
+              class="help-block" style="color:#a94442">Please select a date!</span>
+          </div>
+          <div class="col-xs-4">
+            <label for="store">Store:</label>
+            <select id="store" class="form-control" formControlName="store" (change)="onStoreSelected()">
+              <option [value]="null" disabled="disabled">Please select a store</option>
+              <option *ngFor="let store of stores" [value]="store.id">{{store.name}}</option>
+            </select>
+            <span
+              *ngIf="!addBillForm.get('store').valid && addBillForm.get('store').touched"
+              class="help-block" style="color:#a94442">Please select a store!</span>
+          </div>
         </div>
         <div class="form-group" *ngIf="addBillForm.get('store').valid">
           <label>Top Store Products:</label>

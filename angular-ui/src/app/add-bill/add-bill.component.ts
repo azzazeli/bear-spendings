@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { AbstractControl, FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { NGXLogger } from 'ngx-logger';
 import { StoreService } from '../service/store.service';
@@ -8,7 +8,8 @@ import { Product } from '../model/product.model';
 @Component({
   selector: 'app-add-bill',
   templateUrl: './add-bill.component.html',
-  styleUrls: ['./add-bill.component.css']
+  styleUrls: ['./add-bill.component.css'],
+  encapsulation: ViewEncapsulation.None
 })
 export class AddBillComponent implements OnInit {
   stores: Store[];
@@ -26,6 +27,7 @@ export class AddBillComponent implements OnInit {
     });
     this.addBillForm = new FormGroup({
       'store': new FormControl(null, Validators.required),
+      'bill-date': new FormControl(null, Validators.required),
       'bill-items': new FormArray([], Validators.required)
     });
     this.newBillItemForm = new FormGroup({

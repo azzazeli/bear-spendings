@@ -6,6 +6,7 @@ import { LoggerModule, NgxLoggerLevel } from 'ngx-logger';
 import { StoreService } from '../service/store.service';
 import { Store } from '../model/store.model';
 import { of } from 'rxjs/internal/observable/of';
+import { CalendarModule } from 'primeng/primeng';
 
 describe('AddBillComponent', () => {
   let component: AddBillComponent;
@@ -32,7 +33,7 @@ describe('AddBillComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [ReactiveFormsModule, LoggerModule.forRoot({level: NgxLoggerLevel.DEBUG})],
+      imports: [ReactiveFormsModule, CalendarModule, LoggerModule.forRoot({level: NgxLoggerLevel.DEBUG})],
       providers: [
         {provide: StoreService, useValue: jasmine.createSpyObj('StoreService', ['getStores'])}
       ],
@@ -155,13 +156,17 @@ describe('AddBillComponent', () => {
     expectNewBillItemReset();
   });
 
-  it('enable \'add bill\' button when there at least on bill item', () => {
+  it('enable \'add bill\' button when ' +
+    '1. there at least on bill item ' +
+    '2. store is selected ' +
+    '3. date is selected', () => {
     //given
     fixture.detectChanges();
     let addBillBtn = fixture.nativeElement.querySelector('#add-bill-btn');
     expect(addBillBtn.disabled).toBe(true);
     expect(component.addBillForm.valid).toBe(false);
     //when
+    component.addBillForm.get('bill-date').setValue('04/11/2019');
     component.addBillForm.get('store').setValue('1');
     component.newBillItemForm.setValue(sampleProduct(1));
     component.onAddBillItem();
