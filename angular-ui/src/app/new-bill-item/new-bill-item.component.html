@@ -1,0 +1,27 @@
+<h4>New Bill Item</h4>
+<form [formGroup]="newBillItemForm">
+  <div class="form-group row">
+    <div class="col-xs-6">
+      <label for="bill-item-product">Product:</label>
+      <input id="bill-item-product" formControlName="product-name" type="text" class="form-control">
+      <input id="bill-item-product-id" formControlName="product-id" type="hidden" class="form-control">
+    </div>
+    <div class="col-xs-2">
+      <label for="bill-item-price">Price:</label>
+      <input id="bill-item-price" formControlName="price" type="number" class="form-control">
+    </div>
+    <div class="col-xs-2">
+      <label for="bill-item-quantity">Quantity:</label>
+      <input id="bill-item-quantity" formControlName="quantity" type="number" class="form-control" size="2">
+    </div>
+    <div class="col-xs-1">
+      <label for="add-to-bill-btn">&nbsp;</label>
+      <button type="button" class="btn btn-default btn-success" aria-label="Bill Align"
+              [disabled]="!newBillItemForm.valid"
+              (click)="onAddBillItem()"
+              id="add-to-bill-btn">
+        <span class="btn-label glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
+      </button>
+    </div>
+  </div>
+</form>

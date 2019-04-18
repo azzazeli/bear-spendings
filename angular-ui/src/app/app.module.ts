@@ -12,13 +12,15 @@ import { HttpClientModule } from '@angular/common/http';
 import { StoreService } from './service/store.service';
 import { CalendarModule } from 'primeng/primeng';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { NewBillItemComponent } from './new-bill-item/new-bill-item.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
     AddBillComponent,
-    HeaderComponent
+    HeaderComponent,
+    NewBillItemComponent
   ],
   imports: [
     BrowserModule,

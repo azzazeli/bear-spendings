@@ -1,9 +1,11 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { AbstractControl, FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { NGXLogger } from 'ngx-logger';
 import { StoreService } from '../service/store.service';
 import { Store } from '../model/store.model';
 import { Product } from '../model/product.model';
+import { BillItem } from '../model/bill-item.model';
+import { NewBillItemComponent } from '../new-bill-item/new-bill-item.component';
 
 @Component({
   selector: 'app-add-bill',
@@ -14,9 +16,11 @@ import { Product } from '../model/product.model';
 export class AddBillComponent implements OnInit {
   stores: Store[];
   addBillForm: FormGroup;
-  newBillItemForm: FormGroup;
   topStoreProducts: Product[];
   selectedProductId: number;
+
+  @ViewChild(NewBillItemComponent)
+  newBillItemComponent: NewBillItemComponent;
 
   constructor(private logger: NGXLogger, private storeService: StoreService) { }
 
@@ -26,15 +30,9 @@ export class AddBillComponent implements OnInit {
       this.stores = stores;
     });
     this.addBillForm = new FormGroup({
-      'store': new FormControl(null, Validators.required),
+      'store-id': new FormControl(null, Validators.required),
       'bill-date': new FormControl(null, Validators.required),
       'bill-items': new FormArray([], Validators.required)
-    });
-    this.newBillItemForm = new FormGroup({
-      'product-id': new FormControl(null),
-      'product-name': new FormControl(null, Validators.required),
-      'price': new FormControl(null, Validators.required),
-      'quantity': new FormControl(null, Validators.required)
     });
   }
 
@@ -43,8 +41,8 @@ export class AddBillComponent implements OnInit {
   }
 
   onStoreSelected() {
-    const storeId: number = this.addBillForm.get('store').value;
-    this.logger.debug('On store selected. store id:', storeId);
+    const storeId: number = this.addBillForm.get('store-id').value;
+    this.logger.debug('AddBillComponent: On store selected. store id:', storeId);
     this.topStoreProducts = [new Product(1, 'Chefir JLC 2.5%', 9.80),
       new Product(2, 'Chefir JLC 1.5%', 7.85)];
     this.resetNewBillItem();
@@ -52,37 +50,31 @@ export class AddBillComponent implements OnInit {
 
   onTopProductSelected(productId: number) {
     this.selectedProductId = productId;
-    this.logger.debug('On top store product selected. ProductId:', productId );
+    this.logger.debug('AddBillComponent: On top store product selected. ProductId:', productId );
     const selectedProduct: Product = this.topStoreProducts.find(p => p.id == productId);
-    this.newBillItemForm.setValue({
-      'product-id': selectedProduct.id,
-      'product-name': selectedProduct.name,
-      'quantity': 1,
-      'price': selectedProduct.price
-    });
+    this.newBillItemComponent.setBillItem(new BillItem(selectedProduct.id, selectedProduct.name, 1, selectedProduct.price));
   }
 
-  onAddBillItem() {
-    this.logger.debug('On add bill item: ', JSON.stringify(this.newBillItemForm.value));
+  onAddBillItem(billItem: BillItem) {
+    this.logger.debug('AddBillComponent: On add bill item: ', JSON.stringify(billItem));
     this.billItems().push(new FormGroup(
       {
-        'product-id': new FormControl(this.newBillItemForm.get('product-id').value),
-        'product-name': new FormControl(this.newBillItemForm.get('product-name').value),
-        'quantity': new FormControl(this.newBillItemForm.get('quantity').value),
-        'price': new FormControl(this.newBillItemForm.get('price').value)
+        'product-id': new FormControl(billItem.productId),
+        'product-name': new FormControl(billItem.productName),
+        'quantity': new FormControl(billItem.quantity),
+        'price': new FormControl(billItem.price)
       }
     ));
     this.resetNewBillItem();
   }
 
   onDeleteBillItem(index: number) {
-    this.logger.debug('On delete bill item at index:', index);
+    this.logger.debug('AddBillComponent: On delete bill item at index:', index);
     this.billItems().removeAt(index);
   }
 
   onAddBill() {
-    this.logger.debug("On add bill. addBillForm:", this.addBillForm );
-    // this.addBillForm.vali
+    this.logger.debug("AddBillComponent: On add bill. addBillForm:", this.addBillForm );
   }
 
   private billItems(): FormArray {
@@ -90,7 +82,7 @@ export class AddBillComponent implements OnInit {
   }
 
   private resetNewBillItem() {
-    this.newBillItemForm.reset();
+    this.newBillItemComponent.newBillItemForm.reset();
     this.selectedProductId = null;
   }
 

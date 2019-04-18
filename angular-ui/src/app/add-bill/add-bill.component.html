@@ -14,17 +14,17 @@
               class="help-block" style="color:#a94442">Please select a date!</span>
           </div>
           <div class="col-xs-4">
-            <label for="store">Store:</label>
-            <select id="store" class="form-control" formControlName="store" (change)="onStoreSelected()">
+            <label for="store-id">Store:</label>
+            <select id="store-id" class="form-control" formControlName="store-id" (change)="onStoreSelected()">
               <option [value]="null" disabled="disabled">Please select a store</option>
               <option *ngFor="let store of stores" [value]="store.id">{{store.name}}</option>
             </select>
             <span
-              *ngIf="!addBillForm.get('store').valid && addBillForm.get('store').touched"
+              *ngIf="!addBillForm.get('store-id').valid && addBillForm.get('store-id').touched"
               class="help-block" style="color:#a94442">Please select a store!</span>
           </div>
         </div>
-        <div class="form-group" *ngIf="addBillForm.get('store').valid">
+        <div class="form-group" *ngIf="addBillForm.get('store-id').valid">
           <label>Top Store Products:</label>
           <ul class="list-group">
             <li *ngFor="let p of topStoreProducts"
@@ -33,33 +33,7 @@
                 class="list-group-item">{{p.name}} - {{p.price}} MDL</li>
           </ul>
         </div>
-        <h4>New Bill Item</h4>
-        <form [formGroup]="newBillItemForm">
-          <div class="form-group row">
-            <div class="col-xs-6">
-              <label for="bill-item-product">Product:</label>
-              <input id="bill-item-product" formControlName="product-name" type="text" class="form-control">
-              <input id="bill-item-product-id" formControlName="product-id" type="hidden" class="form-control">
-            </div>
-            <div class="col-xs-2">
-              <label for="bill-item-price">Price:</label>
-              <input id="bill-item-price" formControlName="price" type="number" class="form-control">
-            </div>
-            <div class="col-xs-2">
-              <label for="bill-item-quantity">Quantity:</label>
-              <input id="bill-item-quantity" formControlName="quantity" type="number" class="form-control" size="2">
-            </div>
-            <div class="col-xs-1">
-              <label for="add-to-bill-btn">&nbsp;</label>
-              <button type="button" class="btn btn-default btn-success" aria-label="Bill Align"
-                      [disabled]="!newBillItemForm.valid"
-                      (click)="onAddBillItem()"
-                      id="add-to-bill-btn">
-                <span class="btn-label glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
-              </button>
-            </div>
-          </div>
-        </form>
+        <app-new-bill-item (add-bill-item)="onAddBillItem($event)" ></app-new-bill-item>
         <table class="table table-hover" formArrayName="bill-items">
           <caption>Bill Items</caption>
           <thead>
