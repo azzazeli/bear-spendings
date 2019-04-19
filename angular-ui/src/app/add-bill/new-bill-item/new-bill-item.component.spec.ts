@@ -2,8 +2,8 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { NewBillItemComponent } from './new-bill-item.component';
 import { ReactiveFormsModule } from '@angular/forms';
-import { BillItem } from '../model/bill-item.model';
-import { TestService } from '../service/test.service';
+import { BillItem } from '../../model/bill-item.model';
+import { TestService } from '../../service/test.service';
 import { LoggerModule, NGXLogger, NgxLoggerLevel } from 'ngx-logger';
 
 describe('NewBillItemComponent', () => {
@@ -76,7 +76,7 @@ describe('NewBillItemComponent', () => {
     fixture.detectChanges();
     //then
     expect(component.newBillItemForm.get('product-id').value).toBe(billItem.productId);
-    expect(component.newBillItemForm.get('product-name').value).toBe(billItem.productId);
+    expect(component.newBillItemForm.get('product-name').value).toBe(billItem.productName);
     expect(component.newBillItemForm.get('price').value).toBe(billItem.price);
     expect(component.newBillItemForm.get('quantity').value).toBe(billItem.quantity);
   });

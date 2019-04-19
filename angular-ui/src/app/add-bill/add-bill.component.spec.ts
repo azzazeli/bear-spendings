@@ -8,7 +8,7 @@ import { Store } from '../model/store.model';
 import { of } from 'rxjs/internal/observable/of';
 import { CalendarModule } from 'primeng/primeng';
 import { TestService } from '../service/test.service';
-import { NewBillItemComponent } from '../new-bill-item/new-bill-item.component';
+import { NewBillItemComponent } from './new-bill-item/new-bill-item.component';
 
 describe('AddBillComponent', () => {
   let component: AddBillComponent;

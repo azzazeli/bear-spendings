@@ -1,6 +1,6 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { BillItem } from '../model/bill-item.model';
+import { BillItem } from '../../model/bill-item.model';
 import { NGXLogger } from 'ngx-logger';
 
 @Component({
@@ -30,9 +30,13 @@ export class NewBillItemComponent implements OnInit {
     this.logger.debug('NewBillItemComponent: Set bill item:' + JSON.stringify(billItem));
     this.billItem = billItem;
     this.newBillItemForm.get('product-id').setValue(billItem.productId);
-    this.newBillItemForm.get('product-name').setValue(billItem.productId);
+    this.newBillItemForm.get('product-name').setValue(billItem.productName);
     this.newBillItemForm.get('price').setValue(billItem.price);
     this.newBillItemForm.get('quantity').setValue(billItem.quantity);
+  }
+
+  reset(): void {
+    this.newBillItemForm.reset();
   }
 
   onAddBillItem(): void {

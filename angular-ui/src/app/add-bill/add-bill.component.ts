@@ -5,7 +5,7 @@ import { StoreService } from '../service/store.service';
 import { Store } from '../model/store.model';
 import { Product } from '../model/product.model';
 import { BillItem } from '../model/bill-item.model';
-import { NewBillItemComponent } from '../new-bill-item/new-bill-item.component';
+import { NewBillItemComponent } from './new-bill-item/new-bill-item.component';
 
 @Component({
   selector: 'app-add-bill',
@@ -82,7 +82,7 @@ export class AddBillComponent implements OnInit {
   }
 
   private resetNewBillItem() {
-    this.newBillItemComponent.newBillItemForm.reset();
+    this.newBillItemComponent.reset();
     this.selectedProductId = null;
   }
 
