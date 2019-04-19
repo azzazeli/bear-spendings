@@ -3,11 +3,11 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { AddBillComponent } from './add-bill.component';
 import { FormArray, ReactiveFormsModule } from '@angular/forms';
 import { LoggerModule, NgxLoggerLevel } from 'ngx-logger';
-import { StoreService } from '../service/store.service';
-import { Store } from '../model/store.model';
+import { StoreService } from '../core/service/store.service';
+import { Store } from '../core/model/store.model';
 import { of } from 'rxjs/internal/observable/of';
 import { CalendarModule } from 'primeng/primeng';
-import { TestService } from '../service/test.service';
+import { TestService } from '../core/service/test.service';
 import { NewBillItemComponent } from './new-bill-item/new-bill-item.component';
 
 describe('AddBillComponent', () => {
@@ -18,7 +18,8 @@ describe('AddBillComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [ReactiveFormsModule, CalendarModule, LoggerModule.forRoot({level: NgxLoggerLevel.DEBUG})],
+      imports: [ReactiveFormsModule, CalendarModule,
+        LoggerModule.forRoot({level: NgxLoggerLevel.DEBUG})],
       providers: [
         TestService,
         {provide: StoreService, useValue: jasmine.createSpyObj('StoreService', ['getStores'])}

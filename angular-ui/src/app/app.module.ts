@@ -7,13 +7,14 @@ import { HomeComponent } from './home/home.component';
 import { HeaderComponent } from './header/header.component';
 import { LoggerModule, NgxLoggerLevel } from 'ngx-logger';
 import { HttpClientModule } from '@angular/common/http';
-import { StoreService } from './service/store.service';
 import { AddBillModule } from './add-bill/add-bill.module';
+import { CoreModule } from './core/core.module';
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
+
     HeaderComponent,
   ],
   imports: [
@@ -21,9 +22,10 @@ import { AddBillModule } from './add-bill/add-bill.module';
     AppRoutingModule,
     HttpClientModule,
     AddBillModule,
+    CoreModule,
     LoggerModule.forRoot({level: NgxLoggerLevel.DEBUG} )
   ],
-  providers: [StoreService],
+  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

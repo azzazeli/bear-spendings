@@ -2,8 +2,8 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { NewBillItemComponent } from './new-bill-item.component';
 import { ReactiveFormsModule } from '@angular/forms';
-import { BillItem } from '../../model/bill-item.model';
-import { TestService } from '../../service/test.service';
+import { BillItem } from '../../core/model/bill-item.model';
+import { TestService } from '../../core/service/test.service';
 import { LoggerModule, NGXLogger, NgxLoggerLevel } from 'ngx-logger';
 
 describe('NewBillItemComponent', () => {

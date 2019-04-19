@@ -1,10 +1,10 @@
 import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { AbstractControl, FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { NGXLogger } from 'ngx-logger';
-import { StoreService } from '../service/store.service';
-import { Store } from '../model/store.model';
-import { Product } from '../model/product.model';
-import { BillItem } from '../model/bill-item.model';
+import { StoreService } from '../core/service/store.service';
+import { Store } from '../core/model/store.model';
+import { Product } from '../core/model/product.model';
+import { BillItem } from '../core/model/bill-item.model';
 import { NewBillItemComponent } from './new-bill-item/new-bill-item.component';
 
 @Component({

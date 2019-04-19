@@ -1,6 +1,6 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { BillItem } from '../../model/bill-item.model';
+import { BillItem } from '../../core/model/bill-item.model';
 import { NGXLogger } from 'ngx-logger';
 
 @Component({
