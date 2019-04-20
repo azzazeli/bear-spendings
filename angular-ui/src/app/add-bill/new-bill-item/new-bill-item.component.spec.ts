@@ -3,18 +3,18 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { NewBillItemComponent } from './new-bill-item.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { BillItem } from '../../core/model/bill-item.model';
-import { TestService } from '../../core/service/test.service';
+import { SamplesDataService } from '../../core/service/samplesDataService';
 import { LoggerModule, NGXLogger, NgxLoggerLevel } from 'ngx-logger';
 
 describe('NewBillItemComponent', () => {
   let component: NewBillItemComponent;
   let fixture: ComponentFixture<NewBillItemComponent>;
-  let testService: TestService;
+  let testService: SamplesDataService;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [ReactiveFormsModule, LoggerModule.forRoot({level: NgxLoggerLevel.DEBUG})],
-      providers: [TestService, NGXLogger],
+      providers: [SamplesDataService, NGXLogger],
       declarations: [ NewBillItemComponent ]
     })
     .compileComponents();
@@ -24,10 +24,10 @@ describe('NewBillItemComponent', () => {
     fixture = TestBed.createComponent(NewBillItemComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
-    testService = TestBed.get(TestService);
+    testService = TestBed.get(SamplesDataService);
   });
 
-  it('should create', () => {
+  it('#should create', () => {
     expect(component).toBeTruthy();
     expect(component.newBillItemForm).toBeDefined();
     expect(component.newBillItemForm.get('product-id')).toBeDefined();
@@ -36,7 +36,7 @@ describe('NewBillItemComponent', () => {
     expect(component.newBillItemForm.get('price')).toBeDefined();
   });
 
-  it('validation checks', () => {
+  it('#validation checks', () => {
     expect(component.newBillItemForm.valid).toBe(false);
     component.newBillItemForm.get('product-name').setValue('Chefir JLC 1.5%');
     expect(component.newBillItemForm.valid).toBe(false);
@@ -46,7 +46,7 @@ describe('NewBillItemComponent', () => {
     expect(component.newBillItemForm.valid).toBe(true);
   });
 
-  it('on add new bill fire event' , () => {
+  it('#on add new bill fire event' , () => {
     //given
     const expected = {
       'product-id': 1,
@@ -69,7 +69,7 @@ describe('NewBillItemComponent', () => {
     expect(component.addBillItemEvent.emit).toHaveBeenCalled();
   });
 
-  it('on set bill item - populate form with data', () => {
+  it('#on set bill item - populate form with data', () => {
     //when
     const billItem = testService.sampleBillItem(1);
     component.setBillItem(billItem);
@@ -81,7 +81,7 @@ describe('NewBillItemComponent', () => {
     expect(component.newBillItemForm.get('quantity').value).toBe(billItem.quantity);
   });
 
-  it('on add bill item - disable add button', () => {
+  it('#on add bill item - disable add button', () => {
     let addToBillBtn = fixture.nativeElement.querySelector('#add-to-bill-btn');
     fixture.detectChanges();
     expect(addToBillBtn.disabled).toBe(true);

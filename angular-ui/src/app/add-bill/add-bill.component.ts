@@ -6,6 +6,7 @@ import { Store } from '../core/model/store.model';
 import { Product } from '../core/model/product.model';
 import { BillItem } from '../core/model/bill-item.model';
 import { NewBillItemComponent } from './new-bill-item/new-bill-item.component';
+import { ProductsService } from '../core/service/products.service';
 
 @Component({
   selector: 'app-add-bill',
@@ -22,7 +23,9 @@ export class AddBillComponent implements OnInit {
   @ViewChild(NewBillItemComponent)
   newBillItemComponent: NewBillItemComponent;
 
-  constructor(private logger: NGXLogger, private storeService: StoreService) { }
+  constructor(private logger: NGXLogger, private storeService: StoreService,
+              private productsService: ProductsService) {
+  }
 
   ngOnInit() {
     this.storeService.getStores().subscribe((stores: Store[])  => {
@@ -43,8 +46,9 @@ export class AddBillComponent implements OnInit {
   onStoreSelected() {
     const storeId: number = this.addBillForm.get('store-id').value;
     this.logger.debug('AddBillComponent: On store selected. store id:', storeId);
-    this.topStoreProducts = [new Product(1, 'Chefir JLC 2.5%', 9.80),
-      new Product(2, 'Chefir JLC 1.5%', 7.85)];
+    this.productsService.topStoreProducts(storeId).subscribe((products) => {
+      this.topStoreProducts = products;
+    });
     this.resetNewBillItem();
   }
 

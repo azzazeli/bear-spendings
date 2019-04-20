@@ -1,0 +1,52 @@
+[
+  {
+    "id": 1,
+    "name": "Piine de secara",
+    "price": 12
+  },
+  {
+    "id": 2,
+    "name": "Chefir JLC 2.5 %",
+    "price": 8.55
+  },
+  {
+    "id": 3,
+    "name": "Unt BioButter",
+    "price": 78
+  },
+  {
+    "id": 4,
+    "name": "Pesmeti",
+    "price": 10
+  },
+  {
+    "id": 5,
+    "name": "Brinza Casuta mea",
+    "price": 18
+  },
+  {
+    "id": 6,
+    "name": "Cascaval Dor Blue",
+    "price": 37.4
+  },
+  {
+    "id": 7,
+    "name": "Cacaval Masdam",
+    "price": 44.6
+  },
+  {
+    "id": 8,
+    "name": "Masline mari",
+    "price": 33.1
+  },
+  {
+    "id": 9,
+    "name": "Banane",
+    "price": 33
+  },
+  {
+    "id": 10,
+    "name": "Lamie",
+    "price": 21
+  }
+]

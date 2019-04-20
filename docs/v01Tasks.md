@@ -4,12 +4,12 @@
 
 ### UI
 #### Add bill form
-- [ ] get top products from json file from  assets
-- [ ] on top product select populate bill item form
+- [x] get top products from json file from  assets
+- [x] on top product select populate bill item form
 - [ ] clear bill item form
-- [ ] add bill item to the bill
-- [ ] delete bill item from the list
-- [ ] primary validation of form
+- [x] add bill item to the bill
+- [x] delete bill item from the list
+- [x] primary validation of form
 - [ ] sent bill item to server
 
 
