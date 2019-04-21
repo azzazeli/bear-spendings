@@ -51,4 +51,7 @@ export class NewBillItemComponent implements OnInit {
     this.addBillItemEvent.emit(this.billItem);
   }
 
+  onClearBillItem() {
+    this.newBillItemForm.reset();
+  }
 }

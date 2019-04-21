@@ -6,7 +6,7 @@
 #### Add bill form
 - [x] get top products from json file from  assets
 - [x] on top product select populate bill item form
-- [ ] clear bill item form
+- [x] clear bill item form
 - [x] add bill item to the bill
 - [x] delete bill item from the list
 - [x] primary validation of form

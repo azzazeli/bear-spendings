@@ -9,7 +9,7 @@ import { LoggerModule, NGXLogger, NgxLoggerLevel } from 'ngx-logger';
 describe('NewBillItemComponent', () => {
   let component: NewBillItemComponent;
   let fixture: ComponentFixture<NewBillItemComponent>;
-  let testService: SamplesDataService;
+  let samplesDataService: SamplesDataService;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -24,7 +24,7 @@ describe('NewBillItemComponent', () => {
     fixture = TestBed.createComponent(NewBillItemComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
-    testService = TestBed.get(SamplesDataService);
+    samplesDataService = TestBed.get(SamplesDataService);
   });
 
   it('#should create', () => {
@@ -71,7 +71,7 @@ describe('NewBillItemComponent', () => {
 
   it('#on set bill item - populate form with data', () => {
     //when
-    const billItem = testService.sampleBillItem(1);
+    const billItem = samplesDataService.sampleBillItem(1);
     component.setBillItem(billItem);
     fixture.detectChanges();
     //then
@@ -85,13 +85,25 @@ describe('NewBillItemComponent', () => {
     let addToBillBtn = fixture.nativeElement.querySelector('#add-to-bill-btn');
     fixture.detectChanges();
     expect(addToBillBtn.disabled).toBe(true);
-    const billItem = testService.sampleBillItem(1);
+    const billItem = samplesDataService.sampleBillItem(1);
     component.setBillItem(billItem);
     fixture.detectChanges();
     expect(addToBillBtn.disabled).toBe(false);
     component.onAddBillItem();
     fixture.detectChanges();
     expect(addToBillBtn.disabled).toBe(true);
-  })
+  });
+
+  it('#on clear bill item - empty all inputs', () => {
+    //given
+    component.setBillItem(samplesDataService.sampleBillItem(1));
+    //when
+    component.onClearBillItem();
+    //then
+    expect(component.newBillItemForm.get('product-id').value).toBeNull();
+    expect(component.newBillItemForm.get('product-name').value).toBeNull();
+    expect(component.newBillItemForm.get('price').value).toBeNull();
+    expect(component.newBillItemForm.get('quantity').value).toBeNull();
+  });
 
 });
