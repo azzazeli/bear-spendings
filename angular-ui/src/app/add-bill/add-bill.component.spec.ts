@@ -10,11 +10,15 @@ import { CalendarModule } from 'primeng/primeng';
 import { SamplesDataService } from '../core/service/samplesDataService';
 import { NewBillItemComponent } from './new-bill-item/new-bill-item.component';
 import { ProductsService } from '../core/service/products.service';
+import { BillService } from '../core/service/bill.service';
+import { Bill } from '../core/model/bill.model';
+import * as moment from 'moment';
 
 describe('AddBillComponent', () => {
   let component: AddBillComponent;
   let fixture: ComponentFixture<AddBillComponent>;
   let storeServiceSpy: jasmine.SpyObj<StoreService>;
+  let billServiceSpy: jasmine.SpyObj<BillService>;
   let productsServiceSpy: jasmine.SpyObj<ProductsService>;
   let samplesDataService: SamplesDataService;
 
@@ -25,6 +29,7 @@ describe('AddBillComponent', () => {
       providers: [
         SamplesDataService,
         {provide: StoreService, useValue: jasmine.createSpyObj('StoreService', ['getStores'])},
+        {provide: BillService, useValue: jasmine.createSpyObj('BillService', ['addBill'])},
         {provide: ProductsService, useValue: jasmine.createSpyObj('ProductsService', ['topStoreProducts'])}
       ],
       declarations: [AddBillComponent, NewBillItemComponent]
@@ -37,6 +42,7 @@ describe('AddBillComponent', () => {
     component = fixture.componentInstance;
     storeServiceSpy = TestBed.get(StoreService);
     productsServiceSpy = TestBed.get(ProductsService);
+    billServiceSpy = TestBed.get(BillService);
     storeServiceSpy.getStores.and.returnValue(of([new Store(1, 'Nr.1')]));
     samplesDataService = TestBed.get(SamplesDataService);
     productsServiceSpy.topStoreProducts.and.returnValue(of(samplesDataService.sampleProducts()));
@@ -167,5 +173,19 @@ describe('AddBillComponent', () => {
     //then
     expect(component.addBillForm.valid).toBe(true)
   });
+
+  it('#on add bill - call BillService.addBill', () => {
+    //given
+    fixture.detectChanges();
+    component.addBillForm.get('bill-date').setValue('04/11/2019');
+    component.addBillForm.get('store-id').setValue(1);
+    component.onAddBillItem(samplesDataService.sampleBillItem(1));
+    //when
+    component.onAddBill();
+    const expectedBill: Bill = new Bill(moment('04/11/2019'), 1);
+    expectedBill.billItems.push(samplesDataService.sampleBillItem(1));
+    expect(billServiceSpy.addBill).toHaveBeenCalledWith(expectedBill);
+  });
+  
 
 });

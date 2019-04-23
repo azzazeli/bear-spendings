@@ -10,7 +10,7 @@
 - [x] add bill item to the bill
 - [x] delete bill item from the list
 - [x] primary validation of form
-- [ ] sent bill item to server
+- [x] sent bill item to server
 
 
 ### Server

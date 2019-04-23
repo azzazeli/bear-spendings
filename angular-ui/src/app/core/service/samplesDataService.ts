@@ -1,6 +1,8 @@
 import { BillItem } from '../model/bill-item.model';
 import { Store } from '../model/store.model';
 import { Product } from '../model/product.model';
+import { Bill } from '../model/bill.model';
+import * as moment from 'moment';
 
 export class SamplesDataService {
 
@@ -32,5 +34,14 @@ export class SamplesDataService {
       new Product(9, 'Banane', 33),
       new Product(10, 'Lamie', 21)
     ];
+  }
+
+  sampleBill(): Bill {
+    const bill: Bill = new Bill(moment('2019-04-21'), this.sampleStores()[0].id);
+    bill.billItems = [
+      this.sampleBillItem(1),
+      this.sampleBillItem(2)
+    ];
+    return bill;
   }
 }

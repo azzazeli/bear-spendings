@@ -7,6 +7,9 @@ import { Product } from '../core/model/product.model';
 import { BillItem } from '../core/model/bill-item.model';
 import { NewBillItemComponent } from './new-bill-item/new-bill-item.component';
 import { ProductsService } from '../core/service/products.service';
+import { BillService } from '../core/service/bill.service';
+import { Bill } from '../core/model/bill.model';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-add-bill',
@@ -24,12 +27,13 @@ export class AddBillComponent implements OnInit {
   newBillItemComponent: NewBillItemComponent;
 
   constructor(private logger: NGXLogger, private storeService: StoreService,
+              private billService: BillService,
               private productsService: ProductsService) {
   }
 
   ngOnInit() {
     this.storeService.getStores().subscribe((stores: Store[])  => {
-      this.logger.debug('Subscribe to getStores(): ', stores);
+      this.logger.debug('AddBillComponent: Subscribe to getStores(): ', stores);
       this.stores = stores;
     });
     this.addBillForm = new FormGroup({
@@ -79,6 +83,16 @@ export class AddBillComponent implements OnInit {
 
   onAddBill() {
     this.logger.debug("AddBillComponent: On add bill. addBillForm:", this.addBillForm );
+    const bill: Bill = new Bill(moment(this.addBillForm.get('bill-date').value), this.addBillForm.get('store-id').value);
+    for( let billItemFG of this.billItems().controls) {
+      bill.billItems.push(new BillItem(
+        billItemFG.get('product-id').value,
+        billItemFG.get('product-name').value,
+        billItemFG.get('quantity').value,
+        billItemFG.get('price').value)
+      );
+    }
+    this.billService.addBill(bill);
   }
 
   private billItems(): FormArray {
