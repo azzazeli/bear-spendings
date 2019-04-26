@@ -9,6 +9,7 @@ import { LoggerModule, NgxLoggerLevel } from 'ngx-logger';
 import { HttpClientModule } from '@angular/common/http';
 import { AddBillModule } from './add-bill/add-bill.module';
 import { CoreModule } from './core/core.module';
+import { BillsModule } from './bills/bills.module';
 
 @NgModule({
   declarations: [
@@ -21,6 +22,7 @@ import { CoreModule } from './core/core.module';
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
+    BillsModule,
     AddBillModule,
     CoreModule,
     LoggerModule.forRoot({level: NgxLoggerLevel.DEBUG} )

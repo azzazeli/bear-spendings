@@ -3,6 +3,7 @@ import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { SamplesDataService } from './samplesDataService';
 import { HttpClient } from '@angular/common/http';
+import { Bill } from '../model/bill.model';
 
 
 describe('BillServiceTest',()  => {
@@ -32,10 +33,18 @@ describe('BillServiceTest',()  => {
     billService.addBill(samplesDataService.sampleBill()).subscribe(() => {});
     //then
     const req = httpTestingController.expectOne(billService.ADD_BILL_URL, 'call to add bill url');
-    debugger;
     expect(req.request.method).toEqual('POST');
     expect(req.request.body).toEqual(samplesDataService.sampleBill());
   });
 
+  it('#on bills - sent http get request', () => {
+    //when
+    billService.allBills().subscribe((bills: Bill[]) => {
+      expect(bills.length).toEqual(2);
+      expect(bills[0]).toBe(samplesDataService.sampleBill());
+    });
+    //then
+    httpTestingController.expectOne(billService.ALL_BILLS_URL);
+  });
 
 });

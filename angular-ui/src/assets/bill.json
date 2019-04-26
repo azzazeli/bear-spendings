@@ -1,0 +1,40 @@
+[
+  {
+    "id": 1,
+    "purchaseDate": "2019-04-21",
+    "storeId": 1,
+    "billItems": [
+      {
+        "id": 1,
+        "productName": "Chefir JLC 2.5%",
+        "quantity": 1,
+        "price": 9.85
+      },
+      {
+        "id": 2,
+        "productName": "Chefir JLC 2.5%",
+        "quantity": 1,
+        "price": 9.85
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "purchaseDate": "2019-04-22",
+    "storeId": 1,
+    "billItems": [
+      {
+        "id": 3,
+        "productName": "Chefir JLC 1%",
+        "quantity": 2,
+        "price": 6.55
+      },
+      {
+        "id": 4,
+        "productName": "Chefir JLC 2.5%",
+        "quantity": 1,
+        "price": 9.85
+      }
+    ]
+  }
+]

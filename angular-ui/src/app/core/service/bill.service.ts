@@ -7,10 +7,15 @@ import { Observable } from 'rxjs';
 export class BillService {
 
   ADD_BILL_URL ='call_server_url';
+  ALL_BILLS_URL = "assets/bill.json";
 
   constructor(private http: HttpClient) {}
 
   public addBill(bill: Bill): Observable<Bill> {
     return this.http.post<Bill>(this.ADD_BILL_URL, bill);
+  }
+
+  public allBills(): Observable<Bill[]> {
+    return this.http.get<Bill[]>(this.ALL_BILLS_URL);
   }
 }
