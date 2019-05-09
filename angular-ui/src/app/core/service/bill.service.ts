@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 export class BillService {
 
   ADD_BILL_URL ='call_server_url';
-  ALL_BILLS_URL = "assets/bill.json";
+  ALL_BILLS_URL = "assets/bills.json";
 
   constructor(private http: HttpClient) {}
 

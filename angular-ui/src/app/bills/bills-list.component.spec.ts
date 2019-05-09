@@ -6,12 +6,14 @@ import { SamplesDataService } from '../core/service/samplesDataService';
 import { LoggerModule, NgxLoggerLevel } from 'ngx-logger';
 import { of } from 'rxjs/internal/observable/of';
 import { TableModule } from 'primeng/table';
+import { StoreService } from '../core/service/store.service';
 import createSpyObj = jasmine.createSpyObj;
 
 describe('BillsListComponent', () => {
   let component: BillsListComponent;
   let fixture: ComponentFixture<BillsListComponent>;
   let billServiceSpy: jasmine.SpyObj<BillService>;
+  let storeServiceSpy: jasmine.SpyObj<StoreService>;
   let samplesDataService: SamplesDataService;
 
   beforeEach(async(() => {
@@ -22,7 +24,8 @@ describe('BillsListComponent', () => {
       ],
       providers: [
         SamplesDataService,
-        {provide: BillService, useValue: createSpyObj('BillService', ['allBills'])}
+        {provide: BillService, useValue: createSpyObj('BillService', ['allBills'])},
+        {provide: StoreService, useValue: createSpyObj('StoreService', ['getStore'])}
       ],
       declarations: [ BillsListComponent ]
     })
@@ -33,8 +36,10 @@ describe('BillsListComponent', () => {
     fixture = TestBed.createComponent(BillsListComponent);
     component = fixture.componentInstance;
     billServiceSpy = TestBed.get(BillService);
+    storeServiceSpy = TestBed.get(StoreService);
     samplesDataService = TestBed.get(SamplesDataService);
     billServiceSpy.allBills.and.returnValue(of([samplesDataService.sampleBill()]));
+    storeServiceSpy.getStore.and.returnValue(of(samplesDataService.sampleStores()[0]));
     fixture.detectChanges();
   });
 
@@ -44,5 +49,6 @@ describe('BillsListComponent', () => {
 
   it('#should init bills []', () => {
     expect(component.bills).toBeDefined();
+    expect(component.bills[0].store).toEqual(samplesDataService.sampleStores()[0]);
   })
 });

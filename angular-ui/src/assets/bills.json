@@ -6,12 +6,14 @@
     "billItems": [
       {
         "id": 1,
+        "productId": 1,
         "productName": "Chefir JLC 2.5%",
         "quantity": 1,
         "price": 9.85
       },
       {
         "id": 2,
+        "productId": 1,
         "productName": "Chefir JLC 2.5%",
         "quantity": 1,
         "price": 9.85
@@ -25,12 +27,14 @@
     "billItems": [
       {
         "id": 3,
+        "productId": 2,
         "productName": "Chefir JLC 1%",
         "quantity": 2,
         "price": 6.55
       },
       {
         "id": 4,
+        "productId": 1,
         "productName": "Chefir JLC 2.5%",
         "quantity": 1,
         "price": 9.85

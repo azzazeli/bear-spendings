@@ -5,7 +5,6 @@ import { SamplesDataService } from './samplesDataService';
 import { HttpClient } from '@angular/common/http';
 import { Bill } from '../model/bill.model';
 
-
 describe('BillServiceTest',()  => {
   let billService: BillService;
   let samplesDataService: SamplesDataService;
@@ -40,11 +39,12 @@ describe('BillServiceTest',()  => {
   it('#on bills - sent http get request', () => {
     //when
     billService.allBills().subscribe((bills: Bill[]) => {
-      expect(bills.length).toEqual(2);
-      expect(bills[0]).toBe(samplesDataService.sampleBill());
+      expect(bills.length).toEqual(1);
+      expect(bills[0].storeId).toBe(samplesDataService.sampleStores()[0].id);
     });
     //then
-    httpTestingController.expectOne(billService.ALL_BILLS_URL);
+    httpTestingController.expectOne(billService.ALL_BILLS_URL).flush(
+      [samplesDataService.sampleBill()]);
   });
 
 });
