@@ -1,16 +1,41 @@
 <div class="row">
   <div class="col-xs-12 col-sm-10 col-md-8 col-sm-offset-1 col-md-offset2">
-    <p-table [value]="bills">
+    <p-table [value]="bills" dataKey="id">
       <ng-template pTemplate="header">
         <tr>
+          <th style="width: 3em"></th>
           <th>Date</th>
           <th>Store</th>
         </tr>
       </ng-template>
-      <ng-template pTemplate="body" let-bill>
+      <ng-template pTemplate="body" let-bill let-expanded="expanded">
         <tr>
+          <td>
+            <a href="#" [pRowToggler]="bill">
+              <i [ngClass]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></i>
+            </a>
+          </td>
           <td>{{bill.purchaseDate}}</td>
-          <td>{{bill.store.name}}</td>
+          <td>{{(getStore(bill.storeId) | async)?.name}}</td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="rowexpansion" let-bill>
+        <tr>
+          <td [colSpan]="3" style="padding: 0">
+            <p-table [value]="bill.billItems" [style]="{'margin-left': '3em'}">
+              <ng-template pTemplate="header">
+                <tr>
+                 <th>Product</th>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-billItem>
+                <tr>
+                  <td>{{billItem.productId}}
+                  </td>
+                </tr>
+              </ng-template>
+            </p-table>
+          </td>
         </tr>
       </ng-template>
     </p-table>

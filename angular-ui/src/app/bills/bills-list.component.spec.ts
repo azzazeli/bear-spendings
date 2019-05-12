@@ -49,6 +49,6 @@ describe('BillsListComponent', () => {
 
   it('#should init bills []', () => {
     expect(component.bills).toBeDefined();
-    expect(component.bills[0].store).toEqual(samplesDataService.sampleStores()[0]);
-  })
+  });
+
 });

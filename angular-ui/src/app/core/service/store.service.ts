@@ -22,7 +22,6 @@ export class StoreService {
       this.observableCache[id] = this.fetchStore(id);
     }
     return this.observableCache[id];
-
     }
 
   fetchStore(id: number): Observable<Store> {

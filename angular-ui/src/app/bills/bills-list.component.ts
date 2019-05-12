@@ -4,6 +4,7 @@ import { BillService } from '../core/service/bill.service';
 import { NGXLogger } from 'ngx-logger';
 import { StoreService } from '../core/service/store.service';
 import { Store } from '../core/model/store.model';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-bills-list',
@@ -20,14 +21,12 @@ export class BillsListComponent implements OnInit {
 
   ngOnInit() {
     this.billService.allBills().subscribe((bills: Bill[]) => {
-      bills.forEach( (bill:Bill) => {
-        this.storeService.getStore(bill.storeId).subscribe((store: Store) => {
-            bill.store = store;
-          }
-        );
-      });
       this.bills = bills;
     });
+  }
+
+  getStore(storeId: number): Observable<Store> {
+    return this.storeService.getStore(storeId);
   }
 
 }

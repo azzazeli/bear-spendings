@@ -1,5 +1,6 @@
 
 export class BillItem {
+  public id: number;
   public productId: number;
   public productName: string;
   public quantity: number;
