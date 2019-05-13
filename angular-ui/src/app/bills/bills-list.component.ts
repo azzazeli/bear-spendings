@@ -5,6 +5,8 @@ import { NGXLogger } from 'ngx-logger';
 import { StoreService } from '../core/service/store.service';
 import { Store } from '../core/model/store.model';
 import { Observable } from 'rxjs';
+import { Product } from '../core/model/product.model';
+import { ProductsService } from '../core/service/products.service';
 
 @Component({
   selector: 'app-bills-list',
@@ -16,6 +18,7 @@ export class BillsListComponent implements OnInit {
 
   constructor(private logger: NGXLogger,
               private storeService: StoreService,
+              private productService: ProductsService,
               private billService: BillService) {
   }
 
@@ -26,7 +29,11 @@ export class BillsListComponent implements OnInit {
   }
 
   getStore(storeId: number): Observable<Store> {
-    return this.storeService.getStore(storeId);
+    return this.storeService.getObservableById(storeId);
+  }
+
+  getProduct(productId: number): Observable<Product> {
+    return this.productService.getObservableById(productId);
   }
 
 }

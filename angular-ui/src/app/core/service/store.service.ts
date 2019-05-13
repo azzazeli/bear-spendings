@@ -2,29 +2,23 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Store } from '../model/store.model';
 import { Observable } from 'rxjs';
+import { ObservableCacheService } from './observable.cache.service';
 
 @Injectable()
-export class StoreService {
+export class StoreService extends ObservableCacheService<Store>{
   //todo: use `${environment.api}`
   STORES_URL: string = "assets/stores.json";
   GET_ST0RE_URL: string = 'assets/getStore.json';
 
-  //todo: try RequestCache https://blog.fullstacktraining.com/caching-http-requests-with-angular/
-  private observableCache: {[key: number]: Observable<Store>} = {};
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+    super();
+  }
 
   getStores(): Observable<Store[]> {
     return this.http.get<Store[]>(this.STORES_URL);
   }
 
-  getStore(id: number): Observable<Store> {
-    if(!this.observableCache[id]) {
-      this.observableCache[id] = this.fetchStore(id);
-    }
-    return this.observableCache[id];
-    }
-
-  fetchStore(id: number): Observable<Store> {
+  protected fetchObservable(id: number): Observable<Store> {
     return this.http.get<Store>(this.GET_ST0RE_URL);
   }
 

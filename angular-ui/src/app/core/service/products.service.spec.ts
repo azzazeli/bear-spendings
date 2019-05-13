@@ -39,4 +39,18 @@ describe('ProductsServiceTest', () => {
     expect(req.length).toEqual(1);
     req[0].flush(samplesDataService.sampleProducts());
   });
+
+  it('#get product by id', () => {
+    //when
+    productService.getObservableById(1).subscribe((product: Product) => {
+      expect(product.id).toEqual(1);
+    });
+
+    const req = httpTestingController.expectOne(productService.productUrl(1));
+    expect(req.request.method).toEqual('GET');
+    req.flush(samplesDataService.sampleProducts()[0]);
+
+    productService.getObservableById(1);
+    httpTestingController.expectNone(productService.productUrl(1));
+  });
 });

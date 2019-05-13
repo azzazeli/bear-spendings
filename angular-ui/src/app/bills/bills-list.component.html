@@ -26,12 +26,15 @@
               <ng-template pTemplate="header">
                 <tr>
                  <th>Product</th>
+                 <th>Quantity</th>
+                 <th>Price</th>
                 </tr>
               </ng-template>
               <ng-template pTemplate="body" let-billItem>
                 <tr>
-                  <td>{{billItem.productId}}
-                  </td>
+                  <td>{{(getProduct(billItem.productId)| async)?.name}}</td>
+                  <td>{{billItem.quantity}}</td>
+                  <td>{{billItem.price}}</td>
                 </tr>
               </ng-template>
             </p-table>

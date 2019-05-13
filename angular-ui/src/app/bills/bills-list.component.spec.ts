@@ -7,6 +7,7 @@ import { LoggerModule, NgxLoggerLevel } from 'ngx-logger';
 import { of } from 'rxjs/internal/observable/of';
 import { TableModule } from 'primeng/table';
 import { StoreService } from '../core/service/store.service';
+import { ProductsService } from '../core/service/products.service';
 import createSpyObj = jasmine.createSpyObj;
 
 describe('BillsListComponent', () => {
@@ -14,6 +15,7 @@ describe('BillsListComponent', () => {
   let fixture: ComponentFixture<BillsListComponent>;
   let billServiceSpy: jasmine.SpyObj<BillService>;
   let storeServiceSpy: jasmine.SpyObj<StoreService>;
+  let productServiceSpy: jasmine.SpyObj<ProductsService>;
   let samplesDataService: SamplesDataService;
 
   beforeEach(async(() => {
@@ -25,7 +27,8 @@ describe('BillsListComponent', () => {
       providers: [
         SamplesDataService,
         {provide: BillService, useValue: createSpyObj('BillService', ['allBills'])},
-        {provide: StoreService, useValue: createSpyObj('StoreService', ['getStore'])}
+        {provide: StoreService, useValue: createSpyObj('StoreService', ['getObservableById'])},
+        {provide: ProductsService, useValue: createSpyObj('ProductsService', ['getObservableById'])}
       ],
       declarations: [ BillsListComponent ]
     })
@@ -37,9 +40,12 @@ describe('BillsListComponent', () => {
     component = fixture.componentInstance;
     billServiceSpy = TestBed.get(BillService);
     storeServiceSpy = TestBed.get(StoreService);
+    productServiceSpy = TestBed.get(ProductsService);
     samplesDataService = TestBed.get(SamplesDataService);
+
     billServiceSpy.allBills.and.returnValue(of([samplesDataService.sampleBill()]));
-    storeServiceSpy.getStore.and.returnValue(of(samplesDataService.sampleStores()[0]));
+    storeServiceSpy.getObservableById.and.returnValue(of(samplesDataService.sampleStores()[0]));
+    productServiceSpy.getObservableById.and.returnValue((of(samplesDataService.sampleProducts()[0])));
     fixture.detectChanges();
   });
 
