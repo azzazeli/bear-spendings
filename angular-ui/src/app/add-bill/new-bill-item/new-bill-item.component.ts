@@ -21,7 +21,7 @@ export class NewBillItemComponent implements OnInit {
     this.newBillItemForm = new FormGroup({
       'product-id': new FormControl(null),
       'product-name': new FormControl(null, Validators.required),
-      'price': new FormControl(null, Validators.required),
+      'price': new FormControl(null, [Validators.required, this.validateNegative]),
       'quantity': new FormControl(null, Validators.required)
     });
   }
@@ -53,5 +53,10 @@ export class NewBillItemComponent implements OnInit {
 
   onClearBillItem() {
     this.newBillItemForm.reset();
+  }
+
+
+  validateNegative(formControl: FormControl): {[s:string]: boolean} {
+    return +formControl.value <= 0 ? {'negativeNumber' : true } : null;
   }
 }

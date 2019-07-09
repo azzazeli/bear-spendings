@@ -106,4 +106,16 @@ describe('NewBillItemComponent', () => {
     expect(component.newBillItemForm.get('quantity').value).toBeNull();
   });
 
+  it('#validate negative price', () => {
+    const billItem = samplesDataService.sampleBillItem(1);
+    billItem.price = -2;
+    component.setBillItem(billItem);
+    expect(component.newBillItemForm.valid).toBe(false);
+    expect(component.newBillItemForm.controls['price'].invalid).toBe(true);
+
+    billItem.price = 2;
+    component.setBillItem(billItem);
+    expect(component.newBillItemForm.valid).toBe(true);
+  });
+
 });
