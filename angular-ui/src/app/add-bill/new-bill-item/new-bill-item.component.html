@@ -16,7 +16,7 @@
     <div class="col-xs-2">
       <label for="bill-item-quantity">Quantity:</label>
       <input id="bill-item-quantity" formControlName="quantity" type="number" class="form-control" size="2">
-      <div *ngIf="!newBillItemForm.get('quantity').valid && newBillItemForm.get('quantity').touched" style="color: red">
+      <div *ngIf="!newBillItemForm.get('quantity').valid && newBillItemForm.get('quantity').touched"  style="color: red">
         Invalid quantity.
       </div>
     </div>
