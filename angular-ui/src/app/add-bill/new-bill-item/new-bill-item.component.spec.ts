@@ -118,4 +118,16 @@ describe('NewBillItemComponent', () => {
     expect(component.newBillItemForm.valid).toBe(true);
   });
 
+  it('#validate negative quantity', () => {
+    const billItem = samplesDataService.sampleBillItem(1);
+    billItem.quantity = -2;
+    component.setBillItem(billItem);
+    expect(component.newBillItemForm.valid).toBe(false);
+    expect(component.newBillItemForm.controls['quantity'].invalid).toBe(true);
+
+    billItem.quantity = 2;
+    component.setBillItem(billItem);
+    expect(component.newBillItemForm.valid).toBe(true);
+  });
+
 });
