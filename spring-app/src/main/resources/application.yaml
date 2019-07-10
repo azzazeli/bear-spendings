@@ -2,15 +2,21 @@ server:
   port: 8090
 
 spring:
-#  datasource:
-#    url: "jdbc:sqlserver://localhost;databaseName=bearspendings"
-#    username: sa
-#    password: manager
-#    driverClassName: com.microsoft.sqlserver.jdbc.SQLServerDriver
+  datasource:
+    url: "jdbc:h2:file:~/.bear-spendings-data/db"
+    username: sa
+    password: manager
+    driverClassName: org.h2.Driver
   jpa:
-    show-sql: true
+    show_sql: true
     hibernate:
       ddl-auto: update
+    database-platform: org.hibernate.dialect.H2Dialect
   h2:
     console:
       enabled: true
+logging:
+  level:
+    org:
+      hibernate:
+        type: info #trace - to see sql bind values

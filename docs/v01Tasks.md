@@ -27,7 +27,7 @@
 
 ## List of bills
 ### UI
-- [ ] list of bills from mock using bootstrap grid. pay attention to bill item representation
+- [x] list of bills from mock using bootstrap grid. pay attention to bill item representation
 
 
 ## Server

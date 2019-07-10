@@ -31,6 +31,7 @@ public class DevBootstrap implements ApplicationListener<ContextRefreshedEvent> 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
         log.debug("Developer bootstrap. Initialize with sample data.");
+        //todo: init data only once not on every run (make this configurable from yml) - this is for case when database is not persisted
         initData();
     }
 
@@ -46,7 +47,7 @@ public class DevBootstrap implements ApplicationListener<ContextRefreshedEvent> 
         BillItem chefirBi = BillItem.builder().product(chefir).price(7.85).quantity(1).build();
         billItemRepository.save(chefirBi);
         Bill nr1Bill = Bill.builder()
-                .orderDate(LocalDate.of(2019, 04, 15))
+                .orderDate(LocalDate.of(2019, 4, 15))
                 .store(nr1)
                 .item(chefirBi)
                 .build();
