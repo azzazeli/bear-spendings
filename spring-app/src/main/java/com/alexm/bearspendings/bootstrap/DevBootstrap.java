@@ -30,12 +30,13 @@ public class DevBootstrap implements ApplicationListener<ContextRefreshedEvent> 
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
-        log.debug("Developer bootstrap. Initialize with sample data.");
-        //todo: init data only once not on every run (make this configurable from yml) - this is for case when database is not persisted
-        initData();
+        if (productRepository.count() <=0) {
+            initData();
+        }
     }
 
     private void initData() {
+        log.debug("Developer bootstrap. Initialize with sample data.");
         final Store nr1 = Store.builder().name("Nr.1").build();
         storeRepository.save(nr1);
 

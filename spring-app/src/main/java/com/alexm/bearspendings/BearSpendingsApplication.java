@@ -10,4 +10,6 @@ public class BearSpendingsApplication {
         SpringApplication.run(BearSpendingsApplication.class, args);
     }
 
+    //todo: write here a full integration test with in memory h2
+
 }
