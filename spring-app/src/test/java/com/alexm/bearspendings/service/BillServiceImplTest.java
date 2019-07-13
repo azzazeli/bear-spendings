@@ -2,11 +2,11 @@ package com.alexm.bearspendings.service;
 
 import com.alexm.bearspendings.entity.Bill;
 import com.alexm.bearspendings.repository.BillRepository;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -17,7 +17,7 @@ import static org.mockito.Mockito.when;
 /**
  * @author AlexM created on 7/11/19
  */
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class BillServiceImplTest {
 
     @Mock
@@ -25,7 +25,7 @@ public class BillServiceImplTest {
 
     private BillServiceImpl billService;
 
-    @Before
+    @BeforeEach
     public void setup() {
         billService = new BillServiceImpl(billRepository);
     }
