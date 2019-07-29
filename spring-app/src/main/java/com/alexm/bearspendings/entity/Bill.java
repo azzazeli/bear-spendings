@@ -12,14 +12,15 @@ import java.util.Set;
 /**
  * @author AlexM
  */
+
 @Entity
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Accessors(fluent = true)
 @Getter @Setter
 @ToString
 @EqualsAndHashCode(of = {"id"})
-@Builder
 public class Bill {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

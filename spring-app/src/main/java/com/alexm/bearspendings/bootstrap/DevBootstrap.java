@@ -15,6 +15,10 @@ import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * @author AlexM
@@ -37,21 +41,44 @@ public class DevBootstrap implements ApplicationListener<ContextRefreshedEvent> 
 
     private void initData() {
         log.debug("Developer bootstrap. Initialize with sample data.");
+        Store nr1 = initStore();
+        List<Product> products = initProducts();
+        Random random = ThreadLocalRandom.current();
+
+        for (int i=0; i <=random.nextInt(10); i++)  {
+            List<BillItem> items = new LinkedList<>();
+            for (int j=0; j <=random.nextInt(10) + 3; j++)  {
+                items.add(buildBillItem(products.get(random.nextInt(products.size()-1)),
+                        (double)Math.round(random.nextDouble()*100*100)/100, random.nextInt(5))
+                );
+            }
+            Bill nr1Bill = Bill.builder()
+                    .orderDate(LocalDate.of(2019, 4, random.nextInt(30)+1))
+                    .store(nr1)
+                    .items(items)
+                    .build();
+            billRepository.save(nr1Bill);
+        }
+    }
+
+    private BillItem buildBillItem(Product product, Double price, Integer quantiy) {
+        BillItem item = BillItem.builder().product(product).price(price).quantity(quantiy).build();
+        return billItemRepository.save(item);
+    }
+
+    private Store initStore() {
         final Store nr1 = Store.builder().name("Nr.1").build();
-        storeRepository.save(nr1);
+        return storeRepository.save(nr1);
+    }
 
+    private List<Product> initProducts() {
+        List<Product> generated = new LinkedList<>();
         final Product chefir = Product.builder().name("Chefir JLS 2.5%").build();
-        productRepository.save(chefir);
-        productRepository.save(Product.builder().name("Chefir JLS 2.5%").build());
-        productRepository.save(Product.builder().name("Seminte dovleac").build());
-
-        BillItem chefirBi = BillItem.builder().product(chefir).price(7.85).quantity(1).build();
-        billItemRepository.save(chefirBi);
-        Bill nr1Bill = Bill.builder()
-                .orderDate(LocalDate.of(2019, 4, 15))
-                .store(nr1)
-                .item(chefirBi)
-                .build();
-        billRepository.save(nr1Bill);
+        final Product cascaval = Product.builder().name("Cascaval Masdam").build();
+        generated.add(productRepository.save(chefir));
+        generated.add(productRepository.save(cascaval));
+        generated.add(productRepository.save(Product.builder().name("Chefir JLS 2.5%").build()));
+        generated.add(productRepository.save(Product.builder().name("Seminte dovleac").build()));
+        return generated;
     }
 }
