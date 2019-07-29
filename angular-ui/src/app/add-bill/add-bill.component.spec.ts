@@ -1,17 +1,17 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { AddBillComponent } from './add-bill.component';
-import { FormArray, ReactiveFormsModule } from '@angular/forms';
-import { LoggerModule, NgxLoggerLevel } from 'ngx-logger';
-import { StoreService } from '../core/service/store.service';
-import { Store } from '../core/model/store.model';
-import { of } from 'rxjs/internal/observable/of';
-import { CalendarModule } from 'primeng/primeng';
-import { SamplesDataService } from '../core/service/samplesDataService';
-import { NewBillItemComponent } from './new-bill-item/new-bill-item.component';
-import { ProductsService } from '../core/service/products.service';
-import { BillService } from '../core/service/bill.service';
-import { Bill } from '../core/model/bill.model';
+import {AddBillComponent} from './add-bill.component';
+import {FormArray, ReactiveFormsModule} from '@angular/forms';
+import {LoggerModule, NgxLoggerLevel} from 'ngx-logger';
+import {StoreService} from '../core/service/store.service';
+import {Store} from '../core/model/store.model';
+import {of} from 'rxjs/internal/observable/of';
+import {CalendarModule} from 'primeng/primeng';
+import {SamplesDataService} from '../core/service/samplesDataService';
+import {NewBillItemComponent} from './new-bill-item/new-bill-item.component';
+import {ProductsService} from '../core/service/products.service';
+import {BillService} from '../core/service/bill.service';
+import {Bill} from '../core/model/bill.model';
 import * as moment from 'moment';
 
 describe('AddBillComponent', () => {
@@ -183,9 +183,9 @@ describe('AddBillComponent', () => {
     //when
     component.onAddBill();
     const expectedBill: Bill = new Bill(moment('04/11/2019'), 1);
-    expectedBill.billItems.push(samplesDataService.sampleBillItem(1));
+    expectedBill.items.push(samplesDataService.sampleBillItem(1));
     expect(billServiceSpy.addBill).toHaveBeenCalledWith(expectedBill);
   });
-  
+
 
 });

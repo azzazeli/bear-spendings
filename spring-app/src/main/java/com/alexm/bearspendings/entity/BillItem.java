@@ -1,6 +1,7 @@
 package com.alexm.bearspendings.entity;
 
 import lombok.*;
+import lombok.experimental.Accessors;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -10,6 +11,7 @@ import javax.validation.constraints.NotNull;
  */
 @Entity
 @NoArgsConstructor @Getter @Setter
+@Accessors(fluent = true)
 @AllArgsConstructor
 @ToString
 @EqualsAndHashCode(of = {"id"})
@@ -19,7 +21,7 @@ public class BillItem {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     @NotNull
-    @OneToOne()
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     private Product product;
     @NotNull
     private Integer quantity;

@@ -1,9 +1,9 @@
 [
   {
     "id": 1,
-    "purchaseDate": "2019-04-21",
+    "orderDate": "2019-04-21",
     "storeId": 1,
-    "billItems": [
+    "items": [
       {
         "id": 1,
         "productId": 1,
@@ -20,9 +20,9 @@
   },
   {
     "id": 2,
-    "purchaseDate": "2019-04-22",
+    "orderDate": "2019-04-22",
     "storeId": 1,
-    "billItems": [
+    "items": [
       {
         "id": 3,
         "productId": 2,

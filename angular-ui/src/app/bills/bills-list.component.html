@@ -15,14 +15,14 @@
               <i [ngClass]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></i>
             </a>
           </td>
-          <td>{{bill.purchaseDate}}</td>
+          <td>{{bill.orderDate}}</td>
           <td>{{(getStore(bill.storeId) | async)?.name}}</td>
         </tr>
       </ng-template>
       <ng-template pTemplate="rowexpansion" let-bill>
         <tr>
           <td [colSpan]="3" style="padding: 0">
-            <p-table [value]="bill.billItems" [style]="{'margin-left': '3em'}">
+            <p-table [value]="bill.items" [style]="{'margin-left': '3em'}">
               <ng-template pTemplate="header">
                 <tr>
                  <th>Product</th>

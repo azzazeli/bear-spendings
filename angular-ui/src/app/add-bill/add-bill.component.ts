@@ -1,14 +1,14 @@
-import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
-import { AbstractControl, FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
-import { NGXLogger } from 'ngx-logger';
-import { StoreService } from '../core/service/store.service';
-import { Store } from '../core/model/store.model';
-import { Product } from '../core/model/product.model';
-import { BillItem } from '../core/model/bill-item.model';
-import { NewBillItemComponent } from './new-bill-item/new-bill-item.component';
-import { ProductsService } from '../core/service/products.service';
-import { BillService } from '../core/service/bill.service';
-import { Bill } from '../core/model/bill.model';
+import {Component, OnInit, ViewChild, ViewEncapsulation} from '@angular/core';
+import {AbstractControl, FormArray, FormControl, FormGroup, Validators} from '@angular/forms';
+import {NGXLogger} from 'ngx-logger';
+import {StoreService} from '../core/service/store.service';
+import {Store} from '../core/model/store.model';
+import {Product} from '../core/model/product.model';
+import {BillItem} from '../core/model/bill-item.model';
+import {NewBillItemComponent} from './new-bill-item/new-bill-item.component';
+import {ProductsService} from '../core/service/products.service';
+import {BillService} from '../core/service/bill.service';
+import {Bill} from '../core/model/bill.model';
 import * as moment from 'moment';
 
 @Component({
@@ -85,7 +85,7 @@ export class AddBillComponent implements OnInit {
     this.logger.debug("AddBillComponent: On add bill. addBillForm:", this.addBillForm );
     const bill: Bill = new Bill(moment(this.addBillForm.get('bill-date').value), this.addBillForm.get('store-id').value);
     for( let billItemFG of this.billItems().controls) {
-      bill.billItems.push(new BillItem(
+      bill.items.push(new BillItem(
         billItemFG.get('product-id').value,
         billItemFG.get('product-name').value,
         billItemFG.get('quantity').value,

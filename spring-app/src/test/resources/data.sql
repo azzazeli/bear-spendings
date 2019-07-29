@@ -12,3 +12,4 @@ insert into bill_item(id, price, quantity, product_id, bill_id) values (1, 7.85,
 insert into bill_item(id, price, quantity, product_id, bill_id) values (2, 9.85, 1, 2, 1);
 
 insert into bill_item(id, price, quantity, product_id, bill_id) values (3, 87.00, 1, 3, 2);
+insert into bill_item(id, price, quantity, product_id, bill_id) values (4, 10.00, 1, 2, 2);

@@ -1,6 +1,7 @@
 package com.alexm.bearspendings.entity;
 
 import lombok.*;
+import lombok.experimental.Accessors;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
@@ -14,6 +15,7 @@ import java.util.Set;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
+@Accessors(fluent = true)
 @Getter @Setter
 @ToString
 @EqualsAndHashCode(of = {"id"})
@@ -25,12 +27,12 @@ public class Bill {
     @NotNull
     private LocalDate orderDate;
     @NotNull
-    @OneToOne
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     private Store store;
 
     @NotEmpty
     @Singular
     @OneToMany
     @JoinColumn(name = "bill_id")
-    Set<BillItem> items;
+    private Set<BillItem> items;
 }

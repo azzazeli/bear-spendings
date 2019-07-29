@@ -1,9 +1,10 @@
-import { BillService } from './bill.service';
-import { TestBed } from '@angular/core/testing';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import { SamplesDataService } from './samplesDataService';
-import { HttpClient } from '@angular/common/http';
-import { Bill } from '../model/bill.model';
+import {BillService} from './bill.service';
+import {TestBed} from '@angular/core/testing';
+import {HttpClientTestingModule, HttpTestingController} from '@angular/common/http/testing';
+import {SamplesDataService} from './samplesDataService';
+import {HttpClient} from '@angular/common/http';
+import {Bill} from '../model/bill.model';
+import {LoggerModule, NgxLoggerLevel} from "ngx-logger";
 
 describe('BillServiceTest',()  => {
   let billService: BillService;
@@ -13,7 +14,9 @@ describe('BillServiceTest',()  => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
+      imports: [HttpClientTestingModule,
+        LoggerModule.forRoot({level: NgxLoggerLevel.DEBUG})
+      ],
       providers: [BillService, SamplesDataService]
     });
 
