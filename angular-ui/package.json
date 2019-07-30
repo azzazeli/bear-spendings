@@ -3,10 +3,9 @@
   "version": "0.0.1",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
     "start_mock": "ng serve -c=mock",
     "start_dev": "ng serve -c=dev",
-    "build": "ng build",
+    "build": "ng build -c=production",
     "test": "ng test",
     "test-build": "ng test -- --no-watch --no-progress --browsers=ChromeHeadlessCI",
     "lint": "ng lint",

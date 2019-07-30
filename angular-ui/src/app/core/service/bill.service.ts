@@ -18,7 +18,7 @@ export class BillService {
   }
 
   public allBills(): Observable<Bill[]> {
-    this.logger.debug("mock environment.apiUrl", environment.apiUrl);
+    this.logger.debug("environment.apiUrl", environment.apiUrl);
     return this.http.get<Bill[]>(this.ALL_BILLS_URL);
   }
 }

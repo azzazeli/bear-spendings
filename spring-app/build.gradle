@@ -14,8 +14,7 @@ repositories {
 }
 
 dependencies {
-	//todo: extract to separate dist project
-//	implementation (project(':angular-ui'))
+	implementation (project(':angular-ui'))
 //	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 	implementation 'org.springframework.boot:spring-boot-starter-web'

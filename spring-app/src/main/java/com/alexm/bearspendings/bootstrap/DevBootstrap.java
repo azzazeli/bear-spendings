@@ -52,8 +52,7 @@ public class DevBootstrap implements ApplicationListener<ContextRefreshedEvent> 
                         (double)Math.round(random.nextDouble()*100*100)/100, random.nextInt(5))
                 );
             }
-            Bill nr1Bill = Bill.builder()
-                    .orderDate(LocalDate.of(2019, 4, random.nextInt(30)+1))
+            Bill nr1Bill = Bill.builder().orderDate(LocalDate.of(2019, 4, random.nextInt(30) + 1))
                     .store(nr1)
                     .items(items)
                     .build();
