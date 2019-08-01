@@ -9,7 +9,7 @@ import {NGXLogger} from "ngx-logger";
 export class BillService {
 
   ADD_BILL_URL ='call_server_url';
-  ALL_BILLS_URL = environment.apiUrl+environment.ALL_BILLS_URL;
+  ALL_BILLS_URL = environment.apiUrl + environment.ALL_BILLS_URL;
 
   constructor(private http: HttpClient, private logger: NGXLogger) {}
 

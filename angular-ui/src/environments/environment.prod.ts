@@ -1,5 +1,5 @@
 export const environment = {
   production: true,
-  apiUrl: 'http://localhost:8090/',
+  apiUrl: 'dummy',
   ALL_BILLS_URL: "bills"
 };
