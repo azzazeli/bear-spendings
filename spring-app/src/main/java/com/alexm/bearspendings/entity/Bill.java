@@ -6,7 +6,7 @@ import lombok.experimental.Accessors;
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 /**
@@ -26,7 +26,7 @@ public class Bill {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     @NotNull
-    private LocalDate orderDate;
+    private LocalDateTime orderDate;
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     private Store store;

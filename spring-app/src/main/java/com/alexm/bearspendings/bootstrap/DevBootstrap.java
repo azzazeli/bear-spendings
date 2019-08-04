@@ -14,7 +14,7 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
@@ -52,7 +52,7 @@ public class DevBootstrap implements ApplicationListener<ContextRefreshedEvent> 
                         (double)Math.round(random.nextDouble()*100*100)/100, random.nextInt(5))
                 );
             }
-            Bill nr1Bill = Bill.builder().orderDate(LocalDate.of(2019, 4, random.nextInt(30) + 1))
+            Bill nr1Bill = Bill.builder().orderDate(LocalDateTime.of(2019, 4, random.nextInt(30) + 1, 1, 1))
                     .store(nr1)
                     .items(items)
                     .build();

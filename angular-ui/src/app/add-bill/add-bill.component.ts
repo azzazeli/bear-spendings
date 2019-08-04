@@ -92,7 +92,9 @@ export class AddBillComponent implements OnInit {
         billItemFG.get('price').value)
       );
     }
-    this.billService.addBill(bill);
+    this.billService.addBill(bill).subscribe(value => {
+      this.logger.debug("Bill was added ");
+    });
   }
 
   private billItems(): FormArray {

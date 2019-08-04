@@ -13,7 +13,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -43,7 +43,7 @@ public class BillServiceImplTest {
     @Test
     public void allBills() {
         LinkedList<Bill> billsFromRepo = new LinkedList<>();
-        LocalDate now = LocalDate.now();
+        LocalDateTime now = LocalDateTime.now();
         billsFromRepo.add(builder()
                 .id(1234L)
                 .store(Store.builder().id(334L).name("Pegas").build())

@@ -17,6 +17,9 @@ spring:
       enabled: true
 logging:
   level:
+    com:
+      alexm:
+        bearspendings: debug
     org:
       hibernate:
         type: info #trace - to see sql bind values

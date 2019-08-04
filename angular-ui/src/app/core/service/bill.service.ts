@@ -8,8 +8,8 @@ import {NGXLogger} from "ngx-logger";
 @Injectable()
 export class BillService {
 
-  ADD_BILL_URL ='call_server_url';
-  ALL_BILLS_URL = environment.apiUrl + environment.ALL_BILLS_URL;
+  ADD_BILL_URL = `${environment.apiUrl}add_bill`;
+  ALL_BILLS_URL = `${environment.apiUrl}${environment.ALL_BILLS_URL}`;
 
   constructor(private http: HttpClient, private logger: NGXLogger) {}
 

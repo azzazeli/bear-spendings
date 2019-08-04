@@ -2,9 +2,8 @@ package com.alexm.bearspendings.controller;
 
 import com.alexm.bearspendings.dto.UIBill;
 import com.alexm.bearspendings.service.BillService;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -13,6 +12,7 @@ import java.util.List;
  */
 @CrossOrigin( origins = "http://localhost:4200")
 @RestController
+@Slf4j
 public class BillController {
 
     private final BillService billService;
@@ -24,6 +24,14 @@ public class BillController {
     @GetMapping("/bills")
     public List<UIBill> bills() {
         return billService.allBills();
+    }
+
+    @PostMapping("add_bill")
+    public UIBill addBill(@RequestBody UIBill uiBill) {
+      log.debug("Processing add bill request. uiBill:" + uiBill);
+
+      log.debug("Finished to process request");
+      return uiBill;
     }
 
 }
