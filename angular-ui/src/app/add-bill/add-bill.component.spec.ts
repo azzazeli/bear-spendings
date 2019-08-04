@@ -176,6 +176,7 @@ describe('AddBillComponent', () => {
 
   it('#on add bill - call BillService.addBill', () => {
     //given
+    billServiceSpy.addBill.and.returnValue(of());
     fixture.detectChanges();
     component.addBillForm.get('bill-date').setValue('04/11/2019');
     component.addBillForm.get('store-id').setValue(1);
@@ -186,6 +187,5 @@ describe('AddBillComponent', () => {
     expectedBill.items.push(samplesDataService.sampleBillItem(1));
     expect(billServiceSpy.addBill).toHaveBeenCalledWith(expectedBill);
   });
-
 
 });
