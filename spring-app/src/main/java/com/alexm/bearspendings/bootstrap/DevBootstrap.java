@@ -8,8 +8,8 @@ import com.alexm.bearspendings.repository.BillItemRepository;
 import com.alexm.bearspendings.repository.BillRepository;
 import com.alexm.bearspendings.repository.ProductRepository;
 import com.alexm.bearspendings.repository.StoreRepository;
-import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
@@ -24,17 +24,26 @@ import java.util.concurrent.ThreadLocalRandom;
  * @author AlexM
  */
 @Component
-@AllArgsConstructor
 @Slf4j
 public class DevBootstrap implements ApplicationListener<ContextRefreshedEvent> {
-    ProductRepository productRepository;
-    StoreRepository storeRepository;
-    BillItemRepository billItemRepository;
-    BillRepository billRepository;
+    private ProductRepository productRepository;
+    private StoreRepository storeRepository;
+    private BillItemRepository billItemRepository;
+    private BillRepository billRepository;
+
+    @Value("#{new Boolean('${com.alexm.bearspendings.initTestData}')}")
+    private Boolean initWithTestData = false;
+
+    public DevBootstrap(ProductRepository productRepository, StoreRepository storeRepository, BillItemRepository billItemRepository, BillRepository billRepository) {
+        this.productRepository = productRepository;
+        this.storeRepository = storeRepository;
+        this.billItemRepository = billItemRepository;
+        this.billRepository = billRepository;
+    }
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
-        if (productRepository.count() <=0) {
+        if (initWithTestData && productRepository.count() <=0 ) {
             initData();
         }
     }

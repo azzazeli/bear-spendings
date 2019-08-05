@@ -185,7 +185,7 @@ describe('AddBillComponent', () => {
     component.onAddBill();
     const expectedBill: Bill = new Bill(moment('04/11/2019'), 1);
     expectedBill.items.push(samplesDataService.sampleBillItem(1));
-    expect(billServiceSpy.addBill).toHaveBeenCalledWith(expectedBill);
+    expect(billServiceSpy.addBill.toHaveBeenCalledWith(expectedBill);
   });
 
 });
