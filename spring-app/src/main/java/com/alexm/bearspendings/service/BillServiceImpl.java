@@ -45,6 +45,11 @@ public class BillServiceImpl implements BillService  {
                 .map(billToUiBillMap)
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public void addBill(UIBill bill) {
+        //todo: implement me
+    }
 }
 
 

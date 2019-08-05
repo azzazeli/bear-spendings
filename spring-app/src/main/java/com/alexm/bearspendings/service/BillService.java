@@ -9,4 +9,6 @@ import java.util.List;
  */
 public interface BillService {
     List<UIBill> allBills();
+
+    void addBill(UIBill bill);
 }

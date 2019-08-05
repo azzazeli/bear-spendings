@@ -5,6 +5,7 @@ import com.alexm.bearspendings.service.BillService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -27,9 +28,9 @@ public class BillController {
     }
 
     @PostMapping("add_bill")
-    public UIBill addBill(@RequestBody UIBill uiBill) {
+    public UIBill addBill(@Valid @RequestBody UIBill uiBill) {
       log.debug("Processing add bill request. uiBill:" + uiBill);
-
+      billService.addBill(uiBill);
       log.debug("Finished to process request");
       return uiBill;
     }
