@@ -18,7 +18,7 @@ import javax.validation.constraints.NotNull;
 @Builder
 public class BillItem {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)

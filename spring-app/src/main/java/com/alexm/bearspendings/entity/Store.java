@@ -17,7 +17,7 @@ import javax.persistence.Id;
 @Builder
 public class Store {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
     private String country;
