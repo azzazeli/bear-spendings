@@ -23,7 +23,7 @@ import java.util.Set;
 @EqualsAndHashCode(of = {"id"})
 public class Bill {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @NotNull
     private LocalDateTime orderDate;
