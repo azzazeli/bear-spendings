@@ -27,7 +27,7 @@ public class BillController {
         return billService.allBills();
     }
 
-    @PostMapping("add_bill")
+    @PostMapping("/add_bill")
     public UIBill addBill(@Valid @RequestBody UIBill uiBill) {
       log.debug("Processing add bill request. uiBill:" + uiBill);
       billService.addBill(uiBill);

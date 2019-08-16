@@ -4,7 +4,6 @@ import com.alexm.bearspendings.entity.Bill;
 import com.alexm.bearspendings.entity.BillItem;
 import com.alexm.bearspendings.entity.Product;
 import com.alexm.bearspendings.entity.Store;
-import com.alexm.bearspendings.repository.BillItemRepository;
 import com.alexm.bearspendings.repository.BillRepository;
 import com.alexm.bearspendings.repository.ProductRepository;
 import com.alexm.bearspendings.repository.StoreRepository;
@@ -28,16 +27,14 @@ import java.util.concurrent.ThreadLocalRandom;
 public class DevBootstrap implements ApplicationListener<ContextRefreshedEvent> {
     private ProductRepository productRepository;
     private StoreRepository storeRepository;
-    private BillItemRepository billItemRepository;
     private BillRepository billRepository;
 
     @Value("#{new Boolean('${com.alexm.bearspendings.initTestData}')}")
-    private Boolean initWithTestData = false;
+    private boolean initWithTestData = false;
 
-    public DevBootstrap(ProductRepository productRepository, StoreRepository storeRepository, BillItemRepository billItemRepository, BillRepository billRepository) {
+    public DevBootstrap(ProductRepository productRepository, StoreRepository storeRepository, BillRepository billRepository) {
         this.productRepository = productRepository;
         this.storeRepository = storeRepository;
-        this.billItemRepository = billItemRepository;
         this.billRepository = billRepository;
     }
 
@@ -70,8 +67,7 @@ public class DevBootstrap implements ApplicationListener<ContextRefreshedEvent> 
     }
 
     private BillItem buildBillItem(Product product, Double price, Integer quantiy) {
-        BillItem item = BillItem.builder().product(product).price(price).quantity(quantiy).build();
-        return billItemRepository.save(item);
+        return BillItem.builder().product(product).price(price).quantity(quantiy).build();
     }
 
     private Store initStore() {

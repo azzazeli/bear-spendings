@@ -8,3 +8,9 @@ com:
   alexm:
     bearspendings:
       initTestData: false
+
+logging:
+  level:
+    com:
+      alexm:
+        bearspendings: debug

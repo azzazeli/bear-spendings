@@ -24,17 +24,17 @@ public class BillServiceImpl implements BillService  {
 
     private final Function<BillItem, UIBillItem> billItemToUiBillItemMap = billItem ->
             UIBillItem.builder()
-                    .id(billItem.id())
-                    .price(billItem.price())
-                    .quantity(billItem.quantity())
-                    .productId(billItem.product().getId())
+                    .id(billItem.getId())
+                    .price(billItem.getPrice())
+                    .quantity(billItem.getQuantity())
+                    .productId(billItem.getProduct().getId())
                     .build();
     private final Function<Bill, UIBill> billToUiBillMap = bill ->
             UIBill.builder()
-                    .id(bill.id())
-                    .orderDate(bill.orderDate())
-                    .storeId(bill.store().getId())
-                    .items(bill.items().stream().map(billItemToUiBillItemMap).collect(Collectors.toSet()))
+                    .id(bill.getId())
+                    .orderDate(bill.getOrderDate())
+                    .storeId(bill.getStore().getId())
+                    .items(bill.getItems().stream().map(billItemToUiBillItemMap).collect(Collectors.toSet()))
                     .build();
 
 
@@ -52,7 +52,8 @@ public class BillServiceImpl implements BillService  {
 
     @Override
     public void addBill(UIBill uiBill) {
-        billRepository.save(uiBill2BilFunction.apply(uiBill));
+        Bill bill = uiBill2BilFunction.apply(uiBill);
+        billRepository.save(bill);
     }
 
 }

@@ -1,7 +1,6 @@
 package com.alexm.bearspendings.entity;
 
 import lombok.*;
-import lombok.experimental.Accessors;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
@@ -17,7 +16,6 @@ import java.util.Set;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Accessors(fluent = true)
 @Getter @Setter
 @ToString
 @EqualsAndHashCode(of = {"id"})
@@ -33,7 +31,7 @@ public class Bill {
 
     @NotEmpty
     @Singular
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "bill_id")
     private Set<BillItem> items;
 }

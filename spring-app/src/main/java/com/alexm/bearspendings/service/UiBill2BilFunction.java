@@ -32,7 +32,7 @@ public class UiBill2BilFunction implements Function<UIBill, Bill> {
                 .orderDate(uiBill.getOrderDate())
                 .items(
                         uiBill.getItems().stream().map(uiBillItem -> BillItem.builder()
-                                .product(productRepository.getOne(uiBillItem.getId()))
+                                .product(productRepository.getOne(uiBillItem.getProductId()))
                                 .price(uiBillItem.getPrice())
                                 .quantity(uiBillItem.getQuantity())
                                 .build()).collect(Collectors.toSet())
