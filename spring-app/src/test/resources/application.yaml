@@ -4,3 +4,7 @@ spring:
     username: sa
     password: manager
     driverClassName: org.h2.Driver
+com:
+  alexm:
+    bearspendings:
+      initTestData: false

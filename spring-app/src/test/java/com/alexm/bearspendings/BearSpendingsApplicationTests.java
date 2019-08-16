@@ -13,10 +13,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
-public class BearSpendingsApplicationTests {
+class BearSpendingsApplicationTests {
 
+	/**
+	 * just check if context is ok
+	 */
 	@Test
-	public void contextLoads() {
+	 void contextLoads() {
 	}
 
 	@Autowired
@@ -25,16 +28,21 @@ public class BearSpendingsApplicationTests {
 	private MockMvc mvc;
 
 	@BeforeEach
-	public void setupMvc() {
+	void setupMvc() {
 		this.mvc = MockMvcBuilders.webAppContextSetup(webAppContext).build();
 	}
 
 	@Test
-	public void getAllBills() throws Exception {
+	 void getAllBills() throws Exception {
 		this.mvc.perform(get("/bills"))
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("$.length()").value("2"))
 		;
+	}
+
+	@Test
+	void addNewBill() {
+		//todo: here add one new bill
 	}
 
 }

@@ -20,6 +20,8 @@ import java.util.stream.StreamSupport;
 @Service
 public class BillServiceImpl implements BillService  {
     private final BillRepository billRepository;
+    private final Function<UIBill, Bill> uiBill2BilFunction;
+
     private final Function<BillItem, UIBillItem> billItemToUiBillItemMap = billItem ->
             UIBillItem.builder()
                     .id(billItem.id())
@@ -35,8 +37,10 @@ public class BillServiceImpl implements BillService  {
                     .items(bill.items().stream().map(billItemToUiBillItemMap).collect(Collectors.toSet()))
                     .build();
 
-    public BillServiceImpl(BillRepository billRepository) {
+
+    public BillServiceImpl(BillRepository billRepository, Function<UIBill, Bill> uiBill2BilFunction) {
         this.billRepository = billRepository;
+        this.uiBill2BilFunction = uiBill2BilFunction;
     }
 
     @Override
@@ -47,9 +51,10 @@ public class BillServiceImpl implements BillService  {
     }
 
     @Override
-    public void addBill(UIBill bill) {
-        //todo: implement me
+    public void addBill(UIBill uiBill) {
+        billRepository.save(uiBill2BilFunction.apply(uiBill));
     }
+
 }
 
 

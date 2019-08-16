@@ -1,11 +1,14 @@
 package com.alexm.bearspendings.service;
 
 import com.alexm.bearspendings.dto.UIBill;
+import com.alexm.bearspendings.dto.UIBillItem;
 import com.alexm.bearspendings.entity.Bill;
 import com.alexm.bearspendings.entity.BillItem;
 import com.alexm.bearspendings.entity.Product;
 import com.alexm.bearspendings.entity.Store;
 import com.alexm.bearspendings.repository.BillRepository;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSet;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,26 +25,36 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.tuple;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 /**
  * @author AlexM created on 7/11/19
  */
 @ExtendWith(MockitoExtension.class)
-public class BillServiceImplTest {
+class BillServiceImplTest {
 
     @Mock
     private BillRepository billRepository;
-
     private BillServiceImpl billService;
 
+    private LocalDateTime orderDate = LocalDateTime.of(2019, 2, 12, 12, 33);
+
     @BeforeEach
-    public void setup() {
-        billService = new BillServiceImpl(billRepository);
+    void setup() {
+        billService = new BillServiceImpl(billRepository, uiBill -> Bill.builder()
+                .store(Store.builder().id(1L).build())
+                .orderDate(orderDate)
+                .items(
+                        ImmutableList.of(
+                                BillItem.builder().quantity(2).product(Product.builder().id(1L).build()).price(22.9).build(),
+                                BillItem.builder().quantity(1).product(Product.builder().id(2L).build()).price(44.0).build()
+                        )
+                )
+                .build());
     }
 
     @Test
-    public void allBills() {
+    void allBills() {
         LinkedList<Bill> billsFromRepo = new LinkedList<>();
         LocalDateTime now = LocalDateTime.now();
         billsFromRepo.add(builder()
@@ -58,10 +71,37 @@ public class BillServiceImplTest {
         assertEquals(1234L, uiBill.getId().longValue());
         assertEquals(334L, uiBill.getStoreId().longValue());
         assertEquals(now, uiBill.getOrderDate());
-        assertThat(uiBill.getItems()).extracting("id","productId","quantity", "price")
+        assertThat(uiBill.getItems()).extracting("id", "productId", "quantity", "price")
                 .contains(
                         tuple(222L, 1000L, 1, 11.2)
                 );
+    }
+
+    @Test
+    void addBill() {
+        UIBill newBill = UIBill.builder()
+                .storeId(1L)
+                .orderDate(orderDate)
+                .items(
+                        ImmutableSet.of(
+                                UIBillItem.builder().quantity(2).productId(1L).price(22.9).build(),
+                                UIBillItem.builder().quantity(1).productId(2L).price(44.0).build()
+                        )
+                )
+                .build();
+        billService.addBill(newBill);
+
+        Bill expectedBill = Bill.builder()
+                .store(Store.builder().id(1L).build())
+                .orderDate(orderDate)
+                .items(
+                        ImmutableList.of(
+                                BillItem.builder().quantity(2).product(Product.builder().id(1L).build()).price(22.9).build(),
+                                BillItem.builder().quantity(1).product(Product.builder().id(2L).build()).price(44.0).build()
+                        )
+                )
+                .build();
+        verify(billRepository, times(1)).save(expectedBill);
     }
 
 }
