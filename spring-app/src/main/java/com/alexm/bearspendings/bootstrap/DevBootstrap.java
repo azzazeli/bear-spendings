@@ -49,6 +49,10 @@ public class DevBootstrap implements ApplicationListener<ContextRefreshedEvent> 
         log.debug("Developer bootstrap. Initialize with sample data.");
         Store nr1 = initStore();
         List<Product> products = initProducts();
+        initBills(nr1, products);
+    }
+
+    private void initBills(Store nr1, List<Product> products) {
         Random random = ThreadLocalRandom.current();
 
         for (int i=0; i <=random.nextInt(10); i++)  {
