@@ -40,16 +40,16 @@ public class DevBootstrap implements ApplicationListener<ContextRefreshedEvent> 
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
-        if (initWithTestData && productRepository.count() <=0 ) {
+        if (initWithTestData && storeRepository.count() <=0 ) {
             initData();
         }
     }
 
     private void initData() {
         log.debug("Developer bootstrap. Initialize with sample data.");
-        Store nr1 = initStore();
-        List<Product> products = initProducts();
-        initBills(nr1, products);
+        initStores();
+//        initProducts();
+//        initBills(nr1, products);
     }
 
     private void initBills(Store nr1, List<Product> products) {
@@ -74,9 +74,39 @@ public class DevBootstrap implements ApplicationListener<ContextRefreshedEvent> 
         return BillItem.builder().product(product).price(price).quantity(quantiy).build();
     }
 
-    private Store initStore() {
-        final Store nr1 = Store.builder().name("Nr.1").build();
-        return storeRepository.save(nr1);
+    private void initStores() {
+        String chisinauCity = "Chisinau";
+        String moldovaCountry = "Moldova";
+        storeRepository.save(Store.builder()
+                .name("Nr.1")
+                .country(moldovaCountry)
+                .location("Viaduc")
+                .city(chisinauCity)
+                .build());
+        storeRepository.save(Store.builder()
+                .name("Pegas")
+                .country(moldovaCountry)
+                .location("Petricani")
+                .city(chisinauCity)
+                .build());
+        storeRepository.save(Store.builder()
+                .name("Pegas")
+                .country(moldovaCountry)
+                .location("Creanga")
+                .city(chisinauCity)
+                .build());
+        storeRepository.save(Store.builder()
+                .name("Ali Market")
+                .country(moldovaCountry)
+                .location("Matei Basarab")
+                .city(chisinauCity)
+                .build());
+        storeRepository.save(Store.builder()
+                .name("Piata Ciocana")
+                .country(moldovaCountry)
+                .location("Ciocana")
+                .city(chisinauCity)
+                .build());
     }
 
     private List<Product> initProducts() {
