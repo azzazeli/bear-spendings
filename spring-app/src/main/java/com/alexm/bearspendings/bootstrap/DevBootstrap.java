@@ -25,6 +25,9 @@ import java.util.concurrent.ThreadLocalRandom;
 @Component
 @Slf4j
 public class DevBootstrap implements ApplicationListener<ContextRefreshedEvent> {
+
+    public static final String ALLOWED_ORIGIN = "http://localhost:4200";
+
     private ProductRepository productRepository;
     private StoreRepository storeRepository;
     private BillRepository billRepository;
@@ -83,13 +86,7 @@ public class DevBootstrap implements ApplicationListener<ContextRefreshedEvent> 
                 .location("Viaduc")
                 .city(chisinauCity)
                 .build());
-        storeRepository.save(Store.builder()
-                .name("Pegas")
-                .country(moldovaCountry)
-                .location("Petricani")
-                .city(chisinauCity)
-                .build());
-        storeRepository.save(Store.builder()
+       storeRepository.save(Store.builder()
                 .name("Pegas")
                 .country(moldovaCountry)
                 .location("Creanga")

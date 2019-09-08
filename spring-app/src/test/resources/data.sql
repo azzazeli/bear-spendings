@@ -1,5 +1,5 @@
 
-insert into store (id, city, country, location, name) values (1, 'chisinau', 'moldova', 'botanica viaduct', 'nr.1');
+insert into store (id, city, country, location, name) values (1, 'chisinau', 'moldova', 'botanica viaduct', 'Nr.1');
 
 insert into product(id, name) values (1, 'chefir jlc 1%');
 insert into product(id, name) values (2, 'chefir jlc 2.5%');

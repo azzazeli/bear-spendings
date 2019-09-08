@@ -8,10 +8,12 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
+import static com.alexm.bearspendings.bootstrap.DevBootstrap.ALLOWED_ORIGIN;
+
 /**
  * @author AlexM created on 7/11/19
  */
-@CrossOrigin( origins = "http://localhost:4200")
+@CrossOrigin( origins = ALLOWED_ORIGIN)
 @RestController
 @Slf4j
 public class BillController {
