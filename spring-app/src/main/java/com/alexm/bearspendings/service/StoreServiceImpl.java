@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -27,5 +28,11 @@ public class StoreServiceImpl implements StoreService {
         Set<Store> stores = new HashSet<>();
         storeRepository.findAll().iterator().forEachRemaining(stores::add);
         return stores;
+    }
+
+    @Override
+    public Optional<Store> findStore(Long id) {
+        log.debug("Getting store for id: {}", id);
+        return storeRepository.findById(id);
     }
 }

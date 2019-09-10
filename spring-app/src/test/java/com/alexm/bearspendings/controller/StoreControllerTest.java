@@ -4,6 +4,7 @@ import com.alexm.bearspendings.entity.Store;
 import com.alexm.bearspendings.service.StoreService;
 import com.google.common.collect.ImmutableSet;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,12 +12,14 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+
+import java.util.Optional;
 
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
  * @author AlexM
@@ -38,14 +41,34 @@ class StoreControllerTest {
                 Store.builder().id(1L).name("Nr.2").build(),
                 Store.builder().id(2L).name("Pegas").build()
         ));
+        when(storeService.findStore(1L)).thenReturn(Optional.of(Store.builder().id(1L).name("Nr.1").build()));
     }
 
     @Test
     void stores() throws Exception {
         mvc.perform(get("/stores"))
-                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(2))
         .andDo(print())
         ;
+    }
+
+
+    @DisplayName("get store")
+    @Test
+    void store() throws Exception {
+        mvc.perform(get("/store/1"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(1))
+                .andExpect(jsonPath("$.name").value("Nr.1"))
+                .andDo(print());
+    }
+
+    @DisplayName("store not found")
+    @Test
+    void noStore() throws Exception {
+        mvc.perform(get("/store/10002"))
+                .andExpect(status().isNotFound())
+                .andDo(print());
     }
 }

@@ -5,6 +5,8 @@ import lombok.*;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
+import static javax.persistence.CascadeType.ALL;
+
 /**
  * @author AlexM
  */
@@ -19,7 +21,7 @@ public class BillItem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = ALL)
     private Product product;
     @NotNull
     private Integer quantity;

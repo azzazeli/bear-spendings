@@ -6,7 +6,8 @@ export const environment = {
   production: false,
   apiUrl:"default",
   ALL_BILLS_URL: "bills",
-  STORES_URL: "stores"
+  STORES_URL: "stores",
+  GET_ST0RE_URL: "store"
 };
 
 /*

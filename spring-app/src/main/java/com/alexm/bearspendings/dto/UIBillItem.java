@@ -11,15 +11,15 @@ import javax.validation.constraints.Positive;
 @Builder
 @Data
 @JsonDeserialize(builder = UIBillItem.UIBillItemBuilder.class)
+@ValidUiBillItem
 public class UIBillItem {
     private Long id;
-    @NotNull(message = "Product id is mandatory")
-    @Positive(message = "Product id must be positive")
+    private String productName;
     private Long productId;
-    @NotNull
+    @NotNull(message = "Quantity is mandatory")
     @Positive(message = "Quantity must be a positive number")
     private Integer quantity;
-    @NotNull
+    @NotNull(message = "Price is mandatory")
     @Positive(message = "Price must be a positive number")
     private Double price;
 
