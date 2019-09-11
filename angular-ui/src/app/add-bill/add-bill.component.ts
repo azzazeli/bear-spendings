@@ -10,12 +10,14 @@ import {ProductsService} from '../core/service/products.service';
 import {BillService} from '../core/service/bill.service';
 import {Bill} from '../core/model/bill.model';
 import * as moment from 'moment';
+import {MessageService} from "primeng/api";
 
 @Component({
   selector: 'app-add-bill',
   templateUrl: './add-bill.component.html',
   styleUrls: ['./add-bill.component.css'],
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
+  providers: [MessageService]
 })
 export class AddBillComponent implements OnInit {
   stores: Store[];
@@ -26,7 +28,9 @@ export class AddBillComponent implements OnInit {
   @ViewChild(NewBillItemComponent)
   newBillItemComponent: NewBillItemComponent;
 
-  constructor(private logger: NGXLogger, private storeService: StoreService,
+  constructor(private logger: NGXLogger,
+              private messageService: MessageService,
+              private storeService: StoreService,
               private billService: BillService,
               private productsService: ProductsService) {
   }
@@ -94,6 +98,7 @@ export class AddBillComponent implements OnInit {
     }
     this.billService.addBill(bill).subscribe(addedBill => {
       this.logger.debug("Bill was added. bill id:" + addedBill.id);
+      this.messageService.add({severity: 'success', summary: 'Bill was added with success'});
       this.resetForm();
     });
   }

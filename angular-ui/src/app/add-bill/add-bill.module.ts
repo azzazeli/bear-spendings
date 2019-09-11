@@ -1,11 +1,12 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { AddBillComponent } from './add-bill.component';
-import { NewBillItemComponent } from './new-bill-item/new-bill-item.component';
-import { ReactiveFormsModule } from '@angular/forms';
-import { CalendarModule } from 'primeng/primeng';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { CoreModule } from '../core/core.module';
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {AddBillComponent} from './add-bill.component';
+import {NewBillItemComponent} from './new-bill-item/new-bill-item.component';
+import {ReactiveFormsModule} from '@angular/forms';
+import {CalendarModule} from 'primeng/primeng';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {CoreModule} from '../core/core.module';
+import {ToastModule} from 'primeng/toast';
 
 @NgModule({
   declarations: [
@@ -17,7 +18,8 @@ import { CoreModule } from '../core/core.module';
     CoreModule,
     ReactiveFormsModule,
     CalendarModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    ToastModule,
   ],
   exports: [
     AddBillComponent
