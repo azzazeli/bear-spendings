@@ -174,18 +174,29 @@ describe('AddBillComponent', () => {
     expect(component.addBillForm.valid).toBe(true)
   });
 
-  it('#on add bill - call BillService.addBill', () => {
+  fit('#on add bill - call BillService.addBill, reset new bill form', () => {
     //given
-    billServiceSpy.addBill.and.returnValue(of());
+    let addedBill = new Bill(moment('2019-04-21'), 1);
+    addedBill.id = 1224;
+    billServiceSpy.addBill.and.returnValue(of(addedBill));
     fixture.detectChanges();
     component.addBillForm.get('bill-date').setValue('04/11/2019');
     component.addBillForm.get('store-id').setValue(1);
+    component.onStoreSelected();
     component.onAddBillItem(samplesDataService.sampleBillItem(1));
+
     //when
     component.onAddBill();
     const expectedBill: Bill = new Bill(moment('04/11/2019'), 1);
     expectedBill.items.push(samplesDataService.sampleBillItem(1));
     expect(billServiceSpy.addBill).toHaveBeenCalledWith(expectedBill);
+    expect(component.topStoreProducts.length).toBe(0);
+    expect((<FormArray>component.addBillForm.get('bill-items')).controls).toEqual([]);
+    expect(component.addBillForm.get('bill-date').value).toBeNull('Bill date must be reset');
+    expect(component.addBillForm.get('store-id').value).toBeNull('Store must be reset');
+    expect(component.addBillForm.pristine).toBe(true);
+    expect(component.addBillForm.touched).toBeFalsy();
+    expect(component.selectedProductId).toBeNull('Selected top product must be reset');
   });
 
 });

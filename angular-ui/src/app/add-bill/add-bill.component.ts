@@ -93,8 +93,8 @@ export class AddBillComponent implements OnInit {
       );
     }
     this.billService.addBill(bill).subscribe(addedBill => {
-      //todo: clear entire form
       this.logger.debug("Bill was added. bill id:" + addedBill.id);
+      this.resetForm();
     });
   }
 
@@ -102,9 +102,23 @@ export class AddBillComponent implements OnInit {
     return <FormArray>this.addBillForm.get('bill-items');
   }
 
+  private resetForm() {
+    this.logger.debug('resetting new bill form ...');
+    this.addBillForm.get('bill-date').setValue(null);
+    this.addBillForm.get('store-id').setValue(null);
+    this.topStoreProducts.splice(0);
+    this.billItems().controls = [];
+    this.resetNewBillItem();
+    this.addBillForm.markAsUntouched();
+    this.addBillForm.markAsPristine();
+    this.logger.debug("resetting done.")
+  }
+
   private resetNewBillItem() {
+    this.logger.debug('resetting new bill item form ...');
     this.newBillItemComponent.reset();
     this.selectedProductId = null;
+    this.logger.debug("resetting done.");
   }
 
 }
