@@ -6,13 +6,14 @@ import {LoggerModule, NgxLoggerLevel} from 'ngx-logger';
 import {StoreService} from '../core/service/store.service';
 import {Store} from '../core/model/store.model';
 import {of} from 'rxjs/internal/observable/of';
-import {CalendarModule} from 'primeng/primeng';
+import {CalendarModule, MessageService} from 'primeng/primeng';
 import {SamplesDataService} from '../core/service/samplesDataService';
 import {NewBillItemComponent} from './new-bill-item/new-bill-item.component';
 import {ProductsService} from '../core/service/products.service';
 import {BillService} from '../core/service/bill.service';
 import {Bill} from '../core/model/bill.model';
 import * as moment from 'moment';
+import {ToastModule} from "primeng/toast";
 
 describe('AddBillComponent', () => {
   let component: AddBillComponent;
@@ -24,9 +25,10 @@ describe('AddBillComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [ReactiveFormsModule, CalendarModule,
+      imports: [ ReactiveFormsModule, CalendarModule, ToastModule,
         LoggerModule.forRoot({level: NgxLoggerLevel.DEBUG})],
       providers: [
+        MessageService,
         SamplesDataService,
         {provide: StoreService, useValue: jasmine.createSpyObj('StoreService', ['getStores'])},
         {provide: BillService, useValue: jasmine.createSpyObj('BillService', ['addBill'])},

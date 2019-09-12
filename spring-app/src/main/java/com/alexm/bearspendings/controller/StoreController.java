@@ -1,13 +1,11 @@
 package com.alexm.bearspendings.controller;
 
+import com.alexm.bearspendings.entity.Product;
 import com.alexm.bearspendings.entity.Store;
 import com.alexm.bearspendings.service.StoreService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import static com.alexm.bearspendings.bootstrap.DevBootstrap.ALLOWED_ORIGIN;
 
@@ -36,5 +34,12 @@ public class StoreController {
         log.debug("request for store with id: {}", id);
         return ResponseEntity.of(storeService.findStore(id));
     }
+
+    @GetMapping("/top_store_products")
+    public ResponseEntity<Iterable<Product>> topStoreProduct(@RequestParam(name = "storeId") Long storeId) {
+        log.debug("Getting top products for store with id:{}", storeId);
+        return ResponseEntity.ok(storeService.topProducts(storeId));
+    }
+
 
 }

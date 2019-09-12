@@ -1,5 +1,6 @@
 package com.alexm.bearspendings.controller;
 
+import com.alexm.bearspendings.entity.Product;
 import com.alexm.bearspendings.entity.Store;
 import com.alexm.bearspendings.service.StoreService;
 import com.google.common.collect.ImmutableSet;
@@ -41,7 +42,11 @@ class StoreControllerTest {
                 Store.builder().id(1L).name("Nr.2").build(),
                 Store.builder().id(2L).name("Pegas").build()
         ));
-        when(storeService.findStore(1L)).thenReturn(Optional.of(Store.builder().id(1L).name("Nr.1").build()));
+        when(storeService.findStore(1L))
+                .thenReturn(Optional.of(Store.builder().id(1L).name("Nr.1").build()));
+        when(storeService.topProducts(1L)).thenReturn(ImmutableSet.of(
+                Product.builder().id(23L).name("Lapte").build()
+        ));
     }
 
     @Test
@@ -71,4 +76,15 @@ class StoreControllerTest {
                 .andExpect(status().isNotFound())
                 .andDo(print());
     }
+
+    @DisplayName("test top store products")
+    @Test
+    void topStoreProducts() throws Exception {
+        mvc.perform(get("/top_store_products?storeId=1"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(1))
+                .andExpect(jsonPath("$.[0].name").value("Lapte"))
+                .andDo(print());
+    }
+
 }
