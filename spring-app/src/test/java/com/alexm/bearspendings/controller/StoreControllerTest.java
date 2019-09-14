@@ -16,6 +16,8 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Optional;
 
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -44,7 +46,7 @@ class StoreControllerTest {
         ));
         when(storeService.findStore(1L))
                 .thenReturn(Optional.of(Store.builder().id(1L).name("Nr.1").build()));
-        when(storeService.topProducts(1L)).thenReturn(ImmutableSet.of(
+        when(storeService.topProducts(eq(1L), anyInt())).thenReturn(ImmutableSet.of(
                 Product.builder().id(23L).name("Lapte").build()
         ));
     }

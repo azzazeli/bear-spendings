@@ -38,7 +38,7 @@ public class StoreController {
     @GetMapping("/top_store_products")
     public ResponseEntity<Iterable<Product>> topStoreProduct(@RequestParam(name = "storeId") Long storeId) {
         log.debug("Getting top products for store with id:{}", storeId);
-        return ResponseEntity.ok(storeService.topProducts(storeId));
+        return ResponseEntity.ok(storeService.topProducts(storeId, 10));
     }
 
 

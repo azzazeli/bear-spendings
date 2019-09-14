@@ -31,7 +31,6 @@ public class Bill {
 
     @NotEmpty
     @Singular
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "bill_id")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "bill")
     private Set<BillItem> items;
 }

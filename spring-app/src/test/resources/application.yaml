@@ -1,9 +1,18 @@
+#server:
+#  port: 8399
+
 spring:
   datasource:
     url: "jdbc:h2:mem:bear-spendings-test-data"
     username: sa
     password: manager
     driverClassName: org.h2.Driver
+  jpa:
+    show_sql: true
+#  h2:
+#    console:
+#      enabled: true
+
 com:
   alexm:
     bearspendings:
@@ -14,3 +23,6 @@ logging:
     com:
       alexm:
         bearspendings: debug
+    org:
+      hibernate:
+        type: info #trace - to see sql bind values

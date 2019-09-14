@@ -17,7 +17,8 @@ public interface StoreService {
     /**
      * get a set of top products in the store
      * @param storeId identifier  of {@link Store}
+     * @param size number of returned products
      * @return set of {@link Product}s
      */
-    Set<Product> topProducts(Long storeId);
+    Set<Product> topProducts(Long storeId, int size);
 }

@@ -2,12 +2,14 @@ package com.alexm.bearspendings.service;
 
 import com.alexm.bearspendings.entity.Product;
 import com.alexm.bearspendings.entity.Store;
+import com.alexm.bearspendings.repository.ProductRepository;
 import com.alexm.bearspendings.repository.StoreRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -19,9 +21,11 @@ import java.util.Set;
 @Service
 public class StoreServiceImpl implements StoreService {
     private final StoreRepository storeRepository;
+    private final ProductRepository productRepository;
 
-    public StoreServiceImpl(StoreRepository storeRepository) {
+    public StoreServiceImpl(StoreRepository storeRepository, ProductRepository productRepository) {
         this.storeRepository = storeRepository;
+        this.productRepository = productRepository;
     }
 
     @Override
@@ -42,12 +46,13 @@ public class StoreServiceImpl implements StoreService {
     /**
      * Return last 10 products from bills
      * @param storeId identifier  of {@link Store}
+     * @param size number of returned products
      * @return
      */
     @Override
-    public Set<Product> topProducts(Long storeId) {
+    public Set<Product> topProducts(Long storeId, int size) {
         log.debug("Obtaining top product for store with id:{}", storeId);
-        //TODO implement me :)
-        return Collections.emptySet();
+        List<Product> products = productRepository.topByStore(storeId, PageRequest.of(0, size));
+        return new HashSet<>(products);
     }
 }
