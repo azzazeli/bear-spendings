@@ -1,17 +1,17 @@
 package com.alexm.bearspendings.service;
 
-import com.alexm.bearspendings.entity.Product;
+import com.alexm.bearspendings.dto.TopProduct;
 import com.alexm.bearspendings.entity.Store;
-import com.alexm.bearspendings.repository.ProductRepository;
+import com.alexm.bearspendings.repository.BillItemRepository;
 import com.alexm.bearspendings.repository.StoreRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * @author AlexM
@@ -21,11 +21,11 @@ import java.util.Set;
 @Service
 public class StoreServiceImpl implements StoreService {
     private final StoreRepository storeRepository;
-    private final ProductRepository productRepository;
+    private final BillItemRepository billItemRepository;
 
-    public StoreServiceImpl(StoreRepository storeRepository, ProductRepository productRepository) {
+    public StoreServiceImpl(StoreRepository storeRepository, BillItemRepository billItemRepository) {
         this.storeRepository = storeRepository;
-        this.productRepository = productRepository;
+        this.billItemRepository = billItemRepository;
     }
 
     @Override
@@ -50,9 +50,15 @@ public class StoreServiceImpl implements StoreService {
      * @return
      */
     @Override
-    public Set<Product> topProducts(Long storeId, int size) {
+    public Set<TopProduct> topProducts(Long storeId, int size) {
         log.debug("Obtaining top product for store with id:{}", storeId);
-        List<Product> products = productRepository.topByStore(storeId, PageRequest.of(0, size));
-        return new HashSet<>(products);
+        return billItemRepository.lastItemsWithDistinctProducts(storeId, PageRequest.of(0, size))
+                .stream()
+                .map(billItem -> TopProduct.builder()
+                        .id(billItem.getProduct().getId())
+                        .price(billItem.getPrice())
+                        .quantity(billItem.getQuantity())
+                        .build())
+                .collect(Collectors.toSet());
     }
 }

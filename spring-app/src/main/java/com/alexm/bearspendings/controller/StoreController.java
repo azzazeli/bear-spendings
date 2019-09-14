@@ -1,6 +1,6 @@
 package com.alexm.bearspendings.controller;
 
-import com.alexm.bearspendings.entity.Product;
+import com.alexm.bearspendings.dto.TopProduct;
 import com.alexm.bearspendings.entity.Store;
 import com.alexm.bearspendings.service.StoreService;
 import lombok.extern.slf4j.Slf4j;
@@ -36,7 +36,7 @@ public class StoreController {
     }
 
     @GetMapping("/top_store_products")
-    public ResponseEntity<Iterable<Product>> topStoreProduct(@RequestParam(name = "storeId") Long storeId) {
+    public ResponseEntity<Iterable<TopProduct>> topStoreProduct(@RequestParam(name = "storeId") Long storeId) {
         log.debug("Getting top products for store with id:{}", storeId);
         return ResponseEntity.ok(storeService.topProducts(storeId, 10));
     }

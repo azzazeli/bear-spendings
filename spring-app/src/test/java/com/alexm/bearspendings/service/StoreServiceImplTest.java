@@ -1,6 +1,6 @@
 package com.alexm.bearspendings.service;
 
-import com.alexm.bearspendings.entity.Product;
+import com.alexm.bearspendings.dto.TopProduct;
 import com.alexm.bearspendings.entity.Store;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -59,27 +59,27 @@ class StoreServiceImplTest {
     void testTopProducts() {
         //given
         //when
-        Set<Product> products = storeService.topProducts(1L, 2);
+        Set<TopProduct> products = storeService.topProducts(1L, 2);
         //then
         assertAll(
                 () -> { assertEquals(2, products.size());}
         );
-        Iterator<Product> iterator = products.iterator();
-        Product chefir1 = iterator.next();
-        assertThat(chefir1,
+        Iterator<TopProduct> iterator = products.iterator();
+        TopProduct inghetata = iterator.next();
+        assertThat(inghetata,
                 allOf(
-                        hasProperty("id", equalTo(1L)),
-                        hasProperty("name", equalTo("chefir jlc 1%"))
+                        hasProperty("id", equalTo(3L)),
+                        hasProperty("quantity", equalTo(1)),
+                        hasProperty("price", equalTo(87.00))
                 )
         );
-
-        Product chefir2 = iterator.next();
-        assertThat(chefir2,
+        TopProduct chefir25 = iterator.next();
+        assertThat(chefir25,
                 allOf(
                         hasProperty("id", equalTo(2L)),
-                        hasProperty("name", equalTo("chefir jlc 2.5%"))
+                        hasProperty("quantity", equalTo(1)),
+                        hasProperty("price", equalTo(10.00))
                 )
         );
-
     }
 }
