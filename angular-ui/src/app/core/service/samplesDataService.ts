@@ -3,6 +3,7 @@ import {Store} from '../model/store.model';
 import {Product} from '../model/product.model';
 import {Bill} from '../model/bill.model';
 import * as moment from 'moment';
+import {StoreProduct} from "../model/store-product.model";
 
 export class SamplesDataService {
 
@@ -34,6 +35,13 @@ export class SamplesDataService {
       new Product(9, 'Banane', 33),
       new Product(10, 'Lamie', 21)
     ];
+  }
+
+  sampleStoreProducts(): StoreProduct[] {
+    return [
+      new StoreProduct(1, 2, 12),
+      new StoreProduct(2, 3, 8.55)
+    ]
   }
 
   sampleBill(): Bill {

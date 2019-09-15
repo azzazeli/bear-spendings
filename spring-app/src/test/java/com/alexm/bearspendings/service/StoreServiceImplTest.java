@@ -68,7 +68,7 @@ class StoreServiceImplTest {
         TopProduct inghetata = iterator.next();
         assertThat(inghetata,
                 allOf(
-                        hasProperty("id", equalTo(3L)),
+                        hasProperty("productId", equalTo(3L)),
                         hasProperty("quantity", equalTo(1)),
                         hasProperty("price", equalTo(87.00))
                 )
@@ -76,7 +76,7 @@ class StoreServiceImplTest {
         TopProduct chefir25 = iterator.next();
         assertThat(chefir25,
                 allOf(
-                        hasProperty("id", equalTo(2L)),
+                        hasProperty("productId", equalTo(2L)),
                         hasProperty("quantity", equalTo(1)),
                         hasProperty("price", equalTo(10.00))
                 )

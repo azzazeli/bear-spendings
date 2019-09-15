@@ -55,7 +55,7 @@ public class StoreServiceImpl implements StoreService {
         return billItemRepository.lastItemsWithDistinctProducts(storeId, PageRequest.of(0, size))
                 .stream()
                 .map(billItem -> TopProduct.builder()
-                        .id(billItem.getProduct().getId())
+                        .productId(billItem.getProduct().getId())
                         .price(billItem.getPrice())
                         .quantity(billItem.getQuantity())
                         .build())

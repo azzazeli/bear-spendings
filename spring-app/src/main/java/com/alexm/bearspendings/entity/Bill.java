@@ -15,7 +15,6 @@ import java.util.Set;
 @Entity
 @Builder
 @NoArgsConstructor
-@AllArgsConstructor
 @Getter @Setter
 @ToString
 @EqualsAndHashCode(of = {"id"})
@@ -29,8 +28,31 @@ public class Bill {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     private Store store;
 
+    @Setter(AccessLevel.NONE)
     @NotEmpty
-    @Singular
+//    @Singular
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "bill")
     private Set<BillItem> items;
+
+    Bill(Long id, @NotNull LocalDateTime orderDate, @NotNull Store store, @NotEmpty Set<BillItem> items) {
+        this.id = id;
+        this.orderDate = orderDate;
+        this.store = store;
+        this.setItems(items);
+    }
+
+
+    public void setItems(Set<BillItem> items) {
+        this.items = items;
+        this.items.forEach(billItem -> billItem.setBill(this));
+    }
+
+    public static class BillBuilder {
+        private Set<BillItem> items;
+
+        public BillBuilder items(Set<BillItem> items) {
+            this.items = items;
+            return this;
+        }
+    }
 }

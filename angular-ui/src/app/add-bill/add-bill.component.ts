@@ -11,6 +11,7 @@ import {BillService} from '../core/service/bill.service';
 import {Bill} from '../core/model/bill.model';
 import * as moment from 'moment';
 import {MessageService} from "primeng/api";
+import {StoreProduct} from "../core/model/store-product.model";
 
 @Component({
   selector: 'app-add-bill',
@@ -22,7 +23,7 @@ import {MessageService} from "primeng/api";
 export class AddBillComponent implements OnInit {
   stores: Store[];
   addBillForm: FormGroup;
-  topStoreProducts: Product[];
+  topStoreProducts: StoreProduct[];
   selectedProductId: number;
 
   @ViewChild(NewBillItemComponent)
@@ -63,8 +64,11 @@ export class AddBillComponent implements OnInit {
   onTopProductSelected(productId: number) {
     this.selectedProductId = productId;
     this.logger.debug('AddBillComponent: On top store product selected. ProductId:', productId );
-    const selectedProduct: Product = this.topStoreProducts.find(p => p.id == productId);
-    this.newBillItemComponent.setBillItem(new BillItem(selectedProduct.id, selectedProduct.name, 1, selectedProduct.price));
+    const selectedProduct: StoreProduct = this.topStoreProducts.find(p => p.productId == productId);
+    this.productsService.getObservableById(selectedProduct.productId).subscribe((product: Product) => {
+      this.newBillItemComponent.setBillItem(new BillItem(selectedProduct.productId,
+        product.name, selectedProduct.quantity, selectedProduct.price));
+    });
   }
 
   onAddBillItem(billItem: BillItem) {

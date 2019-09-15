@@ -7,6 +7,7 @@ import lombok.Data;
 /**
  * Class represents a product bought from a store with price and quantity from bill item.
  * Class is used in 'top store' feature - to accelerate data entry.
+ * //TODO May be a better name for class is StoreProduct
  * @author AlexM
  * Date: 9/14/19
  **/
@@ -19,7 +20,7 @@ public class TopProduct {
      * product id
      * //TODO may be rename field to productId
      */
-    private Long id;
+    private Long productId;
     private Integer quantity;
     private Double price;
 }

@@ -14,9 +14,7 @@ import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
@@ -59,7 +57,7 @@ public class DevBootstrap implements ApplicationListener<ContextRefreshedEvent> 
         Random random = ThreadLocalRandom.current();
 
         for (int i=0; i <=random.nextInt(10); i++)  {
-            List<BillItem> items = new LinkedList<>();
+            Set<BillItem> items = new HashSet<>();
             for (int j=0; j <=random.nextInt(10) + 3; j++)  {
                 items.add(buildBillItem(products.get(random.nextInt(products.size()-1)),
                         (double)Math.round(random.nextDouble()*100*100)/100, random.nextInt(5))

@@ -14,6 +14,8 @@ import {BillService} from '../core/service/bill.service';
 import {Bill} from '../core/model/bill.model';
 import * as moment from 'moment';
 import {ToastModule} from "primeng/toast";
+import {StoreProduct} from "../core/model/store-product.model";
+import {Product} from "../core/model/product.model";
 
 describe('AddBillComponent', () => {
   let component: AddBillComponent;
@@ -32,7 +34,8 @@ describe('AddBillComponent', () => {
         SamplesDataService,
         {provide: StoreService, useValue: jasmine.createSpyObj('StoreService', ['getStores'])},
         {provide: BillService, useValue: jasmine.createSpyObj('BillService', ['addBill'])},
-        {provide: ProductsService, useValue: jasmine.createSpyObj('ProductsService', ['topStoreProducts'])}
+        {provide: ProductsService, useValue: jasmine.createSpyObj('ProductsService',
+            ['topStoreProducts', 'getObservableById'])}
       ],
       declarations: [AddBillComponent, NewBillItemComponent]
     })
@@ -47,7 +50,11 @@ describe('AddBillComponent', () => {
     billServiceSpy = TestBed.get(BillService);
     storeServiceSpy.getStores.and.returnValue(of([new Store(1, 'Nr.1')]));
     samplesDataService = TestBed.get(SamplesDataService);
-    productsServiceSpy.topStoreProducts.and.returnValue(of(samplesDataService.sampleProducts()));
+    productsServiceSpy.topStoreProducts.and.returnValue(of(samplesDataService.sampleStoreProducts()));
+    productsServiceSpy.getObservableById.and.callFake(function (productId) {
+      const products: Product[] = samplesDataService.sampleProducts();
+      return of(products.find(product => product.id == productId));
+    });
   });
 
   it('#should create', () => {
@@ -90,13 +97,13 @@ describe('AddBillComponent', () => {
     fixture.detectChanges();
 
     //then
-     const expectedProduct = samplesDataService.sampleProducts()[1];
-     expect(component.newBillItemComponent.billItem.productId).toEqual(expectedProduct.id);
-     expect(component.newBillItemComponent.billItem.productName).toEqual(expectedProduct.name);
-     expect(component.newBillItemComponent.billItem.quantity).toEqual(1);
-     expect(component.newBillItemComponent.billItem.price).toEqual(expectedProduct.price);
+     const expectedStoreProduct:StoreProduct = samplesDataService.sampleStoreProducts()[1];
+     expect(component.newBillItemComponent.billItem.productId).toEqual(expectedStoreProduct.productId);
+     expect(component.newBillItemComponent.billItem.productName).toEqual(samplesDataService.sampleProducts()[1].name);
+     expect(component.newBillItemComponent.billItem.quantity).toEqual(expectedStoreProduct.quantity);
+     expect(component.newBillItemComponent.billItem.price).toEqual(expectedStoreProduct.price);
 
-    expect(addToBillBtn.disabled).toBe(false);
+     expect(addToBillBtn.disabled).toBe(false);
   });
 
   it('#on add bill item from top store products', () => {
@@ -176,7 +183,7 @@ describe('AddBillComponent', () => {
     expect(component.addBillForm.valid).toBe(true)
   });
 
-  fit('#on add bill - call BillService.addBill, reset new bill form', () => {
+  it('#on add bill - call BillService.addBill, reset new bill form', () => {
     //given
     let addedBill = new Bill(moment('2019-04-21'), 1);
     addedBill.id = 1224;

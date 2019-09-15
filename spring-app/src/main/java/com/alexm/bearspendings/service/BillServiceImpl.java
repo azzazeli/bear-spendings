@@ -51,9 +51,9 @@ public class BillServiceImpl implements BillService  {
     }
 
     @Override
-    public void addBill(UIBill uiBill) {
+    public Bill addBill(UIBill uiBill) {
         Bill bill = uiBill2BilFunction.apply(uiBill);
-        billRepository.save(bill);
+        return billRepository.save(bill);
     }
 
 }

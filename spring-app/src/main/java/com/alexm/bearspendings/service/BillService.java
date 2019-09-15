@@ -1,6 +1,7 @@
 package com.alexm.bearspendings.service;
 
 import com.alexm.bearspendings.dto.UIBill;
+import com.alexm.bearspendings.entity.Bill;
 
 import java.util.List;
 
@@ -10,5 +11,5 @@ import java.util.List;
 public interface BillService {
     List<UIBill> allBills();
 
-    void addBill(UIBill bill);
+    Bill addBill(UIBill bill);
 }

@@ -7,13 +7,12 @@ import com.alexm.bearspendings.entity.BillItem;
 import com.alexm.bearspendings.entity.Product;
 import com.alexm.bearspendings.entity.Store;
 import com.alexm.bearspendings.repository.BillRepository;
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
-import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.mockito.internal.util.collections.Sets;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
@@ -41,16 +40,20 @@ class BillServiceImplTest {
 
     @BeforeEach
     void setup() {
-        billService = new BillServiceImpl(billRepository, uiBill -> Bill.builder()
-                .store(Store.builder().id(1L).build())
-                .orderDate(orderDate)
-                .items(
-                        ImmutableList.of(
-                                BillItem.builder().quantity(2).product(Product.builder().id(1L).build()).price(22.9).build(),
-                                BillItem.builder().quantity(1).product(Product.builder().id(2L).build()).price(44.0).build()
-                        )
-                )
-                .build());
+        billService = new BillServiceImpl(billRepository, uiBill -> {
+            Bill bill = builder()
+                    .store(Store.builder().id(1L).build())
+                    .orderDate(orderDate)
+                    .items(
+                            ImmutableSet.of(
+                                    BillItem.builder().quantity(2).product(Product.builder().id(1L).build()).price(22.9).build(),
+                                    BillItem.builder().quantity(1).product(Product.builder().id(2L).build()).price(44.0).build()
+                            )
+                    )
+                    .build();
+            bill.getItems().forEach(billItem -> billItem.setBill(bill));
+            return bill;
+        });
     }
 
     @Test
@@ -61,7 +64,7 @@ class BillServiceImplTest {
                 .id(1234L)
                 .store(Store.builder().id(334L).name("Pegas").build())
                 .orderDate(now)
-                .items(Lists.list(BillItem.builder().id(222L).price(11.2).quantity(1).product(Product.builder().id(1000L).build()).build()))
+                .items(Sets.newSet((BillItem.builder().id(222L).price(11.2).quantity(1).product(Product.builder().id(1000L).build()).build())))
                 .build());
         when(billRepository.findAll()).thenReturn(billsFromRepo);
         final List<UIBill> actualBills = billService.allBills();
@@ -89,13 +92,12 @@ class BillServiceImplTest {
                         )
                 )
                 .build();
-        billService.addBill(newBill);
-
+        Bill actualBill = billService.addBill(newBill);
         Bill expectedBill = Bill.builder()
                 .store(Store.builder().id(1L).build())
                 .orderDate(orderDate)
                 .items(
-                        ImmutableList.of(
+                        ImmutableSet.of(
                                 BillItem.builder().quantity(2).product(Product.builder().id(1L).build()).price(22.9).build(),
                                 BillItem.builder().quantity(1).product(Product.builder().id(2L).build()).price(44.0).build()
                         )

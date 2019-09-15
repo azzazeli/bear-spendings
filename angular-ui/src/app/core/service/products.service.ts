@@ -4,6 +4,7 @@ import {Observable} from 'rxjs';
 import {Product} from '../model/product.model';
 import {ObservableCacheService} from './observable.cache.service';
 import {environment} from "../../../environments/environment";
+import {StoreProduct} from "../model/store-product.model";
 
 @Injectable()
 export class ProductsService extends ObservableCacheService<Product>{
@@ -18,8 +19,8 @@ export class ProductsService extends ObservableCacheService<Product>{
     return `${this.GET_PRODUCT_URL}${id}.json`;
   }
 
-  topStoreProducts(storeId: number): Observable<Product[]> {
-    return this.http.get<Product[]>(this.TOP_STORE_PRODUCTS_URL, {
+  topStoreProducts(storeId: number): Observable<StoreProduct[]> {
+    return this.http.get<StoreProduct[]>(this.TOP_STORE_PRODUCTS_URL, {
       params: {
         'storeId': storeId.toString()
       }
