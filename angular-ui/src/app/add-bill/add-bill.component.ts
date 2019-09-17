@@ -55,6 +55,7 @@ export class AddBillComponent implements OnInit {
   onStoreSelected() {
     const storeId: number = this.addBillForm.get('store-id').value;
     this.logger.debug('AddBillComponent: On store selected. store id:', storeId);
+    //todo: need to unsubscribe ??
     this.productsService.topStoreProducts(storeId).subscribe((products) => {
       this.topStoreProducts = products;
     });

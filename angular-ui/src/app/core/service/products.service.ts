@@ -9,14 +9,18 @@ import {StoreProduct} from "../model/store-product.model";
 @Injectable()
 export class ProductsService extends ObservableCacheService<Product>{
   TOP_STORE_PRODUCTS_URL = `${environment.apiUrl}${environment.TOP_STORE_PRODUCTS_URL}`
-  private GET_PRODUCT_URL = `assets/products/`;
+  private GET_PRODUCT_URL = `${environment.apiUrl}${environment.PRODUCT_URL}`;
 
   constructor(private http: HttpClient) {
     super();
   }
 
   productUrl(id: number) {
-    return `${this.GET_PRODUCT_URL}${id}.json`;
+    let url = `${this.GET_PRODUCT_URL}${id}`;
+    if (environment.mock) {
+      url += '.json';
+    }
+    return url;
   }
 
   topStoreProducts(storeId: number): Observable<StoreProduct[]> {

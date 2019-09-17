@@ -1,9 +1,10 @@
-import { ProductsService } from './products.service';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import { SamplesDataService } from './samplesDataService';
-import { TestBed } from '@angular/core/testing';
-import { Product } from '../model/product.model';
-import { HttpClient } from '@angular/common/http';
+import {ProductsService} from './products.service';
+import {HttpClientTestingModule, HttpTestingController} from '@angular/common/http/testing';
+import {SamplesDataService} from './samplesDataService';
+import {TestBed} from '@angular/core/testing';
+import {Product} from '../model/product.model';
+import {HttpClient} from '@angular/common/http';
+import {StoreProduct} from "../model/store-product.model";
 
 describe('ProductsServiceTest', () => {
   let productService: ProductsService;
@@ -28,8 +29,8 @@ describe('ProductsServiceTest', () => {
 
   it('#topStoreProducts', () => {
     const storeId = 1;
-    productService.topStoreProducts(storeId).subscribe((products: Product[]) => {
-      expect(products).toEqual(samplesDataService.sampleProducts());
+    productService.topStoreProducts(storeId).subscribe((products: StoreProduct[]) => {
+      expect(products).toEqual(samplesDataService.sampleStoreProducts());
     });
     const req = httpTestingController.match((request) => {
       return request.url === productService.TOP_STORE_PRODUCTS_URL &&
@@ -37,7 +38,7 @@ describe('ProductsServiceTest', () => {
         request.params.get('storeId') == storeId.toString()
     });
     expect(req.length).toEqual(1);
-    req[0].flush(samplesDataService.sampleProducts());
+    req[0].flush(samplesDataService.sampleStoreProducts());
   });
 
   it('#get product by id', () => {

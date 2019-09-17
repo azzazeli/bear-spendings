@@ -11,7 +11,7 @@ import javax.validation.constraints.Positive;
 @Builder
 @Data
 @JsonDeserialize(builder = UIBillItem.UIBillItemBuilder.class)
-@ValidUiBillItem
+@ValidUIBillItem
 public class UIBillItem {
     private Long id;
     private String productName;

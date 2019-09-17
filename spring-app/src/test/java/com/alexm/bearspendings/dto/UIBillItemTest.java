@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  **/
 class UIBillItemTest {
 
-    Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
+    private Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
 
 
     @DisplayName("Validate that product id can be null")

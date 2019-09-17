@@ -29,9 +29,9 @@
           <label>Top Store Products:</label>
           <ul class="list-group">
             <li *ngFor="let p of topStoreProducts"
-                [ngClass]="p.id === selectedProductId ? 'active' : ''"
-                (click)="onTopProductSelected(p.id)"
-                class="list-group-item">{{p.name}} - {{p.price}} MDL</li>
+                [ngClass]="p.productId === selectedProductId ? 'active' : ''"
+                (click)="onTopProductSelected(p.productId)"
+                class="list-group-item">{{(productsService.getObservableById(p.productId) | async)?.name}} - {{p.price}} MDL</li>
           </ul>
         </div>
         <app-new-bill-item (add-bill-item)="onAddBillItem($event)" ></app-new-bill-item>
