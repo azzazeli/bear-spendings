@@ -6,6 +6,8 @@ import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -48,10 +50,10 @@ public class Bill {
     }
 
     public static class BillBuilder {
-        private Set<BillItem> items;
+        private Set<BillItem> items = new HashSet<>();
 
-        public BillBuilder items(Set<BillItem> items) {
-            this.items = items;
+        public BillBuilder items(Collection<BillItem> items) {
+            this.items.addAll(items);
             return this;
         }
     }

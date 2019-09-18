@@ -14,7 +14,7 @@ import java.util.Set;
 @Getter
 @Setter
 @ToString()
-@EqualsAndHashCode(of = {"id"})
+@EqualsAndHashCode(of = {"id", "name"})
 @Builder()
 public class Product {
     @Id
