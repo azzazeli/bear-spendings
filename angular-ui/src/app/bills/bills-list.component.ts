@@ -1,12 +1,14 @@
-import { Component, OnInit } from '@angular/core';
-import { Bill } from '../core/model/bill.model';
-import { BillService } from '../core/service/bill.service';
-import { NGXLogger } from 'ngx-logger';
-import { StoreService } from '../core/service/store.service';
-import { Store } from '../core/model/store.model';
-import { Observable } from 'rxjs';
-import { Product } from '../core/model/product.model';
-import { ProductsService } from '../core/service/products.service';
+import {Component, OnInit} from '@angular/core';
+import {Bill} from '../core/model/bill.model';
+import {BillService} from '../core/service/bill.service';
+import {NGXLogger} from 'ngx-logger';
+import {StoreService} from '../core/service/store.service';
+import {Store} from '../core/model/store.model';
+import {Observable} from 'rxjs';
+import {Product} from '../core/model/product.model';
+import {ProductsService} from '../core/service/products.service';
+import {environment} from '../../environments/environment';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-bills-list',
@@ -35,5 +37,11 @@ export class BillsListComponent implements OnInit {
   getProduct(productId: number): Observable<Product> {
     return this.productService.getObservableById(productId);
   }
+
+  //TODO: maybe part of common utils service
+  formatMoment(date: string): string {
+    return moment(date).format(environment.dateFormat);
+  }
+
 
 }

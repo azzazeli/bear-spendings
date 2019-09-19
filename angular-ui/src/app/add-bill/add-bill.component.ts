@@ -92,7 +92,7 @@ export class AddBillComponent implements OnInit {
 
   onAddBill() {
     this.logger.debug("AddBillComponent: On add bill. addBillForm:", this.addBillForm );
-    const bill: Bill = new Bill(moment(this.addBillForm.get('bill-date').value), this.addBillForm.get('store-id').value);
+    const bill: Bill = new Bill(moment(this.normalizedDate(this.addBillForm.get('bill-date').value)), this.addBillForm.get('store-id').value);
     for( let billItemFG of this.billItems().controls) {
       bill.items.push(new BillItem(
         billItemFG.get('product-id').value,
@@ -106,6 +106,15 @@ export class AddBillComponent implements OnInit {
       this.messageService.add({severity: 'success', summary: 'Bill was added with success'});
       this.resetForm();
     });
+  }
+
+  /**
+   * JSON.stringify() return utc date; this method create a utc date based on passed param.
+   * this is a hack. need to find more elegant solution
+   * @param date
+   */
+  private normalizedDate(date: Date): Date {
+    return new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours(), date.getMinutes()))
   }
 
   private billItems(): FormArray {

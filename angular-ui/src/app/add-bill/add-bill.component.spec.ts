@@ -185,18 +185,18 @@ describe('AddBillComponent', () => {
 
   it('#on add bill - call BillService.addBill, reset new bill form', () => {
     //given
-    let addedBill = new Bill(moment('2019-04-21'), 1);
+    let addedBill = new Bill(moment(new Date('2019-09-19T00:00:00')), 1);
     addedBill.id = 1224;
     billServiceSpy.addBill.and.returnValue(of(addedBill));
     fixture.detectChanges();
-    component.addBillForm.get('bill-date').setValue('04/11/2019');
+    component.addBillForm.get('bill-date').setValue(new Date('2019-09-19T00:00:00'));
     component.addBillForm.get('store-id').setValue(1);
     component.onStoreSelected();
     component.onAddBillItem(samplesDataService.sampleBillItem(1));
 
     //when
     component.onAddBill();
-    const expectedBill: Bill = new Bill(moment('04/11/2019'), 1);
+    const expectedBill: Bill = new Bill(moment(new Date('2019-09-19T03:00:00')), 1);
     expectedBill.items.push(samplesDataService.sampleBillItem(1));
     expect(billServiceSpy.addBill).toHaveBeenCalledWith(expectedBill);
     expect(component.topStoreProducts.length).toBe(0);

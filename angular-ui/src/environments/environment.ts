@@ -7,6 +7,8 @@ export const environment = {
   mock: false,
   dev: false,
 
+  dateFormat: 'YYYY-MM-DD',
+
   apiUrl: 'default',
   ALL_BILLS_URL: 'bills',
 

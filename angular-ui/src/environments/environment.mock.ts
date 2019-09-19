@@ -3,6 +3,8 @@ export const environment = {
   mock: true,
   dev: false,
 
+  dateFormat: 'YYYY-MM-DD',
+
   apiUrl: 'assets/',
 
   ALL_BILLS_URL: 'bills.json',

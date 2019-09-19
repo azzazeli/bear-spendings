@@ -15,7 +15,7 @@
               <i [ngClass]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></i>
             </a>
           </td>
-          <td>{{bill.orderDate}}</td>
+          <td>{{formatMoment(bill.orderDate)}}</td>
           <td>{{(getStore(bill.storeId) | async)?.name}}</td>
         </tr>
       </ng-template>
