@@ -14,7 +14,7 @@ import static javax.persistence.CascadeType.ALL;
 @NoArgsConstructor @Getter @Setter
 @AllArgsConstructor
 @ToString
-@EqualsAndHashCode(of = {"id"})
+@EqualsAndHashCode()
 @Builder
 public class BillItem {
     @Id
