@@ -1,13 +1,13 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { BillsListComponent } from './bills-list.component';
-import { BillService } from '../core/service/bill.service';
-import { SamplesDataService } from '../core/service/samplesDataService';
-import { LoggerModule, NgxLoggerLevel } from 'ngx-logger';
-import { of } from 'rxjs/internal/observable/of';
-import { TableModule } from 'primeng/table';
-import { StoreService } from '../core/service/store.service';
-import { ProductsService } from '../core/service/products.service';
+import {BillsListComponent} from './bills-list.component';
+import {BillService} from '../core/service/bill.service';
+import {SamplesDataService} from '../core/service/samplesDataService';
+import {LoggerModule, NgxLoggerLevel} from 'ngx-logger';
+import {of} from 'rxjs/internal/observable/of';
+import {TableModule} from 'primeng/table';
+import {StoreService} from '../core/service/store.service';
+import {ProductsService} from '../core/service/products.service';
 import createSpyObj = jasmine.createSpyObj;
 
 describe('BillsListComponent', () => {

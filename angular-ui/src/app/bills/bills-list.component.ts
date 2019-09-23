@@ -9,6 +9,7 @@ import {Product} from '../core/model/product.model';
 import {ProductsService} from '../core/service/products.service';
 import {environment} from '../../environments/environment';
 import * as moment from 'moment';
+import {LazyLoadEvent} from "primeng/api";
 
 @Component({
   selector: 'app-bills-list',
@@ -17,6 +18,8 @@ import * as moment from 'moment';
 })
 export class BillsListComponent implements OnInit {
   bills: Bill[];
+  totalRecords: number = 0;
+  loading: boolean = false;
 
   constructor(private logger: NGXLogger,
               private storeService: StoreService,
@@ -25,8 +28,21 @@ export class BillsListComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.billService.allBills().subscribe((bills: Bill[]) => {
-      this.bills = bills;
+    this.logger.debug(`Initializing BillsListComponent ...`);
+    setTimeout(() => {
+      this.totalRecords = 8;
+    });
+  }
+
+  loadBills(event: LazyLoadEvent) {
+    // use setTimeout to avoid ExpressionChangedAfterItHasBeenCheckedError
+    setTimeout(() => {
+      this.logger.debug(`Loading bills first:${event.first} rows:${event.rows}`);
+      this.loading = true;
+      this.billService.allBills().subscribe((bills: Bill[]) => {
+        this.bills = bills;
+        this.loading = false;
+      });
     });
   }
 
