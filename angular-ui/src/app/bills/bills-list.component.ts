@@ -20,6 +20,7 @@ export class BillsListComponent implements OnInit {
   bills: Bill[];
   totalRecords: number = 0;
   loading: boolean = false;
+  readonly PAGE_SIZE = 10;
 
   constructor(private logger: NGXLogger,
               private storeService: StoreService,
@@ -29,9 +30,12 @@ export class BillsListComponent implements OnInit {
 
   ngOnInit() {
     this.logger.debug(`Initializing BillsListComponent ...`);
-    setTimeout(() => {
-      this.totalRecords = 8;
+    // setTimeout(() => {
+    this.billService.allBillsCount().subscribe(value => {
+      this.totalRecords = value;
     });
+
+    // });
   }
 
   loadBills(event: LazyLoadEvent) {
@@ -39,7 +43,7 @@ export class BillsListComponent implements OnInit {
     setTimeout(() => {
       this.logger.debug(`Loading bills first:${event.first} rows:${event.rows}`);
       this.loading = true;
-      this.billService.allBills().subscribe((bills: Bill[]) => {
+      this.billService.allBills(event.first, event.rows).subscribe((bills: Bill[]) => {
         this.bills = bills;
         this.loading = false;
       });

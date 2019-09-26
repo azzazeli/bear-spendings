@@ -1,6 +1,6 @@
 import {BillService} from './bill.service';
 import {TestBed} from '@angular/core/testing';
-import {HttpClientTestingModule, HttpTestingController} from '@angular/common/http/testing';
+import {HttpClientTestingModule, HttpTestingController, TestRequest} from '@angular/common/http/testing';
 import {SamplesDataService} from './samplesDataService';
 import {HttpClient} from '@angular/common/http';
 import {Bill} from '../model/bill.model';
@@ -41,13 +41,26 @@ describe('BillServiceTest',()  => {
 
   it('#on bills - sent http get request', () => {
     //when
-    billService.allBills().subscribe((bills: Bill[]) => {
+    billService.allBills(0, 10).subscribe((bills: Bill[]) => {
       expect(bills.length).toEqual(1);
       expect(bills[0].storeId).toBe(samplesDataService.sampleStores()[0].id);
     });
     //then
-    httpTestingController.expectOne(billService.ALL_BILLS_URL).flush(
-      [samplesDataService.sampleBill()]);
+    const testRequest: TestRequest = httpTestingController.expectOne(`${billService.ALL_BILLS_URL}?page=0&size=10`);
+    testRequest.flush([samplesDataService.sampleBill()]);
+    expect(testRequest.request.method).toEqual('GET');
+    expect(testRequest.request.params.get('page')).toEqual('0');
+    expect(testRequest.request.params.get('size')).toEqual('10');
+  });
+
+  it('#on allBillsCount - sent a http get request', () => {
+    //given
+    const totalRecords = 12;
+    //when
+    billService.allBillsCount().subscribe(value => expect(value).toEqual(totalRecords));
+    //then
+    const req: TestRequest = httpTestingController.expectOne(billService.ALL_BILLS_COUNT_URL, 'call to all bill count url');
+    req.flush(totalRecords);
   });
 
 });
