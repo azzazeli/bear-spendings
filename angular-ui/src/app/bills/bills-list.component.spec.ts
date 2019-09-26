@@ -26,7 +26,7 @@ describe('BillsListComponent', () => {
       ],
       providers: [
         SamplesDataService,
-        {provide: BillService, useValue: createSpyObj('BillService', ['allBills'])},
+        {provide: BillService, useValue: createSpyObj('BillService', ['allBills', 'allBillsCount'])},
         {provide: StoreService, useValue: createSpyObj('StoreService', ['getObservableById'])},
         {provide: ProductsService, useValue: createSpyObj('ProductsService', ['getObservableById'])}
       ],
@@ -44,17 +44,28 @@ describe('BillsListComponent', () => {
     samplesDataService = TestBed.get(SamplesDataService);
 
     billServiceSpy.allBills.and.returnValue(of([samplesDataService.sampleBill()]));
+    billServiceSpy.allBillsCount.and.returnValue(of(20));
     storeServiceSpy.getObservableById.and.returnValue(of(samplesDataService.sampleStores()[0]));
     productServiceSpy.getObservableById.and.returnValue((of(samplesDataService.sampleProducts()[0])));
     fixture.detectChanges();
   });
 
-  it('#should create', () => {
-    expect(component).toBeTruthy();
+  it('#should create', async() => {
+    fixture.whenStable().then(() => {
+      expect(component).toBeTruthy();
+      expect(component.totalRecords).toEqual(20);
+      expect(billServiceSpy.allBillsCount).toHaveBeenCalledTimes(1);
+    });
   });
 
   it('#should init bills []', () => {
-    expect(component.bills).toBeDefined();
+    fixture.whenStable().then(() => {
+      fixture.detectChanges();
+      const component = fixture.componentInstance;
+      expect(component.bills).toBeDefined();
+      expect(component.loading).toEqual(false);
+      expect(billServiceSpy.allBills).toHaveBeenCalledWith(0, component.PAGE_SIZE);
+    });
   });
 
 });
