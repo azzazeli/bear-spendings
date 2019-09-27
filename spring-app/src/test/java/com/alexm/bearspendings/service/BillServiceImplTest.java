@@ -24,6 +24,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.tuple;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 
 /**
@@ -35,6 +36,7 @@ class BillServiceImplTest {
     @Mock
     private BillRepository billRepository;
     private BillServiceImpl billService;
+    private final Long allBillCount = 223L;
 
     private LocalDateTime orderDate = LocalDateTime.of(2019, 2, 12, 12, 33);
 
@@ -54,6 +56,7 @@ class BillServiceImplTest {
             bill.getItems().forEach(billItem -> billItem.setBill(bill));
             return bill;
         });
+        given(billRepository.count()).willReturn(allBillCount);
     }
 
     @Test
@@ -104,6 +107,11 @@ class BillServiceImplTest {
                 )
                 .build();
         verify(billRepository, times(1)).save(expectedBill);
+    }
+
+    @Test
+    void allBillCounts() {
+        assertEquals(allBillCount, billService.allBillsCount());
     }
 
 }

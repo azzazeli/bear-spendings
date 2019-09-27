@@ -56,6 +56,10 @@ public class BillServiceImpl implements BillService  {
         return billRepository.save(bill);
     }
 
+    @Override
+    public Long allBillsCount() {
+        return billRepository.count();
+    }
 }
 
 

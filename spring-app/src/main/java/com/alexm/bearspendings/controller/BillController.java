@@ -3,6 +3,7 @@ package com.alexm.bearspendings.controller;
 import com.alexm.bearspendings.dto.UIBill;
 import com.alexm.bearspendings.service.BillService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -35,6 +36,11 @@ public class BillController {
       billService.addBill(uiBill);
       log.debug("Finished to process request");
       return uiBill;
+    }
+
+    @GetMapping("/bills/count")
+    public ResponseEntity<Long> allBillsCount(){
+        return ResponseEntity.ok(billService.allBillsCount());
     }
 
 }

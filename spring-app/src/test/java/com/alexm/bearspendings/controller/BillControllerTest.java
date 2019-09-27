@@ -23,6 +23,8 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import java.time.LocalDateTime;
 import java.util.stream.Stream;
 
+import static org.mockito.BDDMockito.given;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
@@ -36,12 +38,14 @@ class BillControllerTest {
     BillService billService;
     private final ObjectMapper mapper = new ObjectMapper();
     private final ObjectWriter writer = mapper.writer().withDefaultPrettyPrinter();
+    private final Long totalRecords = 120L;
 
     @Autowired
     MockMvc mvc;
 
     @BeforeEach
     void setup() {
+        given(billService.allBillsCount()).willReturn(totalRecords);
     }
 
     @Test
@@ -122,4 +126,13 @@ class BillControllerTest {
                         .build()
         );
     }
+
+    @Test
+    void allBillCounts() throws Exception {
+        mvc.perform(MockMvcRequestBuilders.get("/bills/count"))
+                .andExpect(status().isOk())
+                .andExpect(content().string(totalRecords.toString())
+                );
+    }
+
 }

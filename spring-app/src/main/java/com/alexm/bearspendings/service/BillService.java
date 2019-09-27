@@ -12,4 +12,6 @@ public interface BillService {
     List<UIBill> allBills();
 
     Bill addBill(UIBill bill);
+
+    Long allBillsCount();
 }
