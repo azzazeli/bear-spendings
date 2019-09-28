@@ -68,4 +68,15 @@ describe('BillsListComponent', () => {
     });
   });
 
+  it('#should transform event.first to page', async(() => {
+    fixture.detectChanges();
+    fixture.whenStable().then( () => {
+      expect(billServiceSpy.allBills).toHaveBeenCalledWith(0, 10);
+      component.loadBills({first: 10, rows:10});
+      setTimeout(() => {
+        expect(billServiceSpy.allBills).toHaveBeenCalledWith(1, 10);
+      }, 100);
+    });
+  }));
+
 });

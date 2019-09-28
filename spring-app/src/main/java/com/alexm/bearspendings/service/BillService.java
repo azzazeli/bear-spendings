@@ -9,7 +9,7 @@ import java.util.List;
  * @author AlexM created on 7/11/19
  */
 public interface BillService {
-    List<UIBill> allBills();
+    List<UIBill> allBills(int page, int size);
 
     Bill addBill(UIBill bill);
 

@@ -6,6 +6,9 @@ import com.alexm.bearspendings.entity.Bill;
 import com.alexm.bearspendings.entity.BillItem;
 import com.alexm.bearspendings.repository.BillRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -46,8 +49,10 @@ public class BillServiceImpl implements BillService  {
 
     @Transactional
     @Override
-    public List<UIBill> allBills() {
-        return StreamSupport.stream(billRepository.findAll().spliterator(), false)
+    public List<UIBill> allBills(int page, int size) {
+        Sort byOrderDateDesc = Sort.by(Sort.Direction.DESC, "orderDate");
+        Pageable pageable = PageRequest.of(page, size, byOrderDateDesc);
+        return StreamSupport.stream(billRepository.findAll(pageable).spliterator(), false)
                 .map(billToUiBillMap)
                 .collect(Collectors.toList());
     }

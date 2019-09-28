@@ -26,8 +26,8 @@ public class BillController {
     }
 
     @GetMapping("/bills")
-    public List<UIBill> bills() {
-        return billService.allBills();
+    public List<UIBill> bills(@RequestParam int page, @RequestParam int size) {
+        return billService.allBills(page, size);
     }
 
     @PostMapping("/add_bill")

@@ -36,17 +36,17 @@ class BillServiceImplTest {
 
     @Test
     void allBills() {
-        final List<UIBill> actualBills = billService.allBills();
+        final List<UIBill> actualBills = billService.allBills(0, 10);
         assertNotNull(actualBills);
         assertEquals(2, actualBills.size());
         UIBill uiBill = actualBills.get(0);
-        assertEquals(1L, uiBill.getId().longValue());
+        assertEquals(2L, uiBill.getId().longValue());
         assertEquals(1L, uiBill.getStoreId().longValue());
-        assertEquals(LocalDateTime.of(2019, 04, 18, 0, 0 ), uiBill.getOrderDate());
-        assertThat(uiBill.getItems()).extracting("id", "productId", "quantity", "price")
+        assertEquals(LocalDateTime.of(2019, 4, 22, 0, 0 ), uiBill.getOrderDate());
+        assertThat(uiBill.getItems()).extracting("id", "price", "quantity", "productId" )
                 .contains(
-                        tuple(1L, 1L, 1, 7.85),
-                        tuple(2L, 2L, 1, 9.85)
+                        tuple(3L, 87.00, 1, 3L),
+                        tuple(4L, 10.00, 1, 2L)
                 );
     }
 

@@ -24,6 +24,7 @@ import java.time.LocalDateTime;
 import java.util.stream.Stream;
 
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -50,9 +51,9 @@ class BillControllerTest {
 
     @Test
     void bills() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.get("/bills"))
-                .andExpect(status().isOk())
-        ;
+        mvc.perform(MockMvcRequestBuilders.get("/bills?page=0&size=20"))
+                .andExpect(status().isOk());
+        verify(billService).allBills(0, 20);
     }
 
     @Test
