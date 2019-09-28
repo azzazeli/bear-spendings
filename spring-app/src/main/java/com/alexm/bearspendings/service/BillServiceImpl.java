@@ -8,6 +8,7 @@ import com.alexm.bearspendings.repository.BillRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -43,6 +44,7 @@ public class BillServiceImpl implements BillService  {
         this.uiBill2BilFunction = uiBill2BilFunction;
     }
 
+    @Transactional
     @Override
     public List<UIBill> allBills() {
         return StreamSupport.stream(billRepository.findAll().spliterator(), false)

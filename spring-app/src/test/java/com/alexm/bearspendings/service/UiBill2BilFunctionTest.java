@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import javax.transaction.Transactional;
 import java.util.Iterator;
 import java.util.Set;
 
@@ -26,15 +27,16 @@ class UiBill2BilFunctionTest {
     @Autowired
     UiBill2BilFunction uiBill2BilFunction;
 
+    @Transactional
     @DisplayName("transform UiBill that contains existing product to Bill")
     @Test
     void existingProduct() {
-        Set<UIBillItem> items = ImmutableSet.of(UIBillItem.builder().productId(122L).quantity(1).price(2.2).build());
+        Set<UIBillItem> items = ImmutableSet.of(UIBillItem.builder().productId(1L).quantity(1).price(2.2).build());
         UIBill uiBill = UIBill.builder().storeId(1L).items(items).build();
         Bill bill = uiBill2BilFunction.apply(uiBill);
         assertAll(() -> {
             assertEquals(1L, bill.getStore().getId().longValue());
-            assertEquals(122L, bill.getItems().iterator().next().getProduct().getId().longValue());
+            assertEquals(1L, bill.getItems().iterator().next().getProduct().getId().longValue());
         });
     }
 
