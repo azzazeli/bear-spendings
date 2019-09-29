@@ -1,0 +1,7 @@
+plugins {
+	id 'java'
+	id 'net.researchgate.release' version '2.6.0'
+}
+
+group = 'com.alexm'
+sourceCompatibility = '1.8'
