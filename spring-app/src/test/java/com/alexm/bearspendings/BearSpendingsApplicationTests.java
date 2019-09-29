@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
@@ -20,6 +19,7 @@ import java.time.LocalDateTime;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -47,7 +47,7 @@ class BearSpendingsApplicationTests {
 
 	@Test
 	 void getAllBills() throws Exception {
-		this.mvc.perform(get("/bills"))
+		this.mvc.perform(get("/bills?page=0&size=10"))
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("$.length()").value("2"))
 		;
@@ -56,7 +56,7 @@ class BearSpendingsApplicationTests {
 	@Transactional
 	@Test
 	void addNewBill() throws Exception {
-		LocalDateTime dateTime = LocalDateTime.of(2019, 8, 16, 14, 58, 1);
+		LocalDateTime dateTime = LocalDateTime.now();
 		UIBill bill = UIBill.builder()
 				.orderDate(dateTime)
 				.storeId(1L)
@@ -67,14 +67,16 @@ class BearSpendingsApplicationTests {
 				)
 				.build();
 
-		mvc.perform(post("/add_bill").content(writer.writeValueAsString(bill)).contentType(MediaType.APPLICATION_JSON))
-				.andExpect(status().isOk())
+		mvc.perform(post("/add_bill")
+				.content(writer.writeValueAsString(bill))
+				.contentType(MediaType.APPLICATION_JSON))
+				.andDo(print())
+				.andExpect(status().isOk());
 
-				;
-		this.mvc.perform(get("/bills"))
+		this.mvc.perform(get("/bills?page=0&size=10"))
 				.andExpect(status().isOk())
-				.andDo(MockMvcResultHandlers.print())
-				.andExpect(jsonPath("[2].orderDate").value(dateTime.toString()));
+				.andDo(print())
+				.andExpect(jsonPath("[0].orderDate").value(dateTime.toString()));
 	}
 
 }
