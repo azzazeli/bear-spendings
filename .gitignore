@@ -1,4 +1,4 @@
-.gradle
+.gradle/
 /build/
 !gradle/wrapper/gradle-wrapper.jar
 
@@ -27,3 +27,13 @@
 
 ### VS Code ###
 .vscode/
+
+### Angular UI ###
+angular-ui/build/
+angular-ui/node_modules/
+
+
+### Sring App ###
+spring-app/build/
+spring-app/.gradle/
+spring-app/out/
