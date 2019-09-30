@@ -18,7 +18,7 @@ import java.util.Set;
 @Builder
 @NoArgsConstructor
 @Getter @Setter
-@ToString
+@ToString(exclude = {"items", "store" })
 @EqualsAndHashCode(of = {"id"})
 public class Bill {
     @Id

@@ -6,6 +6,7 @@ import com.alexm.bearspendings.entity.Bill;
 import com.alexm.bearspendings.repository.BillRepository;
 import com.google.common.collect.ImmutableSet;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -70,6 +71,13 @@ class BillServiceImplTest {
     @Test
     void allBillCounts() {
         assertEquals(2L, billService.allBillsCount().longValue());
+    }
+
+    @DisplayName("Bill toString to not generate stack overflow")
+    @Test
+    void billHashCode() {
+        Bill bill = billRepository.findById(1L).orElseThrow(() -> new RuntimeException("Bill with id = 1 must be present in test dataset"));
+        assertNotNull(bill.toString());
     }
 
 }

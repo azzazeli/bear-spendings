@@ -13,7 +13,7 @@ import static javax.persistence.CascadeType.ALL;
 @Entity
 @NoArgsConstructor @Getter @Setter
 @AllArgsConstructor
-@ToString
+@ToString(exclude = {"bill"})
 @EqualsAndHashCode()
 @Builder
 public class BillItem {
