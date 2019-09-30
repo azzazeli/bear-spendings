@@ -196,7 +196,7 @@ describe('AddBillComponent', () => {
 
     //when
     component.onAddBill();
-    const expectedBill: Bill = new Bill(moment(new Date('2019-09-19T03:00:00')), 1);
+    const expectedBill: Bill = new Bill(moment(component.normalizedDate(new Date('2019-09-19T00:00:00'))), 1);
     expectedBill.items.push(samplesDataService.sampleBillItem(1));
     expect(billServiceSpy.addBill).toHaveBeenCalledWith(expectedBill);
     expect(component.topStoreProducts.length).toBe(0);

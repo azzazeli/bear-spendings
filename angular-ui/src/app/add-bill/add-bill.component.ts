@@ -113,7 +113,7 @@ export class AddBillComponent implements OnInit {
    * this is a hack. need to find more elegant solution
    * @param date
    */
-  private normalizedDate(date: Date): Date {
+  normalizedDate(date: Date): Date {
     return new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours(), date.getMinutes()))
   }
 
