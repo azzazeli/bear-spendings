@@ -5,6 +5,8 @@ import {ReactiveFormsModule} from '@angular/forms';
 import {BillItem} from '../../core/model/bill-item.model';
 import {SamplesDataService} from '../../core/service/samplesDataService';
 import {LoggerModule, NGXLogger, NgxLoggerLevel} from 'ngx-logger';
+import {By} from "@angular/platform-browser";
+import {DebugElement} from "@angular/core";
 
 describe('NewBillItemComponent', () => {
   let component: NewBillItemComponent;
@@ -130,6 +132,19 @@ describe('NewBillItemComponent', () => {
     billItem.quantity = 2;
     component.setBillItem(billItem);
     expect(component.newBillItemForm.valid).toBe(true);
+  });
+
+  it('#on change price, quantity - recalculate price per unit', () => {
+    const billItem = samplesDataService.sampleBillItem(1);
+    component.setBillItem(billItem);
+    let priceField: DebugElement = fixture.debugElement.query(By.css('#bill-item-price'));
+    priceField.nativeElement.value = '10.00';
+    priceField.nativeElement.dispatchEvent(new Event('change'));
+    expect(component.pricePerUnit).toBe(5.00);
+    let quantityField: DebugElement = fixture.debugElement.query(By.css('#bill-item-quantity'));
+    quantityField.nativeElement.value = '3';
+    quantityField.nativeElement.dispatchEvent(new Event('change'));
+    expect(component.pricePerUnit).toBe(3.33);
   });
 
 });
