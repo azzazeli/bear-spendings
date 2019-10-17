@@ -9,6 +9,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -58,7 +59,6 @@ public class StoreServiceImpl implements StoreService {
                         .productId(billItem.getProduct().getId())
                         .price(billItem.getPrice())
                         .quantity(billItem.getQuantity())
-                        .build())
-                .collect(Collectors.toSet());
+                        .build()).collect(Collectors.toCollection(LinkedHashSet::new));
     }
 }

@@ -21,6 +21,6 @@ public class TopProduct {
      * //TODO may be rename field to productId
      */
     private Long productId;
-    private Integer quantity;
+    private Double quantity;
     private Double price;
 }

@@ -1,7 +1,7 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { BillItem } from '../../core/model/bill-item.model';
-import { NGXLogger } from 'ngx-logger';
+import {Component, EventEmitter, OnInit, Output} from '@angular/core';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {BillItem} from '../../core/model/bill-item.model';
+import {NGXLogger} from 'ngx-logger';
 
 @Component({
   selector: 'app-new-bill-item',
@@ -14,6 +14,7 @@ export class NewBillItemComponent implements OnInit {
   @Output('add-bill-item')
   addBillItemEvent: EventEmitter<BillItem> = new EventEmitter();
   billItem: BillItem;
+  pricePerUnit : number;
 
   constructor(private logger: NGXLogger) { }
 
@@ -33,6 +34,7 @@ export class NewBillItemComponent implements OnInit {
     this.newBillItemForm.get('product-name').setValue(billItem.productName);
     this.newBillItemForm.get('price').setValue(billItem.price);
     this.newBillItemForm.get('quantity').setValue(billItem.quantity);
+    this.calculatePricePerUnit(billItem.price, billItem.quantity);
   }
 
   reset(): void {
@@ -53,6 +55,11 @@ export class NewBillItemComponent implements OnInit {
 
   onClearBillItem() {
     this.newBillItemForm.reset();
+    this.pricePerUnit = undefined;
+  }
+
+  private calculatePricePerUnit(price: number, quantity: number): void {
+    this.pricePerUnit = +(price / quantity).toFixed(2);
   }
 
 

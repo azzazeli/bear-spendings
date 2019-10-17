@@ -9,7 +9,7 @@ export class SamplesDataService {
 
   sampleBillItem(id: number): BillItem {
     return new BillItem(
-      id, 'Chefir JLC 2.5%', 1, 9.85
+      id, 'Chefir JLC 2.5%', 2, 20.31
     );
   }
 

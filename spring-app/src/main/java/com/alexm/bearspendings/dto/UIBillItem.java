@@ -18,7 +18,7 @@ public class UIBillItem {
     private Long productId;
     @NotNull(message = "Quantity is mandatory")
     @Positive(message = "Quantity must be a positive number")
-    private Integer quantity;
+    private Double quantity;
     @NotNull(message = "Price is mandatory")
     @Positive(message = "Price must be a positive number")
     private Double price;

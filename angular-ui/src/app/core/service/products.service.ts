@@ -8,7 +8,7 @@ import {StoreProduct} from "../model/store-product.model";
 
 @Injectable()
 export class ProductsService extends ObservableCacheService<Product>{
-  TOP_STORE_PRODUCTS_URL = `${environment.apiUrl}${environment.TOP_STORE_PRODUCTS_URL}`
+  TOP_STORE_PRODUCTS_URL = `${environment.apiUrl}${environment.TOP_STORE_PRODUCTS_URL}`;
   private GET_PRODUCT_URL = `${environment.apiUrl}${environment.PRODUCT_URL}`;
 
   constructor(private http: HttpClient) {

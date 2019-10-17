@@ -47,7 +47,7 @@ class StoreControllerTest {
         when(storeService.findStore(1L))
                 .thenReturn(Optional.of(Store.builder().id(1L).name("Nr.1").build()));
         when(storeService.topProducts(eq(1L), anyInt())).thenReturn(ImmutableSet.of(
-                TopProduct.builder().productId(23L).quantity(1).price(23.00).build()
+                TopProduct.builder().productId(23L).quantity(1.0).price(23.00).build()
         ));
     }
 

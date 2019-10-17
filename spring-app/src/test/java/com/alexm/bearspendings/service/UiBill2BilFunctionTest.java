@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.transaction.Transactional;
-import java.util.Iterator;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -31,7 +30,7 @@ class UiBill2BilFunctionTest {
     @DisplayName("transform UiBill that contains existing product to Bill")
     @Test
     void existingProduct() {
-        Set<UIBillItem> items = ImmutableSet.of(UIBillItem.builder().productId(1L).quantity(1).price(2.2).build());
+        Set<UIBillItem> items = ImmutableSet.of(UIBillItem.builder().productId(1L).quantity(1.0).price(2.2).build());
         UIBill uiBill = UIBill.builder().storeId(1L).items(items).build();
         Bill bill = uiBill2BilFunction.apply(uiBill);
         assertAll(() -> {
@@ -46,14 +45,12 @@ class UiBill2BilFunctionTest {
         String lapte = "Lapte";
         String piine = "Piine";
         Set<UIBillItem> items = ImmutableSet.of(
-                UIBillItem.builder().productName(lapte).quantity(1).price(2.2).build(),
-                UIBillItem.builder().productName(piine).quantity(2).price(12.1).build()
+                UIBillItem.builder().productName(lapte).quantity(1.1).price(2.2).build(),
+                UIBillItem.builder().productName(piine).quantity(2.3).price(12.1).build()
         );
         UIBill uiBill = UIBill.builder().storeId(1L).items(items).build();
         Bill bill = uiBill2BilFunction.apply(uiBill);
-        Iterator<BillItem> iterator = bill.getItems().iterator();
-        while (iterator.hasNext()) {
-            BillItem billItem = iterator.next();
+        for (BillItem billItem : bill.getItems()) {
             assertTrue(ImmutableList.of(lapte, piine).contains(billItem.getProduct().getName()));
         }
     }

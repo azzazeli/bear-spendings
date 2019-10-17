@@ -62,7 +62,7 @@ class BearSpendingsApplicationTests {
 				.storeId(1L)
 				.items(
 						ImmutableSet.of(
-								UIBillItem.builder().price(22.9).quantity(1).productId(1L).build()
+								UIBillItem.builder().price(22.9).quantity(1.0).productId(1L).build()
 						)
 				)
 				.build();

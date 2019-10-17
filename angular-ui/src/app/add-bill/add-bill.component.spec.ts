@@ -115,9 +115,9 @@ describe('AddBillComponent', () => {
     //then
     expect((<FormArray>component.addBillForm.get('bill-items')).length).toBe(1);
     expect((<FormArray>component.addBillForm.get('bill-items')).at(0).get('product-id').value).toBe(1);
-    expect((<FormArray>component.addBillForm.get('bill-items')).at(0).get('quantity').value).toBe(1);
+    expect((<FormArray>component.addBillForm.get('bill-items')).at(0).get('quantity').value).toBe(2);
     expect((<FormArray>component.addBillForm.get('bill-items')).at(0).get('product-name').value).toBe('Chefir JLC 2.5%');
-    expect((<FormArray>component.addBillForm.get('bill-items')).at(0).get('price').value).toBe(9.85);
+    expect((<FormArray>component.addBillForm.get('bill-items')).at(0).get('price').value).toBe(20.31);
 
     //when
     component.onAddBillItem(samplesDataService.sampleBillItem(2));

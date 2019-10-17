@@ -60,7 +60,7 @@ public class DevBootstrap implements ApplicationListener<ContextRefreshedEvent> 
             Set<BillItem> items = new HashSet<>();
             for (int j=0; j <=random.nextInt(10) + 3; j++)  {
                 items.add(buildBillItem(products.get(random.nextInt(products.size()-1)),
-                        (double)Math.round(random.nextDouble()*100*100)/100, random.nextInt(5))
+                        (double)Math.round(random.nextDouble()*100*100)/100, (double) random.nextInt(5))
                 );
             }
             Bill nr1Bill = Bill.builder().orderDate(LocalDateTime.of(2019, 4, random.nextInt(30) + 1, 1, 1))
@@ -71,7 +71,7 @@ public class DevBootstrap implements ApplicationListener<ContextRefreshedEvent> 
         }
     }
 
-    private BillItem buildBillItem(Product product, Double price, Integer quantiy) {
+    private BillItem buildBillItem(Product product, Double price, Double quantiy) {
         return BillItem.builder().product(product).price(price).quantity(quantiy).build();
     }
 

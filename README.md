@@ -11,7 +11,7 @@ Simple app that monitor bear spendings.
     A welcome page for the user. Nothing fancy. Wil be enhanced in upcoming version
 ### Add new bill form
     The main scope of app is to create an easy way to introduce bill. First implementation will be simple, but
-    is going to cover the maincase.
+    is going to cover the main case.
 
    Example
    * select bill date
@@ -26,3 +26,9 @@ Simple app that monitor bear spendings.
 On UI side angular 6 is used. Server side will be implemented with spring boot 2.0
 H2 database will be used for this version
 In memory authentication wil be enough with hardcoded user name and pswd.
+
+### Run build with no UI test
+UI test take some times to execute. There are cases when it is necessary to run build without them.
+For this case run following command:
+```gradlew clean build -Dskip.ui.test=true``` 
+

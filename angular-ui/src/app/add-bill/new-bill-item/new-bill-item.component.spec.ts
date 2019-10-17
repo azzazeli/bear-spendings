@@ -1,10 +1,10 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { NewBillItemComponent } from './new-bill-item.component';
-import { ReactiveFormsModule } from '@angular/forms';
-import { BillItem } from '../../core/model/bill-item.model';
-import { SamplesDataService } from '../../core/service/samplesDataService';
-import { LoggerModule, NGXLogger, NgxLoggerLevel } from 'ngx-logger';
+import {NewBillItemComponent} from './new-bill-item.component';
+import {ReactiveFormsModule} from '@angular/forms';
+import {BillItem} from '../../core/model/bill-item.model';
+import {SamplesDataService} from '../../core/service/samplesDataService';
+import {LoggerModule, NGXLogger, NgxLoggerLevel} from 'ngx-logger';
 
 describe('NewBillItemComponent', () => {
   let component: NewBillItemComponent;
@@ -69,7 +69,7 @@ describe('NewBillItemComponent', () => {
     expect(component.addBillItemEvent.emit).toHaveBeenCalled();
   });
 
-  it('#on set bill item - populate form with data', () => {
+  it('#on set bill item - populate form with data and calculate price per unit', () => {
     //when
     const billItem = samplesDataService.sampleBillItem(1);
     component.setBillItem(billItem);
@@ -79,6 +79,7 @@ describe('NewBillItemComponent', () => {
     expect(component.newBillItemForm.get('product-name').value).toBe(billItem.productName);
     expect(component.newBillItemForm.get('price').value).toBe(billItem.price);
     expect(component.newBillItemForm.get('quantity').value).toBe(billItem.quantity);
+    expect(component.pricePerUnit).toBe(10.15);
   });
 
   it('#on add bill item - disable add button', () => {
@@ -104,6 +105,7 @@ describe('NewBillItemComponent', () => {
     expect(component.newBillItemForm.get('product-name').value).toBeNull();
     expect(component.newBillItemForm.get('price').value).toBeNull();
     expect(component.newBillItemForm.get('quantity').value).toBeNull();
+    expect(component.pricePerUnit).toBeUndefined();
   });
 
   it('#validate negative price', () => {

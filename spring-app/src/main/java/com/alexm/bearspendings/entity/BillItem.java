@@ -13,7 +13,6 @@ import static javax.persistence.CascadeType.ALL;
 @Entity
 @NoArgsConstructor @Getter @Setter
 @AllArgsConstructor
-@ToString(exclude = {"bill"})
 @EqualsAndHashCode()
 @Builder
 public class BillItem {
@@ -25,7 +24,7 @@ public class BillItem {
     @JoinColumn(name = "product_id")
     private Product product;
     @NotNull
-    private Integer quantity;
+    private Double quantity;
     @NotNull
     private Double price;
 
@@ -36,4 +35,15 @@ public class BillItem {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "bill_id")
     private Bill bill;
+
+    @Override
+    public String toString() {
+        return "BillItem{" +
+                "id=" + id +
+                ", productId=" + product.getId() +
+                ", quantity=" + quantity +
+                ", price=" + price +
+                ", billId=" + bill.getId() +
+                '}';
+    }
 }

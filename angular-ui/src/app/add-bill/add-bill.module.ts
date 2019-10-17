@@ -7,6 +7,7 @@ import {CalendarModule} from 'primeng/primeng';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {CoreModule} from '../core/core.module';
 import {ToastModule} from 'primeng/toast';
+import {TooltipModule} from 'primeng/tooltip';
 
 @NgModule({
   declarations: [
@@ -20,6 +21,7 @@ import {ToastModule} from 'primeng/toast';
     CalendarModule,
     BrowserAnimationsModule,
     ToastModule,
+    TooltipModule
   ],
   exports: [
     AddBillComponent

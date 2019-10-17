@@ -8,7 +8,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.Iterator;
 import java.util.Optional;
 import java.util.Set;
 
@@ -64,20 +63,22 @@ class StoreServiceImplTest {
         assertAll(
                 () -> { assertEquals(2, products.size());}
         );
-        Iterator<TopProduct> iterator = products.iterator();
-        TopProduct inghetata = iterator.next();
+
+        TopProduct inghetata = products.stream().filter(topProduct -> topProduct.getProductId().equals(3L)).findFirst()
+                .orElseThrow(RuntimeException::new);
         assertThat(inghetata,
                 allOf(
                         hasProperty("productId", equalTo(3L)),
-                        hasProperty("quantity", equalTo(1)),
+                        hasProperty("quantity", equalTo(1.0)),
                         hasProperty("price", equalTo(87.00))
                 )
         );
-        TopProduct chefir25 = iterator.next();
+        TopProduct chefir25 = products.stream().filter(topProduct -> topProduct.getProductId().equals(2L)).findFirst()
+                .orElseThrow(RuntimeException::new);
         assertThat(chefir25,
                 allOf(
                         hasProperty("productId", equalTo(2L)),
-                        hasProperty("quantity", equalTo(1)),
+                        hasProperty("quantity", equalTo(1.0)),
                         hasProperty("price", equalTo(10.00))
                 )
         );

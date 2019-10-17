@@ -18,7 +18,6 @@ import java.util.Set;
 @Builder
 @NoArgsConstructor
 @Getter @Setter
-@ToString(exclude = {"items", "store" })
 @EqualsAndHashCode(of = {"id"})
 public class Bill {
     @Id
@@ -43,10 +42,18 @@ public class Bill {
         this.setItems(items);
     }
 
-
     public void setItems(Set<BillItem> items) {
         this.items = items;
         this.items.forEach(billItem -> billItem.setBill(this));
+    }
+
+    @Override
+    public String toString() {
+        return "Bill{" +
+                "id=" + id +
+                ", orderDate=" + orderDate +
+                ", storeId=" + store.getId() +
+                '}';
     }
 
     public static class BillBuilder {

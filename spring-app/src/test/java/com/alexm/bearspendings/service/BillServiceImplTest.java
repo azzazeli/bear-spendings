@@ -46,8 +46,8 @@ class BillServiceImplTest {
         assertEquals(LocalDateTime.of(2019, 4, 22, 0, 0 ), uiBill.getOrderDate());
         assertThat(uiBill.getItems()).extracting("id", "price", "quantity", "productId" )
                 .contains(
-                        tuple(3L, 87.00, 1, 3L),
-                        tuple(4L, 10.00, 1, 2L)
+                        tuple(3L, 87.00, 1.0, 3L),
+                        tuple(4L, 10.00, 1.0, 2L)
                 );
     }
 
@@ -59,8 +59,8 @@ class BillServiceImplTest {
                 .orderDate(orderDate)
                 .items(
                         ImmutableSet.of(
-                                UIBillItem.builder().quantity(2).productId(1L).price(22.9).build(),
-                                UIBillItem.builder().quantity(1).productId(2L).price(44.0).build()
+                                UIBillItem.builder().quantity(2.0).productId(1L).price(22.9).build(),
+                                UIBillItem.builder().quantity(1.0).productId(2L).price(44.0).build()
                         )
                 )
                 .build();

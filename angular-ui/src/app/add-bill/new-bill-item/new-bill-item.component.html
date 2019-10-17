@@ -20,22 +20,28 @@
         Invalid quantity.
       </div>
     </div>
-    <div class="col-xs-1">
+    <div class="col-xs-2">
+      <label>Price Per Unit</label>
+      <div class="form-control">{{pricePerUnit}}</div>
+    </div>
+  </div>
+
+  <div class="form-group row" style="float: right; margin-right: 1px">
       <label for="add-to-bill-btn">&nbsp;</label>
       <button type="button" class="btn btn-default btn-success" aria-label="Bill Align"
               [disabled]="!newBillItemForm.valid"
               (click)="onAddBillItem()"
+              pTooltip="Add Bill Item"
               id="add-to-bill-btn">
         <span class="btn-label glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
       </button>
-    </div>
-    <div class="col-xs-1">
       <label for="add-to-bill-btn">&nbsp;</label>
       <button type="button" class="btn btn-default btn-danger" aria-label="Bill Align"
               (click)="onClearBillItem()"
+              pTooltip="Clear Bill Item"
               id="clear-form-btn">
         <span class="btn-label glyphicon glyphicon-remove" aria-hidden="true"></span>
       </button>
-    </div>
   </div>
+
 </form>

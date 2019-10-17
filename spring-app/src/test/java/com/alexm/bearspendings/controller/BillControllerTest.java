@@ -62,8 +62,8 @@ class BillControllerTest {
                 .orderDate(LocalDateTime.now())
                 .storeId(2L)
                 .items(ImmutableSet.of(
-                        UIBillItem.builder().price(22.33).productId(22L).quantity(2).build(),
-                        UIBillItem.builder().price(233.00).productId(12L).quantity(1).build()
+                        UIBillItem.builder().price(22.33).productId(22L).quantity(2.0).build(),
+                        UIBillItem.builder().price(233.00).productId(12L).quantity(1.0).build()
                 ))
                 .build();
         mvc.perform(MockMvcRequestBuilders
@@ -90,31 +90,31 @@ class BillControllerTest {
                 UIBill.builder().build(),
                 UIBill.builder().storeId(2L)
                         .items(ImmutableSet.of(
-                                UIBillItem.builder().price(22.33).productId(22L).quantity(2).build(),
-                                UIBillItem.builder().price(233.00).productId(12L).quantity(1).build()
+                                UIBillItem.builder().price(22.33).productId(22L).quantity(2.0).build(),
+                                UIBillItem.builder().price(233.00).productId(12L).quantity(1.0).build()
                         ))
                         .build(),
                 UIBill.builder().storeId(2L).build(),
                 UIBill.builder().orderDate(LocalDateTime.now())
                         .items(ImmutableSet.of(
-                                UIBillItem.builder().price(22.33).productId(22L).quantity(2).build(),
-                                UIBillItem.builder().price(233.00).productId(12L).quantity(1).build()
+                                UIBillItem.builder().price(22.33).productId(22L).quantity(2.0).build(),
+                                UIBillItem.builder().price(233.00).productId(12L).quantity(1.0).build()
                         ))
                         .build(),
                 UIBill.builder()
                         .orderDate(LocalDateTime.now())
                         .storeId(2L)
                         .items(ImmutableSet.of(
-                                UIBillItem.builder().productId(22L).quantity(2).build(),
-                                UIBillItem.builder().price(233.00).productId(12L).quantity(1).build()
+                                UIBillItem.builder().productId(22L).quantity(2.0).build(),
+                                UIBillItem.builder().price(233.00).productId(12L).quantity(1.0).build()
                         ))
                         .build(),
                 UIBill.builder()
                         .orderDate(LocalDateTime.now())
                         .storeId(2L)
                         .items(ImmutableSet.of(
-                                UIBillItem.builder().price(22.33).quantity(2).build(),
-                                UIBillItem.builder().price(233.00).productId(12L).quantity(1).build()
+                                UIBillItem.builder().price(22.33).quantity(2.0).build(),
+                                UIBillItem.builder().price(233.00).productId(12L).quantity(1.0).build()
                         ))
                         .build(),
                 UIBill.builder()
@@ -122,7 +122,7 @@ class BillControllerTest {
                         .storeId(2L)
                         .items(ImmutableSet.of(
                                 UIBillItem.builder().price(22.33).productId(22L).build(),
-                                UIBillItem.builder().price(233.00).productId(12L).quantity(1).build()
+                                UIBillItem.builder().price(233.00).productId(12L).quantity(1.0).build()
                         ))
                         .build()
         );
