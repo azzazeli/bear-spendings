@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/fagot013/bear-spendings.svg?branch=master)](https://travis-ci.org/fagot013/bear-spendings)
 # bear-spendings
 Simple app that monitor bear spendings. 
 
