@@ -2,7 +2,11 @@
 # bear-spendings
 Simple app that monitor bear spendings. 
 
-##Features (version 0.1)
+## Version 0.2
+ - Cost per unit of bill item
+ - Bill total on 'Add bill' form
+
+## Version 0.1
  - Simple display home page
  - Add new bill form
  - List fo bills (including bill items)
