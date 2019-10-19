@@ -5,14 +5,15 @@ import {Product} from '../model/product.model';
 import {ObservableCacheService} from './observable.cache.service';
 import {environment} from "../../../environments/environment";
 import {StoreProduct} from "../model/store-product.model";
+import {NGXLogger} from "ngx-logger";
 
 @Injectable()
 export class ProductsService extends ObservableCacheService<Product>{
   TOP_STORE_PRODUCTS_URL = `${environment.apiUrl}${environment.TOP_STORE_PRODUCTS_URL}`;
   private GET_PRODUCT_URL = `${environment.apiUrl}${environment.PRODUCT_URL}`;
 
-  constructor(private http: HttpClient) {
-    super();
+  constructor(private http: HttpClient, protected logger: NGXLogger) {
+    super(logger);
   }
 
   productUrl(id: number) {
@@ -32,6 +33,7 @@ export class ProductsService extends ObservableCacheService<Product>{
   }
 
   protected fetchObservable(id: number): Observable<Product> {
+    this.logger.debug(`fetching product with id: ${id}`);
     return this.http.get<Product>(this.productUrl(id));
   }
 }

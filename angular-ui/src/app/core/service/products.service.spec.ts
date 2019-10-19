@@ -5,6 +5,7 @@ import {TestBed} from '@angular/core/testing';
 import {Product} from '../model/product.model';
 import {HttpClient} from '@angular/common/http';
 import {StoreProduct} from "../model/store-product.model";
+import {LoggerModule, NgxLoggerLevel} from "ngx-logger";
 
 describe('ProductsServiceTest', () => {
   let productService: ProductsService;
@@ -14,7 +15,10 @@ describe('ProductsServiceTest', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
+      imports: [
+        HttpClientTestingModule,
+        LoggerModule.forRoot({level: NgxLoggerLevel.DEBUG})
+      ],
       providers: [ProductsService, SamplesDataService]
     });
     productService = TestBed.get(ProductsService);
