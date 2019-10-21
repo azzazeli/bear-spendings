@@ -6,7 +6,8 @@ import {environment} from './environments/environment';
 
 if (environment.production) {
   enableProdMode();
-  environment.apiUrl = window.location.origin;
+  environment.apiUrl = window.location.origin + '/';
+  console.log(`apiUrl:${environment.apiUrl}`);
 }
 
 platformBrowserDynamic().bootstrapModule(AppModule)

@@ -12,7 +12,9 @@ export class BillService {
   ALL_BILLS_URL = `${environment.apiUrl}${environment.ALL_BILLS_URL}`;
   ALL_BILLS_COUNT_URL = `${environment.apiUrl}${environment.ALL_BILLS_URL}/count`;
 
-  constructor(private http: HttpClient, private logger: NGXLogger) {}
+  constructor(private http: HttpClient, private logger: NGXLogger) {
+    this.logger.debug("environment.apiUrl:", environment.apiUrl);
+  }
 
   public addBill(bill: Bill): Observable<Bill> {
     return this.http.post<Bill>(this.ADD_BILL_URL, bill);
@@ -23,7 +25,7 @@ export class BillService {
   }
 
   public allBills(page: number, size: number): Observable<Bill[]> {
-    this.logger.debug("environment.apiUrl", environment.apiUrl);
+    this.logger.debug(`all bills url:${this.ALL_BILLS_URL}`);
     return this.http.get<Bill[]>(this.ALL_BILLS_URL, {
       params: {
         'page': page.toString(),
