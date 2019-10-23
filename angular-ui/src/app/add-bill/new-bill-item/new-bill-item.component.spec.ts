@@ -147,4 +147,18 @@ describe('NewBillItemComponent', () => {
     expect(component.pricePerUnit).toBe(3.33);
   });
 
+  it('on price or quantity = 0,price per unit must be undefined', () => {
+    const billItem = samplesDataService.sampleBillItem(1);
+    component.setBillItem(billItem);
+    let priceField: DebugElement = fixture.debugElement.query(By.css('#bill-item-price'));
+    priceField.nativeElement.value = '0';
+    priceField.nativeElement.dispatchEvent(new Event('change'));
+    expect(component.pricePerUnit).toBeUndefined();
+
+    let quantityField: DebugElement = fixture.debugElement.query(By.css('#bill-item-quantity'));
+    quantityField.nativeElement.value = '0';
+    quantityField.nativeElement.dispatchEvent(new Event('change'));
+    expect(component.pricePerUnit).toBeUndefined();
+  });
+
 });

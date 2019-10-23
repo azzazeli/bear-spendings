@@ -64,6 +64,10 @@ export class NewBillItemComponent implements OnInit {
   }
 
   private calculatePricePerUnit(price: number, quantity: number): void {
+    if (price <=0 || quantity <= 0){
+      this.pricePerUnit = undefined;
+      return;
+    }
     this.pricePerUnit = +(price / quantity).toFixed(2);
     this.logger.debug('recalculating price per unit ...');
     this.logger.debug('price:' + price);
