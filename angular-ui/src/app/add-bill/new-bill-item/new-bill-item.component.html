@@ -1,40 +1,48 @@
 <h4>New Bill Item</h4>
 <form class="needs-validation" [formGroup]="newBillItemForm" >
   <div class="form-group row">
-    <div class="col-xs-6">
+    <div class="col-xs-6 ">
       <label for="bill-item-product">Product:</label>
-      <input id="bill-item-product" formControlName="product-name" type="text" class="form-control">
+      <div class="input-group input-group-sm" style="width: 100%">
+        <input id="bill-item-product" formControlName="product-name" type="text" class="form-control">
+      </div>
       <input id="bill-item-product-id" formControlName="product-id" type="hidden" class="form-control">
     </div>
     <div class="col-xs-2">
       <label for="bill-item-price">Price:</label>
-      <input id="bill-item-price" formControlName="price"
-             min="0"
-             (change)="recalculatePricePerUnit()"
-             type="number" class="form-control">
-      <div *ngIf="!newBillItemForm.get('price').valid && newBillItemForm.get('price').touched" style="color: red">
-        Invalid price.
+      <div class="input-group input-group-sm" style="width: 100%">
+        <input id="bill-item-price" formControlName="price"
+               min="0"
+               (change)="recalculatePricePerUnit()"
+               type="number" class="form-control">
+        <div *ngIf="!newBillItemForm.get('price').valid && newBillItemForm.get('price').touched" style="color: red">
+          Invalid price.
+        </div>
       </div>
     </div>
     <div class="col-xs-2">
       <label for="bill-item-quantity">Quantity:</label>
-      <input id="bill-item-quantity" formControlName="quantity"
-             (change)="recalculatePricePerUnit()"
-             min="0"
-             type="number" class="form-control" size="2">
-      <div *ngIf="!newBillItemForm.get('quantity').valid && newBillItemForm.get('quantity').touched"  style="color: red">
-        Invalid quantity.
+      <div class="input-group input-group-sm" style="width: 100%">
+        <input id="bill-item-quantity" formControlName="quantity"
+               (change)="recalculatePricePerUnit()"
+               min="0"
+               type="number" class="form-control" size="2">
+        <div *ngIf="!newBillItemForm.get('quantity').valid && newBillItemForm.get('quantity').touched"  style="color: red">
+          Invalid quantity.
+        </div>
       </div>
     </div>
     <div class="col-xs-2">
       <label>Price Per Unit</label>
-      <div class="form-control">{{pricePerUnit}}</div>
+      <div class="input-group input-group-sm" style="width: 100%">
+        <div class="form-control ">{{pricePerUnit}}</div>
+      </div>
     </div>
   </div>
 
   <div class="form-group row" style="float: right; margin-right: 1px">
       <label for="add-to-bill-btn">&nbsp;</label>
-      <button type="button" class="btn btn-default btn-success" aria-label="Bill Align"
+      <button type="button" class="btn btn-default btn-success btn-sm" aria-label="Bill Align"
               [disabled]="!newBillItemForm.valid"
               (click)="onAddBillItem()"
               pTooltip="Add Bill Item"
@@ -42,7 +50,7 @@
         <span class="btn-label glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
       </button>
       <label for="add-to-bill-btn">&nbsp;</label>
-      <button type="button" class="btn btn-default btn-danger" aria-label="Bill Align"
+      <button type="button" class="btn btn-default btn-danger btn-sm" aria-label="Bill Align"
               (click)="onClearBillItem()"
               pTooltip="Clear Bill Item"
               id="clear-form-btn">

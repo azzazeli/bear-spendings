@@ -35,7 +35,7 @@
           </ul>
         </div>
         <app-new-bill-item (add-bill-item)="onAddBillItem($event)" ></app-new-bill-item>
-        <table class="table table-hover" formArrayName="bill-items">
+        <table class="table table-hover table-condensed" formArrayName="bill-items">
           <caption>Bill Items</caption>
           <thead>
           <tr>
@@ -52,13 +52,16 @@
               <td>{{billItemsControls[i].get('product-name').value}}</td>
               <td>{{billItemsControls[i].get('price').value}}</td>
               <td>{{billItemsControls[i].get('quantity').value}}</td>
-              <td>
-                <button class="btn btn-danger" type="button"
+              <td style="width: 20px">
+                <button class="btn btn-default btn-danger btn-xs" type="button"
                         (click)="onDeleteBillItem(i)">
                   <span class="glyphicon glyphicon-minus" aria-hidden="true"></span>
                 </button>
               </td>
             </tr>
+          <tr>
+            <th class="text-right" colspan="5">Total: 22.43 </th>
+          </tr>
           </tbody>
         </table>
         <button style="margin-bottom: 20px" id="add-bill-btn"
