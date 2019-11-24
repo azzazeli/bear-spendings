@@ -201,6 +201,7 @@ describe('AddBillComponent', () => {
     component.onAddBill();
     const expectedBill: Bill = new Bill(moment(component.normalizedDate(new Date('2019-09-19T00:00:00'))), 1);
     expectedBill.items.push(samplesDataService.sampleBillItem(1));
+    expectedBill.total = (2 * 20.31);
     expect(billServiceSpy.addBill).toHaveBeenCalledWith(expectedBill);
     expect(component.topStoreProducts.length).toBe(0);
     expect((<FormArray>component.addBillForm.get('bill-items')).controls).toEqual([]);

@@ -10,6 +10,7 @@ export class Bill {
   public storeId: number;
   public store: Store;
   public items: BillItem[] = [];
+  public total: number;
 
   constructor(orderDate: moment.Moment, storeId: number) {
     this.orderDate = orderDate;

@@ -104,6 +104,7 @@ export class AddBillComponent implements OnInit {
         billItemFG.get('price').value)
       );
     }
+    bill.total = this.billTotal;
     this.billService.addBill(bill).subscribe(addedBill => {
       this.logger.debug("Bill was added. bill id:" + addedBill.id);
       this.messageService.add({severity: 'success', summary: 'Bill was added with success'});
@@ -151,6 +152,7 @@ export class AddBillComponent implements OnInit {
     for( let billItemFG of this.billItems().controls) {
         this.billTotal += billItemFG.get('quantity').value * billItemFG.get('price').value;
     }
+    this.billTotal = +this.billTotal.toFixed(2);
     this.logger.debug('Bill total is:', this.billTotal);
   }
 
