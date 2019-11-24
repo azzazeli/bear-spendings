@@ -118,11 +118,13 @@ describe('AddBillComponent', () => {
     expect((<FormArray>component.addBillForm.get('bill-items')).at(0).get('quantity').value).toBe(2);
     expect((<FormArray>component.addBillForm.get('bill-items')).at(0).get('product-name').value).toBe('Chefir JLC 2.5%');
     expect((<FormArray>component.addBillForm.get('bill-items')).at(0).get('price').value).toBe(20.31);
+    expect(component.billTotal).toEqual(2 * 20.31);
 
     //when
     component.onAddBillItem(samplesDataService.sampleBillItem(2));
     //then
-    expect((<FormArray>component.addBillForm.get('bill-items')).at(1).get('product-id').value).toBe(2)
+    expect((<FormArray>component.addBillForm.get('bill-items')).at(1).get('product-id').value).toBe(2);
+    expect(component.billTotal).toEqual(4 * 20.31);
   });
 
   it('#on delete bill item - remove item from array form', ()=> {
@@ -136,6 +138,7 @@ describe('AddBillComponent', () => {
     let billItems = <FormArray>component.addBillForm.get('bill-items');
     expect((<FormArray>component.addBillForm.get('bill-items')).length).toBe(1);
     expect((<FormArray>component.addBillForm.get('bill-items')).at(0).get('product-id').value).toBe(2);
+    expect(component.billTotal).toEqual(2 * 20.31);
   });
 
 

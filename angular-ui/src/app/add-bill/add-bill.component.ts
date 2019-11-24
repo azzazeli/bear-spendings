@@ -25,6 +25,7 @@ export class AddBillComponent implements OnInit {
   addBillForm: FormGroup;
   topStoreProducts: StoreProduct[];
   selectedProductId: number;
+  billTotal: number = 0.0;
 
   @ViewChild(NewBillItemComponent)
   newBillItemComponent: NewBillItemComponent;
@@ -82,12 +83,14 @@ export class AddBillComponent implements OnInit {
         'price': new FormControl(billItem.price)
       }
     ));
+    this.calculateBillTotal();
     this.resetNewBillItem();
   }
 
   onDeleteBillItem(index: number) {
     this.logger.debug('AddBillComponent: On delete bill item at index:', index);
     this.billItems().removeAt(index);
+    this.calculateBillTotal();
   }
 
   onAddBill() {
@@ -123,6 +126,7 @@ export class AddBillComponent implements OnInit {
 
   private resetForm() {
     this.logger.debug('resetting new bill form ...');
+
     this.addBillForm.get('bill-date').setValue(null);
     this.addBillForm.get('store-id').setValue(null);
     this.topStoreProducts.splice(0);
@@ -130,6 +134,7 @@ export class AddBillComponent implements OnInit {
     this.resetNewBillItem();
     this.addBillForm.markAsUntouched();
     this.addBillForm.markAsPristine();
+
     this.logger.debug("resetting done.")
   }
 
@@ -138,6 +143,15 @@ export class AddBillComponent implements OnInit {
     this.newBillItemComponent.reset();
     this.selectedProductId = null;
     this.logger.debug("resetting done.");
+  }
+
+  private calculateBillTotal() {
+    this.logger.debug('Calculating bill total ...');
+    this.billTotal = 0;
+    for( let billItemFG of this.billItems().controls) {
+        this.billTotal += billItemFG.get('quantity').value * billItemFG.get('price').value;
+    }
+    this.logger.debug('Bill total is:', this.billTotal);
   }
 
 }
