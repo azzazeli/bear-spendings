@@ -10,10 +10,10 @@ import java.util.Objects;
  * @author AlexM
  * Date: 9/10/19
  **/
-public class UIBillItemValidator implements ConstraintValidator<ValidUIBillItem, UIBillItem> {
+public class UIBillItemValidator implements ConstraintValidator<ValidUIBillItem, BillItemCommand> {
 
     @Override
-    public boolean isValid(UIBillItem value, ConstraintValidatorContext context) {
+    public boolean isValid(BillItemCommand value, ConstraintValidatorContext context) {
         return !(Objects.isNull(value.getProductId()) && StringUtils.isEmpty(value.getProductName()));
     }
 

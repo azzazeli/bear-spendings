@@ -1,7 +1,7 @@
 package com.alexm.bearspendings.service;
 
-import com.alexm.bearspendings.dto.UIBill;
-import com.alexm.bearspendings.dto.UIBillItem;
+import com.alexm.bearspendings.dto.BillCommand;
+import com.alexm.bearspendings.dto.BillItemCommand;
 import com.alexm.bearspendings.entity.Bill;
 import com.alexm.bearspendings.entity.BillItem;
 import com.alexm.bearspendings.repository.BillRepository;
@@ -24,17 +24,17 @@ import java.util.stream.StreamSupport;
 @Service
 public class BillServiceImpl implements BillService  {
     private final BillRepository billRepository;
-    private final Function<UIBill, Bill> uiBill2BilFunction;
+    private final Function<BillCommand, Bill> uiBill2BilFunction;
 
-    private final Function<BillItem, UIBillItem> billItemToUiBillItemMap = billItem ->
-            UIBillItem.builder()
+    private final Function<BillItem, BillItemCommand> billItemToUiBillItemMap = billItem ->
+            BillItemCommand.builder()
                     .id(billItem.getId())
                     .price(billItem.getPrice())
                     .quantity(billItem.getQuantity())
                     .productId(billItem.getProduct().getId())
                     .build();
-    private final Function<Bill, UIBill> billToUiBillMap = bill ->
-            UIBill.builder()
+    private final Function<Bill, BillCommand> billToUiBillMap = bill ->
+            BillCommand.builder()
                     .id(bill.getId())
                     .orderDate(bill.getOrderDate())
                     .storeId(bill.getStore().getId())
@@ -42,14 +42,14 @@ public class BillServiceImpl implements BillService  {
                     .build();
 
 
-    public BillServiceImpl(BillRepository billRepository, Function<UIBill, Bill> uiBill2BilFunction) {
+    public BillServiceImpl(BillRepository billRepository, Function<BillCommand, Bill> uiBill2BilFunction) {
         this.billRepository = billRepository;
         this.uiBill2BilFunction = uiBill2BilFunction;
     }
 
     @Transactional
     @Override
-    public List<UIBill> allBills(int page, int size) {
+    public List<BillCommand> allBills(int page, int size) {
         Sort byOrderDateDesc = Sort.by(Sort.Direction.DESC, "orderDate");
         Pageable pageable = PageRequest.of(page, size, byOrderDateDesc);
         return StreamSupport.stream(billRepository.findAll(pageable).spliterator(), false)
@@ -58,8 +58,8 @@ public class BillServiceImpl implements BillService  {
     }
 
     @Override
-    public Bill addBill(UIBill uiBill) {
-        Bill bill = uiBill2BilFunction.apply(uiBill);
+    public Bill addBill(BillCommand billCommand) {
+        Bill bill = uiBill2BilFunction.apply(billCommand);
         return billRepository.save(bill);
     }
 

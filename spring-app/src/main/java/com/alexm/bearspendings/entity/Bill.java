@@ -34,12 +34,15 @@ public class Bill {
 //    @Singular
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "bill")
     private Set<BillItem> items;
+    private Double total;
 
-    Bill(Long id, @NotNull LocalDateTime orderDate, @NotNull Store store, @NotEmpty Set<BillItem> items) {
+    Bill(Long id, @NotNull LocalDateTime orderDate, @NotNull Store store,
+         @NotEmpty Set<BillItem> items, @NotNull Double total) {
         this.id = id;
         this.orderDate = orderDate;
         this.store = store;
         this.setItems(items);
+        this.total = total;
     }
 
     public void setItems(Set<BillItem> items) {

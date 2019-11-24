@@ -1,7 +1,7 @@
 package com.alexm.bearspendings.service;
 
-import com.alexm.bearspendings.dto.UIBill;
-import com.alexm.bearspendings.dto.UIBillItem;
+import com.alexm.bearspendings.dto.BillCommand;
+import com.alexm.bearspendings.dto.BillItemCommand;
 import com.alexm.bearspendings.entity.Bill;
 import com.alexm.bearspendings.entity.BillItem;
 import com.google.common.collect.ImmutableList;
@@ -30,9 +30,9 @@ class UiBill2BilFunctionTest {
     @DisplayName("transform UiBill that contains existing product to Bill")
     @Test
     void existingProduct() {
-        Set<UIBillItem> items = ImmutableSet.of(UIBillItem.builder().productId(1L).quantity(1.0).price(2.2).build());
-        UIBill uiBill = UIBill.builder().storeId(1L).items(items).build();
-        Bill bill = uiBill2BilFunction.apply(uiBill);
+        Set<BillItemCommand> items = ImmutableSet.of(BillItemCommand.builder().productId(1L).quantity(1.0).price(2.2).build());
+        BillCommand billCommand = BillCommand.builder().storeId(1L).items(items).build();
+        Bill bill = uiBill2BilFunction.apply(billCommand);
         assertAll(() -> {
             assertEquals(1L, bill.getStore().getId().longValue());
             assertEquals(1L, bill.getItems().iterator().next().getProduct().getId().longValue());
@@ -44,15 +44,17 @@ class UiBill2BilFunctionTest {
     void newProduct() {
         String lapte = "Lapte";
         String piine = "Piine";
-        Set<UIBillItem> items = ImmutableSet.of(
-                UIBillItem.builder().productName(lapte).quantity(1.1).price(2.2).build(),
-                UIBillItem.builder().productName(piine).quantity(2.3).price(12.1).build()
+        Double total = 20.0;
+        Set<BillItemCommand> items = ImmutableSet.of(
+                BillItemCommand.builder().productName(lapte).quantity(1.1).price(2.2).build(),
+                BillItemCommand.builder().productName(piine).quantity(2.3).price(12.1).build()
         );
-        UIBill uiBill = UIBill.builder().storeId(1L).items(items).build();
-        Bill bill = uiBill2BilFunction.apply(uiBill);
+        BillCommand billCommand = BillCommand.builder().storeId(1L).total(total).items(items).build();
+        Bill bill = uiBill2BilFunction.apply(billCommand);
         for (BillItem billItem : bill.getItems()) {
             assertTrue(ImmutableList.of(lapte, piine).contains(billItem.getProduct().getName()));
         }
+        assertEquals(total, bill.getTotal());
     }
 
 }

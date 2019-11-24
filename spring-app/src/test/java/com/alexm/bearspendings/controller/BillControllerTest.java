@@ -1,7 +1,7 @@
 package com.alexm.bearspendings.controller;
 
-import com.alexm.bearspendings.dto.UIBill;
-import com.alexm.bearspendings.dto.UIBillItem;
+import com.alexm.bearspendings.dto.BillCommand;
+import com.alexm.bearspendings.dto.BillItemCommand;
 import com.alexm.bearspendings.service.BillService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
@@ -58,12 +58,13 @@ class BillControllerTest {
 
     @Test
     void addBill() throws Exception {
-        UIBill bill = UIBill.builder()
+        BillCommand bill = BillCommand.builder()
                 .orderDate(LocalDateTime.now())
                 .storeId(2L)
+                .total(20.0)
                 .items(ImmutableSet.of(
-                        UIBillItem.builder().price(22.33).productId(22L).quantity(2.0).build(),
-                        UIBillItem.builder().price(233.00).productId(12L).quantity(1.0).build()
+                        BillItemCommand.builder().price(22.33).productId(22L).quantity(2.0).build(),
+                        BillItemCommand.builder().price(233.00).productId(12L).quantity(1.0).build()
                 ))
                 .build();
         mvc.perform(MockMvcRequestBuilders
@@ -76,7 +77,7 @@ class BillControllerTest {
 
     @ParameterizedTest
     @MethodSource("uiBillProvider")
-    void validateAddBillInput(UIBill bill) throws Exception {
+    void validateAddBillInput(BillCommand bill) throws Exception {
         mvc.perform(MockMvcRequestBuilders
                 .post("/add_bill")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -85,44 +86,44 @@ class BillControllerTest {
     }
 
 
-    static Stream<UIBill> uiBillProvider() {
+    static Stream<BillCommand> uiBillProvider() {
         return Stream.of(
-                UIBill.builder().build(),
-                UIBill.builder().storeId(2L)
+                BillCommand.builder().build(),
+                BillCommand.builder().storeId(2L)
                         .items(ImmutableSet.of(
-                                UIBillItem.builder().price(22.33).productId(22L).quantity(2.0).build(),
-                                UIBillItem.builder().price(233.00).productId(12L).quantity(1.0).build()
+                                BillItemCommand.builder().price(22.33).productId(22L).quantity(2.0).build(),
+                                BillItemCommand.builder().price(233.00).productId(12L).quantity(1.0).build()
                         ))
                         .build(),
-                UIBill.builder().storeId(2L).build(),
-                UIBill.builder().orderDate(LocalDateTime.now())
+                BillCommand.builder().storeId(2L).build(),
+                BillCommand.builder().orderDate(LocalDateTime.now())
                         .items(ImmutableSet.of(
-                                UIBillItem.builder().price(22.33).productId(22L).quantity(2.0).build(),
-                                UIBillItem.builder().price(233.00).productId(12L).quantity(1.0).build()
+                                BillItemCommand.builder().price(22.33).productId(22L).quantity(2.0).build(),
+                                BillItemCommand.builder().price(233.00).productId(12L).quantity(1.0).build()
                         ))
                         .build(),
-                UIBill.builder()
+                BillCommand.builder()
                         .orderDate(LocalDateTime.now())
                         .storeId(2L)
                         .items(ImmutableSet.of(
-                                UIBillItem.builder().productId(22L).quantity(2.0).build(),
-                                UIBillItem.builder().price(233.00).productId(12L).quantity(1.0).build()
+                                BillItemCommand.builder().productId(22L).quantity(2.0).build(),
+                                BillItemCommand.builder().price(233.00).productId(12L).quantity(1.0).build()
                         ))
                         .build(),
-                UIBill.builder()
+                BillCommand.builder()
                         .orderDate(LocalDateTime.now())
                         .storeId(2L)
                         .items(ImmutableSet.of(
-                                UIBillItem.builder().price(22.33).quantity(2.0).build(),
-                                UIBillItem.builder().price(233.00).productId(12L).quantity(1.0).build()
+                                BillItemCommand.builder().price(22.33).quantity(2.0).build(),
+                                BillItemCommand.builder().price(233.00).productId(12L).quantity(1.0).build()
                         ))
                         .build(),
-                UIBill.builder()
+                BillCommand.builder()
                         .orderDate(LocalDateTime.now())
                         .storeId(2L)
                         .items(ImmutableSet.of(
-                                UIBillItem.builder().price(22.33).productId(22L).build(),
-                                UIBillItem.builder().price(233.00).productId(12L).quantity(1.0).build()
+                                BillItemCommand.builder().price(22.33).productId(22L).build(),
+                                BillItemCommand.builder().price(233.00).productId(12L).quantity(1.0).build()
                         ))
                         .build()
         );

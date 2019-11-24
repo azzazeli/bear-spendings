@@ -1,7 +1,7 @@
 package com.alexm.bearspendings;
 
-import com.alexm.bearspendings.dto.UIBill;
-import com.alexm.bearspendings.dto.UIBillItem;
+import com.alexm.bearspendings.dto.BillCommand;
+import com.alexm.bearspendings.dto.BillItemCommand;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.google.common.collect.ImmutableSet;
@@ -57,12 +57,13 @@ class BearSpendingsApplicationTests {
 	@Test
 	void addNewBill() throws Exception {
 		LocalDateTime dateTime = LocalDateTime.now();
-		UIBill bill = UIBill.builder()
+		BillCommand bill = BillCommand.builder()
 				.orderDate(dateTime)
 				.storeId(1L)
+				.total(0.0)
 				.items(
 						ImmutableSet.of(
-								UIBillItem.builder().price(22.9).quantity(1.0).productId(1L).build()
+								BillItemCommand.builder().price(22.9).quantity(1.0).productId(1L).build()
 						)
 				)
 				.build();

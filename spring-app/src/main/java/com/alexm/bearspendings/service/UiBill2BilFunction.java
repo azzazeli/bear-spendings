@@ -1,7 +1,7 @@
 package com.alexm.bearspendings.service;
 
-import com.alexm.bearspendings.dto.UIBill;
-import com.alexm.bearspendings.dto.UIBillItem;
+import com.alexm.bearspendings.dto.BillCommand;
+import com.alexm.bearspendings.dto.BillItemCommand;
 import com.alexm.bearspendings.entity.Bill;
 import com.alexm.bearspendings.entity.BillItem;
 import com.alexm.bearspendings.entity.Product;
@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
  * Date: 8/16/19
  **/
 @Component
-public class UiBill2BilFunction implements Function<UIBill, Bill> {
+public class UiBill2BilFunction implements Function<BillCommand, Bill> {
 
     private final ProductRepository productRepository;
     private final StoreRepository storeRepository;
@@ -29,24 +29,25 @@ public class UiBill2BilFunction implements Function<UIBill, Bill> {
     }
 
     @Override
-    public Bill apply(UIBill uiBill) {
+    public Bill apply(BillCommand billCommand) {
         return Bill.builder()
-                .store(storeRepository.getOne(uiBill.getStoreId()))
-                .orderDate(uiBill.getOrderDate())
+                .store(storeRepository.getOne(billCommand.getStoreId()))
+                .orderDate(billCommand.getOrderDate())
                 .items(
-                        uiBill.getItems().stream().map(uiBillItem -> BillItem.builder()
+                        billCommand.getItems().stream().map(uiBillItem -> BillItem.builder()
                                 .product(newOrExistingProduct(uiBillItem))
                                 .price(uiBillItem.getPrice())
                                 .quantity(uiBillItem.getQuantity())
                                 .build()).collect(Collectors.toSet())
                 )
+                .total(billCommand.getTotal()) //todo: maybe calculate total here ???
                 .build();
     }
 
-    private Product newOrExistingProduct(UIBillItem uiBillItem) {
-        if (Objects.isNull(uiBillItem.getProductId())) {
-            return Product.builder().name(uiBillItem.getProductName()).build();
+    private Product newOrExistingProduct(BillItemCommand billItemCommand) {
+        if (Objects.isNull(billItemCommand.getProductId())) {
+            return Product.builder().name(billItemCommand.getProductName()).build();
         }
-        return productRepository.getOne(uiBillItem.getProductId());
+        return productRepository.getOne(billItemCommand.getProductId());
     }
 }

@@ -39,6 +39,7 @@ export class NewBillItemComponent implements OnInit {
 
   reset(): void {
     this.newBillItemForm.reset();
+    this.pricePerUnit = undefined;
   }
 
   onAddBillItem(): void {
@@ -54,8 +55,7 @@ export class NewBillItemComponent implements OnInit {
   }
 
   onClearBillItem() {
-    this.newBillItemForm.reset();
-    this.pricePerUnit = undefined;
+    this.reset();
   }
 
   recalculatePricePerUnit() {

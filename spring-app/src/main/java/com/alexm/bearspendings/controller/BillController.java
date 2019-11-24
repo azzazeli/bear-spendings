@@ -1,6 +1,6 @@
 package com.alexm.bearspendings.controller;
 
-import com.alexm.bearspendings.dto.UIBill;
+import com.alexm.bearspendings.dto.BillCommand;
 import com.alexm.bearspendings.service.BillService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -26,16 +26,16 @@ public class BillController {
     }
 
     @GetMapping("/bills")
-    public List<UIBill> bills(@RequestParam int page, @RequestParam int size) {
+    public List<BillCommand> bills(@RequestParam int page, @RequestParam int size) {
         return billService.allBills(page, size);
     }
 
     @PostMapping("/add_bill")
-    public UIBill addBill(@Valid @RequestBody UIBill uiBill) {
-      log.debug("Processing add bill request. uiBill:" + uiBill);
-      billService.addBill(uiBill);
+    public BillCommand addBill(@Valid @RequestBody BillCommand billCommand) {
+      log.debug("Processing add bill request. uiBill:" + billCommand);
+      billService.addBill(billCommand);
       log.debug("Finished to process request");
-      return uiBill;
+      return billCommand;
     }
 
     @GetMapping("/bills/count")

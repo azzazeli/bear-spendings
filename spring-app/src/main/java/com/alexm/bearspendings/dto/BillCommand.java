@@ -12,13 +12,14 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
 import java.time.LocalDateTime;
 import java.util.Set;
 
 @Builder
-@JsonDeserialize(builder = UIBill.UIBillBuilder.class)
+@JsonDeserialize(builder = BillCommand.BillCommandBuilder.class)
 @Data
-public class UIBill {
+public class BillCommand {
     private Long id;
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @JsonSerialize(using = LocalDateTimeSerializer.class)
@@ -27,12 +28,15 @@ public class UIBill {
     @NotNull(message = "Store id is mandatory")
     @Positive(message = "Store id must be positive")
     private Long storeId;
+    @NotNull
+    @PositiveOrZero(message = "Total must be greater than zero")
+    private Double total;
     @Valid
     @NotEmpty(message = "Bill must contains at least one bill item")
-    private Set<UIBillItem> items;
+    private Set<BillItemCommand> items;
 
     @JsonPOJOBuilder(withPrefix = "")
-    public static class UIBillBuilder {
+    public static class BillCommandBuilder {
 
     }
 }

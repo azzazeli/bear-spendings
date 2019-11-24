@@ -15,29 +15,29 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * @author AlexM
  * Date: 9/9/19
  **/
-class UIBillItemTest {
+class BillItemCommandTest {
     private Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
 
     @DisplayName("Validate that product id can be null")
     @Test
     void validateProductId() {
-        UIBillItem uiBillItem = UIBillItem.builder().quantity(1.0).productName("Peste").price(2.9).build();
-        assertValidUiBillItem(validator.validate(uiBillItem));
+        BillItemCommand billItemCommand = BillItemCommand.builder().quantity(1.0).productName("Peste").price(2.9).build();
+        assertValidUiBillItem(validator.validate(billItemCommand));
     }
 
     @DisplayName("BillItem product must contains product id or product name")
     @Test
     void validateProductInfo() {
-        assertValidUiBillItem(validator.validate(UIBillItem.builder().productId(1L).quantity(1.0).price(2.2).build()));
-        assertValidUiBillItem(validator.validate(UIBillItem.builder().productName("Lapte").quantity(1.0).price(2.2).build()));
-        UIBillItem invalid = UIBillItem.builder().quantity(1.0).price(2.2).build();
-        Set<ConstraintViolation<UIBillItem>> constraintViolations = validator.validate(invalid);
+        assertValidUiBillItem(validator.validate(BillItemCommand.builder().productId(1L).quantity(1.0).price(2.2).build()));
+        assertValidUiBillItem(validator.validate(BillItemCommand.builder().productName("Lapte").quantity(1.0).price(2.2).build()));
+        BillItemCommand invalid = BillItemCommand.builder().quantity(1.0).price(2.2).build();
+        Set<ConstraintViolation<BillItemCommand>> constraintViolations = validator.validate(invalid);
         assertThat(constraintViolations.size()).isEqualTo(1);
-        ConstraintViolation<UIBillItem> uiBillItemConstraintViolation = constraintViolations.iterator().next();
+        ConstraintViolation<BillItemCommand> uiBillItemConstraintViolation = constraintViolations.iterator().next();
         assertEquals("UiBillItem must contains product id or product name", uiBillItemConstraintViolation.getMessage());
     }
 
-    void assertValidUiBillItem(Set<ConstraintViolation<UIBillItem>> constraintViolations) {
+    void assertValidUiBillItem(Set<ConstraintViolation<BillItemCommand>> constraintViolations) {
         constraintViolations.forEach(uiBillItemConstraintViolation -> System.out.println(uiBillItemConstraintViolation.getMessage()));
         assertThat(constraintViolations.size()).isEqualTo(0);
     }

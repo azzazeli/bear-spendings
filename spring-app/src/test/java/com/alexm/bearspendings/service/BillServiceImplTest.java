@@ -1,7 +1,7 @@
 package com.alexm.bearspendings.service;
 
-import com.alexm.bearspendings.dto.UIBill;
-import com.alexm.bearspendings.dto.UIBillItem;
+import com.alexm.bearspendings.dto.BillCommand;
+import com.alexm.bearspendings.dto.BillItemCommand;
 import com.alexm.bearspendings.entity.Bill;
 import com.alexm.bearspendings.repository.BillRepository;
 import com.google.common.collect.ImmutableSet;
@@ -37,14 +37,14 @@ class BillServiceImplTest {
 
     @Test
     void allBills() {
-        final List<UIBill> actualBills = billService.allBills(0, 10);
+        final List<BillCommand> actualBills = billService.allBills(0, 10);
         assertNotNull(actualBills);
         assertEquals(2, actualBills.size());
-        UIBill uiBill = actualBills.get(0);
-        assertEquals(2L, uiBill.getId().longValue());
-        assertEquals(1L, uiBill.getStoreId().longValue());
-        assertEquals(LocalDateTime.of(2019, 4, 22, 0, 0 ), uiBill.getOrderDate());
-        assertThat(uiBill.getItems()).extracting("id", "price", "quantity", "productId" )
+        BillCommand billCommand = actualBills.get(0);
+        assertEquals(2L, billCommand.getId().longValue());
+        assertEquals(1L, billCommand.getStoreId().longValue());
+        assertEquals(LocalDateTime.of(2019, 4, 22, 0, 0 ), billCommand.getOrderDate());
+        assertThat(billCommand.getItems()).extracting("id", "price", "quantity", "productId" )
                 .contains(
                         tuple(3L, 87.00, 1.0, 3L),
                         tuple(4L, 10.00, 1.0, 2L)
@@ -54,13 +54,13 @@ class BillServiceImplTest {
     @Transactional
     @Test
     void addBill() {
-        UIBill newBill = UIBill.builder()
+        BillCommand newBill = BillCommand.builder()
                 .storeId(1L)
                 .orderDate(orderDate)
                 .items(
                         ImmutableSet.of(
-                                UIBillItem.builder().quantity(2.0).productId(1L).price(22.9).build(),
-                                UIBillItem.builder().quantity(1.0).productId(2L).price(44.0).build()
+                                BillItemCommand.builder().quantity(2.0).productId(1L).price(22.9).build(),
+                                BillItemCommand.builder().quantity(1.0).productId(2L).price(44.0).build()
                         )
                 )
                 .build();

@@ -10,9 +10,9 @@ import javax.validation.constraints.Positive;
 
 @Builder
 @Data
-@JsonDeserialize(builder = UIBillItem.UIBillItemBuilder.class)
+@JsonDeserialize(builder = BillItemCommand.BillItemCommandBuilder.class)
 @ValidUIBillItem
-public class UIBillItem {
+public class BillItemCommand {
     private Long id;
     private String productName;
     private Long productId;
@@ -24,7 +24,7 @@ public class UIBillItem {
     private Double price;
 
     @JsonPOJOBuilder(withPrefix = "")
-    public static class UIBillItemBuilder {
+    public static class BillItemCommandBuilder {
 
     }
 }

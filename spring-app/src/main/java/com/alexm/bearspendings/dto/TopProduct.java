@@ -13,7 +13,7 @@ import lombok.Data;
  **/
 
 @Builder
-@JsonDeserialize(builder = UIBill.UIBillBuilder.class)
+@JsonDeserialize(builder = BillCommand.BillCommandBuilder.class)
 @Data
 public class TopProduct {
     /**
