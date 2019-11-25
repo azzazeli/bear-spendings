@@ -43,6 +43,7 @@ class BillServiceImplTest {
         BillCommand billCommand = actualBills.get(0);
         assertEquals(2L, billCommand.getId().longValue());
         assertEquals(1L, billCommand.getStoreId().longValue());
+        assertEquals(new Double(97.00), billCommand.getTotal());
         assertEquals(LocalDateTime.of(2019, 4, 22, 0, 0 ), billCommand.getOrderDate());
         assertThat(billCommand.getItems()).extracting("id", "price", "quantity", "productId" )
                 .contains(

@@ -5,33 +5,29 @@
              dataKey='id' [paginator]='true' [rows]='PAGE_SIZE'>
       <ng-template pTemplate="header">
         <tr>
-          <th style="width: 3em"></th>
-          <th>Date</th>
-          <th>Store</th>
+          <th>Product</th>
+          <th>Quantity</th>
+          <th>Price</th>
         </tr>
       </ng-template>
       <ng-template pTemplate="body" let-bill let-expanded="expanded">
         <tr>
-          <td>
+          <td [colSpan]="3">
             <a href="#" [pRowToggler]="bill">
               <i [ngClass]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></i>
             </a>
+            <span style="margin-left: 5px">
+              {{formatMoment(bill.orderDate)}}
+              {{(getStore(bill.storeId) | async)?.name}}
+              <b>{{bill.total || 0.00 | number: '2.2'}} MDL</b>
+            </span>
           </td>
-          <td>{{formatMoment(bill.orderDate)}}</td>
-          <td>{{(getStore(bill.storeId) | async)?.name}}</td>
         </tr>
       </ng-template>
       <ng-template pTemplate="rowexpansion" let-bill>
         <tr>
           <td [colSpan]="3" style="padding: 0">
-            <p-table [value]="bill.items" [style]="{'margin-left': '3em'}">
-              <ng-template pTemplate="header">
-                <tr>
-                 <th>Product</th>
-                 <th>Quantity</th>
-                 <th>Price</th>
-                </tr>
-              </ng-template>
+            <p-table [value]="bill.items">
               <ng-template pTemplate="body" let-billItem>
                 <tr>
                   <td>{{(getProduct(billItem.productId)| async)?.name}}</td>

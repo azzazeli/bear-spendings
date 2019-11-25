@@ -38,6 +38,7 @@ public class BillServiceImpl implements BillService  {
                     .id(bill.getId())
                     .orderDate(bill.getOrderDate())
                     .storeId(bill.getStore().getId())
+                    .total(bill.getTotal())
                     .items(bill.getItems().stream().map(billItemToUiBillItemMap).collect(Collectors.toSet()))
                     .build();
 
