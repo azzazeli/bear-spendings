@@ -150,7 +150,7 @@ export class AddBillComponent implements OnInit {
     this.logger.debug('Calculating bill total ...');
     this.billTotal = 0;
     for( let billItemFG of this.billItems().controls) {
-        this.billTotal += billItemFG.get('quantity').value * billItemFG.get('price').value;
+        this.billTotal += billItemFG.get('price').value;
     }
     this.billTotal = +this.billTotal.toFixed(2);
     this.logger.debug('Bill total is:', this.billTotal);
