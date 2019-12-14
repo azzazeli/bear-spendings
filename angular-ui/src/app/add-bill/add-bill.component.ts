@@ -106,10 +106,15 @@ export class AddBillComponent implements OnInit {
     }
     bill.total = this.billTotal;
     this.billService.addBill(bill).subscribe(addedBill => {
-      this.logger.debug("Bill was added. bill id:" + addedBill.id);
+      this.logger.debug('Bill was added. bill id:' + addedBill.id);
       this.messageService.add({severity: 'success', summary: 'Bill was added with success'});
       this.resetForm();
     });
+  }
+
+  onClearForm() {
+    this.logger.debug('Clearing entire bill form');
+    this.resetForm();
   }
 
   /**
@@ -135,7 +140,7 @@ export class AddBillComponent implements OnInit {
     this.resetNewBillItem();
     this.addBillForm.markAsUntouched();
     this.addBillForm.markAsPristine();
-
+    this.billTotal = 0.0;
     this.logger.debug("resetting done.")
   }
 

@@ -202,7 +202,26 @@ describe('AddBillComponent', () => {
     const expectedBill: Bill = new Bill(moment(component.normalizedDate(new Date('2019-09-19T00:00:00'))), 1);
     expectedBill.items.push(samplesDataService.sampleBillItem(1));
     expectedBill.total = (20.31);
+    //then
     expect(billServiceSpy.addBill).toHaveBeenCalledWith(expectedBill);
+    expectFormReset();
+  });
+
+
+  it('#on clear form click - expect form reset ', () => {
+    fixture.detectChanges();
+    //given
+    component.addBillForm.get('bill-date').setValue(new Date('2019-09-19T00:00:00'));
+    component.addBillForm.get('store-id').setValue(1);
+    component.onStoreSelected();
+    component.onAddBillItem(samplesDataService.sampleBillItem(1));
+    //when
+    component.onClearForm();
+    //then
+    expectFormReset();
+  });
+
+  function expectFormReset () {
     expect(component.topStoreProducts.length).toBe(0);
     expect((<FormArray>component.addBillForm.get('bill-items')).controls).toEqual([]);
     expect(component.addBillForm.get('bill-date').value).toBeNull('Bill date must be reset');
@@ -210,6 +229,7 @@ describe('AddBillComponent', () => {
     expect(component.addBillForm.pristine).toBe(true);
     expect(component.addBillForm.touched).toBeFalsy();
     expect(component.selectedProductId).toBeNull('Selected top product must be reset');
-  });
+    expect(component.billTotal).toEqual(0.0);
+  }
 
 });

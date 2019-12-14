@@ -67,6 +67,11 @@
         <button style="margin-bottom: 20px" id="add-bill-btn"
                 class="btn btn-default btn-primary" type="submit"
                 [disabled]="!addBillForm.valid">Add Bill</button>
+        <button style="margin-bottom: 20px; margin-left: 10px"
+                id="clear-bill-btn"
+                type="button"
+                (click)="onClearForm()"
+                class="btn btn-default">Clear</button>
       </form>
     </div>
   </div>
