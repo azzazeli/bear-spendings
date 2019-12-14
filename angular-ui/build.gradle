@@ -10,13 +10,18 @@ node {
 }
 
 private dependsOnTasks () {
-  def dependsOnTasks = ['npm_run_build']
+  def dependsOnTasks = []
   println '------------------'
   println 'Skip UI test: ' + Boolean.valueOf(System.getProperty('skip.ui.test'))
   println '------------------'
 
   if (!Boolean.valueOf(System.getProperty('skip.ui.test'))) {
     dependsOnTasks.add('npm_run_test-build')
+  }
+
+  if (!Boolean.valueOf(System.getProperty('skip.ui.build'))) {
+    println 'Skipping Angular UI App build'
+    dependsOnTasks.add('npm_run_build')
   }
   dependsOnTasks
 }
