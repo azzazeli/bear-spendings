@@ -2,19 +2,31 @@
 # bear-spendings
 Simple app that monitor bear spendings. 
 
-## Version 0.2
+- [Versions](#versions)
+- [Technologies](#technologies)
+- [Dev process](#dev-process)
+
+
+## Versions 
+
+### Version 0.2
  - Cost per unit of bill item
  - Bill total on 'Add bill' form
+ 
+How it looks :)
 
-## Version 0.1
+![Version 0.0.2](docs/imgs/version_0_0_2.png)
+
+
+### Version 0.1
  - Simple display home page
  - Add new bill form
  - List fo bills (including bill items)
 
 
-### Simple home page
+#### Simple home page
     A welcome page for the user. Nothing fancy. Wil be enhanced in upcoming version
-### Add new bill form
+#### Add new bill form
     The main scope of app is to create an easy way to introduce bill. First implementation will be simple, but
     is going to cover the main case.
 
@@ -22,7 +34,7 @@ Simple app that monitor bear spendings.
    * select bill date
    * provide a store
    * a list of top products from selected store is displayed
-   * select one of top product. Bill iotem form will be populated with product name and price, quantity set to 1.
+   * select one of top product. Bill item form will be populated with product name and price, quantity set to 1.
    User can edit all these fields.
    * add bill items to the bill.
     
@@ -30,10 +42,19 @@ Simple app that monitor bear spendings.
 ## Technologies
 On UI side angular 6 is used. Server side will be implemented with spring boot 2.0
 H2 database will be used for this version
-In memory authentication wil be enough with hardcoded user name and pswd.
+In memory authentication wil be enough with hardcoded user name and password.
+
+##Dev process
 
 ### Run build with no UI test
 UI test take some times to execute. There are cases when it is necessary to run build without them.
 For this case run following command:
-```gradlew clean build -Dskip.ui.test=true``` 
+```shell script
+gradlew clean build -Dskip.ui.test=true
+``` 
 
+In order to build only sping app without invoking angular build use following command:
+```shell script
+gradlew clean build -Dskip.ui.test=true -Dskip.ui.build=true
+```
+### How to perform release
