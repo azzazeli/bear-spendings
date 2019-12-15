@@ -58,3 +58,8 @@ In order to build only sping app without invoking angular build use following co
 gradlew clean build -Dskip.ui.test=true -Dskip.ui.build=true
 ```
 ### How to perform release
+Gradle release plugin is added to root project.
+Angular ui version is not incremented by this plugin. Manual version change must be perfomed.
+Steps to perform a release:
+1. run ```gradle release``` from root project
+2. update version of angular ui app in angular-ui package.json version property. push changes to git.
