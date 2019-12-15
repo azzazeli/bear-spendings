@@ -63,3 +63,15 @@ Angular ui version is not incremented by this plugin. Manual version change must
 Steps to perform a release:
 1. run ```gradle release``` from root project
 2. update version of angular ui app in angular-ui package.json version property. push changes to git.
+
+
+### Update version on oracle cloud
+
+1. checkout tag version with git (ex: 0.0.2)
+2. gradle clean build
+3. upload jar to oracle cloud
+4. rename old jar - start-up script is looking for following pattern `bear-spendings-*.jar`.
+The script need to enhanced. 
+5. stop application
+6. start application
+ 
