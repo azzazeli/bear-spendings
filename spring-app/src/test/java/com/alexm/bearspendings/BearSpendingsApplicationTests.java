@@ -16,6 +16,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -77,7 +78,8 @@ class BearSpendingsApplicationTests {
 		this.mvc.perform(get("/bills?page=0&size=10"))
 				.andExpect(status().isOk())
 				.andDo(print())
-				.andExpect(jsonPath("[0].orderDate").value(dateTime.toString()));
+				.andExpect(jsonPath("[0].orderDate").value(dateTime.format(DateTimeFormatter
+						.ISO_LOCAL_DATE_TIME)));
 	}
 
 }
