@@ -37,3 +37,4 @@ angular-ui/node_modules/
 spring-app/build/
 spring-app/.gradle/
 spring-app/out/
+!.idea/runConfigurations
