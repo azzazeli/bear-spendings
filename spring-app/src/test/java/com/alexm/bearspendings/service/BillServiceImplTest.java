@@ -43,7 +43,7 @@ class BillServiceImplTest {
         BillCommand billCommand = actualBills.get(0);
         assertEquals(2L, billCommand.getId().longValue());
         assertEquals(1L, billCommand.getStoreId().longValue());
-        assertEquals(new Double(97.00), billCommand.getTotal());
+        assertEquals(Double.valueOf(97.00), billCommand.getTotal());
         assertEquals(LocalDateTime.of(2019, 4, 22, 0, 0 ), billCommand.getOrderDate());
         assertThat(billCommand.getItems()).extracting("id", "price", "quantity", "productId" )
                 .contains(
@@ -60,8 +60,8 @@ class BillServiceImplTest {
                 .orderDate(orderDate)
                 .items(
                         ImmutableSet.of(
-                                BillItemCommand.builder().quantity(2.0).productId(1L).price(22.9).build(),
-                                BillItemCommand.builder().quantity(1.0).productId(2L).price(44.0).build()
+                                BillItemCommand.builder().id(1L).quantity(2.0).productId(1L).price(22.9).build(),
+                                BillItemCommand.builder().id(2L).quantity(1.0).productId(2L).price(44.0).build()
                         )
                 )
                 .build();

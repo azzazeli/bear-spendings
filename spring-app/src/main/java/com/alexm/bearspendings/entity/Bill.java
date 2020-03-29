@@ -15,14 +15,10 @@ import java.util.Set;
  */
 
 @Entity
-@Builder
 @NoArgsConstructor
 @Getter @Setter
-@EqualsAndHashCode(of = {"id"})
-public class Bill {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+@EqualsAndHashCode(callSuper = true, of = {})
+public class Bill extends BaseEntity {
     @NotNull
     private LocalDateTime orderDate;
     @NotNull
@@ -36,7 +32,8 @@ public class Bill {
     private Set<BillItem> items;
     private Double total;
 
-    Bill(Long id, @NotNull LocalDateTime orderDate, @NotNull Store store,
+    @Builder
+    public Bill(Long id, @NotNull LocalDateTime orderDate, @NotNull Store store,
          @NotEmpty Set<BillItem> items, @NotNull Double total) {
         this.id = id;
         this.orderDate = orderDate;
@@ -56,6 +53,8 @@ public class Bill {
                 "id=" + id +
                 ", orderDate=" + orderDate +
                 ", storeId=" + store.getId() +
+                ", createdDT=" + createdDT +
+                ", createdDT=" + modifiedDT +
                 '}';
     }
 

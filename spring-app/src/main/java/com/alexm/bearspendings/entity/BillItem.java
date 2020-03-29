@@ -2,7 +2,10 @@ package com.alexm.bearspendings.entity;
 
 import lombok.*;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 
 import static javax.persistence.CascadeType.ALL;
@@ -13,12 +16,9 @@ import static javax.persistence.CascadeType.ALL;
 @Entity
 @NoArgsConstructor @Getter @Setter
 @AllArgsConstructor
-@EqualsAndHashCode()
 @Builder
-public class BillItem {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+@EqualsAndHashCode(callSuper = true, of = {})
+public class BillItem  extends BaseEntity {
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, cascade = ALL)
     @JoinColumn(name = "product_id")
