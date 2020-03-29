@@ -221,10 +221,20 @@ describe('AddBillComponent', () => {
     expectFormReset();
   });
 
+  it('bill date default value: today', ()=> {
+    const before = moment();
+    fixture.detectChanges();
+    const after = component.addBillForm.get('bill-date').value.getTime();
+    expect(before.isBefore(after)).toBeTruthy();
+    expect(after).toBeGreaterThan(before.toDate().getTime());
+  });
+
   function expectFormReset () {
+    const now = moment();
     expect(component.topStoreProducts.length).toBe(0);
     expect((<FormArray>component.addBillForm.get('bill-items')).controls).toEqual([]);
-    expect(component.addBillForm.get('bill-date').value).toBeNull('Bill date must be reset');
+    const billDate = moment(component.addBillForm.get('bill-date').value);
+    expect(billDate.isSame(now, 'minute')).toBeTruthy('Bill date must be today');
     expect(component.addBillForm.get('store-id').value).toBeNull('Store must be reset');
     expect(component.addBillForm.pristine).toBe(true);
     expect(component.addBillForm.touched).toBeFalsy();

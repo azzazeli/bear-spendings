@@ -44,7 +44,7 @@ export class AddBillComponent implements OnInit {
     });
     this.addBillForm = new FormGroup({
       'store-id': new FormControl(null, Validators.required),
-      'bill-date': new FormControl(null, Validators.required),
+      'bill-date': new FormControl(moment().toDate(), Validators.required),
       'bill-items': new FormArray([], Validators.required)
     });
   }
@@ -133,7 +133,7 @@ export class AddBillComponent implements OnInit {
   private resetForm() {
     this.logger.debug('resetting new bill form ...');
 
-    this.addBillForm.get('bill-date').setValue(null);
+    this.addBillForm.get('bill-date').setValue(moment().toDate());
     this.addBillForm.get('store-id').setValue(null);
     this.topStoreProducts.splice(0);
     this.billItems().controls = [];
