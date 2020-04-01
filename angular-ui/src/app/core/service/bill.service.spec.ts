@@ -34,7 +34,7 @@ describe('BillServiceTest',()  => {
     //when
     billService.addBill(samplesDataService.sampleBill()).subscribe(() => {});
     //then
-    const req = httpTestingController.expectOne(billService.ADD_BILL_URL, 'call to add bill url');
+    const req = httpTestingController.expectOne(billService.BILLS_URL, 'call to add bill url');
     expect(req.request.method).toEqual('POST');
     expect(req.request.body).toEqual(samplesDataService.sampleBill());
   });
@@ -46,7 +46,7 @@ describe('BillServiceTest',()  => {
       expect(bills[0].storeId).toBe(samplesDataService.sampleStores()[0].id);
     });
     //then
-    const testRequest: TestRequest = httpTestingController.expectOne(`${billService.ALL_BILLS_URL}?page=0&size=10`);
+    const testRequest: TestRequest = httpTestingController.expectOne(`${billService.BILLS_URL}?page=0&size=10`);
     testRequest.flush([samplesDataService.sampleBill()]);
     expect(testRequest.request.method).toEqual('GET');
     expect(testRequest.request.params.get('page')).toEqual('0');

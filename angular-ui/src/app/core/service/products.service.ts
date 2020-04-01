@@ -9,27 +9,24 @@ import {NGXLogger} from "ngx-logger";
 
 @Injectable()
 export class ProductsService extends ObservableCacheService<Product>{
-  TOP_STORE_PRODUCTS_URL = `${environment.apiUrl}${environment.TOP_STORE_PRODUCTS_URL}`;
-  private GET_PRODUCT_URL = `${environment.apiUrl}${environment.PRODUCT_URL}`;
+  TOP_PRODUCTS = `${environment.TOP_PRODUCTS}`;
+  private PRODUCTS_URL = `${environment.apiUrl}${environment.PRODUCTS_URL}`;
 
   constructor(private http: HttpClient, protected logger: NGXLogger) {
     super(logger);
   }
 
   productUrl(id: number) {
-    let url = `${this.GET_PRODUCT_URL}${id}`;
+    let url = `${this.PRODUCTS_URL}/${id}`;
     if (environment.mock) {
       url += '.json';
     }
     return url;
   }
 
+  //todo: better place is in store service
   topStoreProducts(storeId: number): Observable<StoreProduct[]> {
-    return this.http.get<StoreProduct[]>(this.TOP_STORE_PRODUCTS_URL, {
-      params: {
-        'storeId': storeId.toString()
-      }
-    });
+    return this.http.get<StoreProduct[]>(`${environment.apiUrl}${environment.STORES_URL}/${storeId}/${this.TOP_PRODUCTS}`);
   }
 
   protected fetchObservable(id: number): Observable<Product> {

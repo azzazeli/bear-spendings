@@ -5,14 +5,12 @@ export const environment = {
 
   dateFormat: 'YYYY-MM-DD',
 
-  apiUrl: 'http://localhost:8090/',
+  apiUrl: 'http://localhost:8090/api/v1/',
 
-  ALL_BILLS_URL: 'bills',
+  BILLS_URL: 'bills',
 
   STORES_URL: 'stores',
-  GET_ST0RE_URL: 'store',
+  TOP_PRODUCTS: 'top_products',
 
-  TOP_STORE_PRODUCTS_URL: 'top_store_products',
-
-  PRODUCT_URL: 'product/'
+  PRODUCTS_URL: 'products'
 };

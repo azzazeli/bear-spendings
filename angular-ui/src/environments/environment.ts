@@ -9,15 +9,13 @@ export const environment = {
 
   dateFormat: 'YYYY-MM-DD',
 
-  apiUrl: 'default',
-  ALL_BILLS_URL: 'bills',
+  apiUrl: 'default/',
+  BILLS_URL: 'bills',
 
   STORES_URL: 'stores',
-  GET_ST0RE_URL: 'store',
+  TOP_PRODUCTS: 'top_products',
 
-  TOP_STORE_PRODUCTS_URL: 'top_store_products?storeId=1',
-
-  PRODUCT_URL: 'products/1'
+  PRODUCTS_URL: 'products/1',
 };
 
 /*

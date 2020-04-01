@@ -12,7 +12,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import java.util.Optional;
+import java.util.NoSuchElementException;
 
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -25,10 +25,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(secure = false, controllers = ProductController.class)
 class ProductControllerTest {
+    private static final String PRODUCTS_URL = "/api/v1/products";
 
     @Autowired
     MockMvc mockMvc;
     private final Long CHEFIR_PROD_ID = 1L;
+    private final Long UNKNOWN_PRODUCT = 122345L;
     private final String CHEFIR_PROD_NAME  = "chefir jlc 1%";
 
     @MockBean
@@ -37,25 +39,26 @@ class ProductControllerTest {
     @BeforeEach
     void setup() {
         when(productService.findProduct(CHEFIR_PROD_ID)).thenReturn(
-                Optional.of(UIProduct.builder().id(CHEFIR_PROD_ID).name(CHEFIR_PROD_NAME).build())
+                UIProduct.builder().id(CHEFIR_PROD_ID).name(CHEFIR_PROD_NAME).build()
         );
+        when(productService.findProduct(UNKNOWN_PRODUCT)).thenThrow(NoSuchElementException.class);
     }
 
     @Test
     void products() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get("/products"))
+        mockMvc.perform(MockMvcRequestBuilders.get(PRODUCTS_URL))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].name").value("Lapte"));
     }
 
     @Test
     void product() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get("/product/" + CHEFIR_PROD_ID))
+        mockMvc.perform(MockMvcRequestBuilders.get(PRODUCTS_URL + "/" + CHEFIR_PROD_ID))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(CHEFIR_PROD_ID))
                 .andExpect(jsonPath("$.name").value(CHEFIR_PROD_NAME))
                 .andDo(print());
-        mockMvc.perform(MockMvcRequestBuilders.get("product/2334453"))
+        mockMvc.perform(MockMvcRequestBuilders.get(PRODUCTS_URL +UNKNOWN_PRODUCT.toString()))
                 .andExpect(status().isNotFound())
                 .andDo(print());
     }

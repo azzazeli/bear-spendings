@@ -6,9 +6,11 @@ import {Product} from '../model/product.model';
 import {HttpClient} from '@angular/common/http';
 import {StoreProduct} from "../model/store-product.model";
 import {LoggerModule, NgxLoggerLevel} from "ngx-logger";
+import {StoreService} from "./store.service";
 
 describe('ProductsServiceTest', () => {
   let productService: ProductsService;
+  let storeService: StoreService;
   let samplesDataService: SamplesDataService;
   let httpTestingController: HttpTestingController;
   let httpClient: HttpClient;
@@ -19,9 +21,10 @@ describe('ProductsServiceTest', () => {
         HttpClientTestingModule,
         LoggerModule.forRoot({level: NgxLoggerLevel.DEBUG})
       ],
-      providers: [ProductsService, SamplesDataService]
+      providers: [ProductsService, SamplesDataService, StoreService]
     });
     productService = TestBed.get(ProductsService);
+    storeService = TestBed.get(StoreService);
     samplesDataService = TestBed.get(SamplesDataService);
     httpClient = TestBed.get(HttpClient);
     httpTestingController = TestBed.get(HttpTestingController);
@@ -37,9 +40,8 @@ describe('ProductsServiceTest', () => {
       expect(products).toEqual(samplesDataService.sampleStoreProducts());
     });
     const req = httpTestingController.match((request) => {
-      return request.url === productService.TOP_STORE_PRODUCTS_URL &&
-        request.method == 'GET' &&
-        request.params.get('storeId') == storeId.toString()
+      return request.url === `${storeService.STORES_URL}/${storeId}/${productService.TOP_PRODUCTS}` &&
+        request.method == 'GET'
     });
     expect(req.length).toEqual(1);
     req[0].flush(samplesDataService.sampleStoreProducts());

@@ -45,11 +45,11 @@ describe('StoreServiceTest', () => {
     storeService.getObservableById(1).subscribe( (store: Store) => {
       expect(store.id).toEqual(2);
     });
-    const req = httpTestingController.expectOne(`${storeService.GET_ST0RE_URL}/1`);
+    const req = httpTestingController.expectOne(`${storeService.STORES_URL}/1`);
     expect(req.request.method).toEqual('GET');
     req.flush(samplesDataService.sampleStores()[1]);
 
     storeService.getObservableById(1);
-    httpTestingController.expectNone(storeService.GET_ST0RE_URL);
+    httpTestingController.expectNone(storeService.STORES_URL);
   });
 });

@@ -9,12 +9,13 @@ import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.Arrays;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 /**
@@ -22,7 +23,6 @@ import static org.mockito.Mockito.*;
  */
 @SpringBootTest
 class ProductServiceImplTest {
-    //todo: it is better to rely on integration test with h2
     @Mock
     ProductRepository productRepository;
     ProductService productService;
@@ -44,9 +44,13 @@ class ProductServiceImplTest {
 
     @Test
     void product() {
-        Optional<UIProduct> product = productService.findProduct(1L);
-        assertTrue(product.isPresent());
-        assertEquals(PROODUCT_CHEFIR , product.get().getName());
+        UIProduct product = productService.findProduct(1L);
+        assertEquals(PROODUCT_CHEFIR , product.getName());
         verify(productRepository, times(1)) .findById(1L);
+    }
+
+    @Test
+    void noProductFound(){
+        assertThrows(NoSuchElementException.class, () -> productService.findProduct(222355L));
     }
 }

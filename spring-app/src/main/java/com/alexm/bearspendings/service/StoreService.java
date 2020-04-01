@@ -4,7 +4,6 @@ import com.alexm.bearspendings.dto.TopProduct;
 import com.alexm.bearspendings.entity.Product;
 import com.alexm.bearspendings.entity.Store;
 
-import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -13,7 +12,7 @@ import java.util.Set;
  **/
 public interface StoreService {
     Set<Store> allStores();
-    Optional<Store> findStore(Long id);
+    Store findStore(Long id);
 
     /**
      * get a set of top products in the store

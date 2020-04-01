@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.LinkedHashSet;
-import java.util.Optional;
+import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -38,9 +38,9 @@ public class StoreServiceImpl implements StoreService {
     }
 
     @Override
-    public Optional<Store> findStore(Long id) {
+    public Store findStore(Long id) {
         log.debug("Getting store for id: {}", id);
-        return storeRepository.findById(id);
+        return storeRepository.findById(id).orElseThrow(() -> new NoSuchElementException("No value present"));
     }
 
 

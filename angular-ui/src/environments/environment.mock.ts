@@ -7,13 +7,11 @@ export const environment = {
 
   apiUrl: 'assets/',
 
-  ALL_BILLS_URL: 'bills.json',
+  BILLS_URL: 'bills.json',
 
   STORES_URL: 'stores.json',
-  GET_ST0RE_URL: 'getStore.json',
+  TOP_PRODUCTS: 'top_products',
 
-  TOP_STORE_PRODUCTS_URL: 'top-store-products.json',
-
-  PRODUCT_URL: 'products/'
+  TOP_STORE_PRODUCTS_URL: 'top-store-products.json'
 
 };

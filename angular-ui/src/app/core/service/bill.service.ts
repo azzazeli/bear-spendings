@@ -8,16 +8,15 @@ import {NGXLogger} from "ngx-logger";
 @Injectable()
 export class BillService {
 
-  ADD_BILL_URL = `${environment.apiUrl}add_bill`;
-  ALL_BILLS_URL = `${environment.apiUrl}${environment.ALL_BILLS_URL}`;
-  ALL_BILLS_COUNT_URL = `${environment.apiUrl}${environment.ALL_BILLS_URL}/count`;
+  BILLS_URL = `${environment.apiUrl}${environment.BILLS_URL}`;
+  ALL_BILLS_COUNT_URL = `${environment.apiUrl}${environment.BILLS_URL}/count`;
 
   constructor(private http: HttpClient, private logger: NGXLogger) {
     this.logger.debug("environment.apiUrl:", environment.apiUrl);
   }
 
   public addBill(bill: Bill): Observable<Bill> {
-    return this.http.post<Bill>(this.ADD_BILL_URL, bill);
+    return this.http.post<Bill>(this.BILLS_URL, bill);
   }
 
   public allBillsCount(): Observable<number> {
@@ -25,8 +24,8 @@ export class BillService {
   }
 
   public allBills(page: number, size: number): Observable<Bill[]> {
-    this.logger.debug(`all bills url:${this.ALL_BILLS_URL}`);
-    return this.http.get<Bill[]>(this.ALL_BILLS_URL, {
+    this.logger.debug(`all bills url:${this.BILLS_URL}`);
+    return this.http.get<Bill[]>(this.BILLS_URL, {
       params: {
         'page': page.toString(),
         'size': size.toString()

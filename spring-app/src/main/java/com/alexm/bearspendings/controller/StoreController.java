@@ -4,9 +4,13 @@ import com.alexm.bearspendings.dto.TopProduct;
 import com.alexm.bearspendings.entity.Store;
 import com.alexm.bearspendings.service.StoreService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Set;
+
+import static com.alexm.bearspendings.BearSpendingsApplication.API_URL;
 import static com.alexm.bearspendings.bootstrap.DevBootstrap.ALLOWED_ORIGIN;
 
 /**
@@ -14,7 +18,8 @@ import static com.alexm.bearspendings.bootstrap.DevBootstrap.ALLOWED_ORIGIN;
  * Date: 9/8/19
  **/
 @Slf4j
-@RestController
+@RestController()
+@RequestMapping(API_URL + "stores")
 @CrossOrigin( origins = ALLOWED_ORIGIN)
 public class StoreController {
     private final StoreService storeService;
@@ -23,22 +28,23 @@ public class StoreController {
         this.storeService = storeService;
     }
 
-    @GetMapping("/stores")
-    public ResponseEntity<Iterable<Store>> stores() {
+    @GetMapping()
+    public Set<Store> stores() {
         log.debug("getting all stores ...");
-        return ResponseEntity.ok().body(storeService.allStores());
+        return storeService.allStores();
     }
 
-    @GetMapping("/store/{id}")
-    public ResponseEntity<Store> store(@PathVariable Long id) {
+    @GetMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public Store store(@PathVariable Long id) {
         log.debug("request for store with id: {}", id);
-        return ResponseEntity.of(storeService.findStore(id));
+        return storeService.findStore(id);
     }
 
-    @GetMapping("/top_store_products")
-    public ResponseEntity<Iterable<TopProduct>> topStoreProduct(@RequestParam(name = "storeId") Long storeId) {
-        log.debug("Getting top products for store with id:{}", storeId);
-        return ResponseEntity.ok(storeService.topProducts(storeId, 10));
+    @GetMapping("/{id}/top_products")
+    public ResponseEntity<Iterable<TopProduct>> topStoreProduct(@PathVariable Long id) {
+        log.debug("Getting top products for store with id:{}", id);
+        return ResponseEntity.ok(storeService.topProducts(id, 10));
     }
 
 

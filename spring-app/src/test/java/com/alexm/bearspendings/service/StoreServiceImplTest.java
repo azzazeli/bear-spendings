@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.Optional;
+import java.util.NoSuchElementException;
 import java.util.Set;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -40,16 +40,16 @@ class StoreServiceImplTest {
     @DisplayName("get store by id")
     @Test
     void store() {
-        Optional<Store> optionalStore = storeService.findStore(1L);
-        assertTrue(optionalStore.isPresent());
-        optionalStore.ifPresent(store ->
-                assertAll("store properties",
-                        () -> assertEquals(1L, store.getId().longValue()),
-                        () -> assertEquals("Nr.1", store.getName())
-                )
+        Store store = storeService.findStore(1L);
+        assertAll("store properties",
+                () -> assertEquals(1L, store.getId().longValue()),
+                () -> assertEquals("Nr.1", store.getName())
         );
-        optionalStore = storeService.findStore(10002L);
-        assertFalse(optionalStore.isPresent());
+    }
+
+    @Test
+    void noSuchStore() {
+        assertThrows(NoSuchElementException.class, () -> storeService.findStore(10002L));
     }
 
 

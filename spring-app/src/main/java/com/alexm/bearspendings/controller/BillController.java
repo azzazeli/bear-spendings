@@ -3,12 +3,12 @@ package com.alexm.bearspendings.controller;
 import com.alexm.bearspendings.dto.BillCommand;
 import com.alexm.bearspendings.service.BillService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
 
+import static com.alexm.bearspendings.BearSpendingsApplication.API_URL;
 import static com.alexm.bearspendings.bootstrap.DevBootstrap.ALLOWED_ORIGIN;
 
 /**
@@ -16,6 +16,7 @@ import static com.alexm.bearspendings.bootstrap.DevBootstrap.ALLOWED_ORIGIN;
  */
 @CrossOrigin( origins = ALLOWED_ORIGIN)
 @RestController
+@RequestMapping(API_URL + "bills")
 @Slf4j
 public class BillController {
 
@@ -25,12 +26,12 @@ public class BillController {
         this.billService = billService;
     }
 
-    @GetMapping("/bills")
+    @GetMapping()
     public List<BillCommand> bills(@RequestParam int page, @RequestParam int size) {
         return billService.allBills(page, size);
     }
 
-    @PostMapping("/add_bill")
+    @PostMapping()
     public BillCommand addBill(@Valid @RequestBody BillCommand billCommand) {
       log.debug("Processing add bill request. uiBill:" + billCommand);
       billService.addBill(billCommand);
@@ -38,9 +39,9 @@ public class BillController {
       return billCommand;
     }
 
-    @GetMapping("/bills/count")
-    public ResponseEntity<Long> allBillsCount(){
-        return ResponseEntity.ok(billService.allBillsCount());
+    @GetMapping("/count")
+    public Long allBillsCount(){
+        return billService.allBillsCount();
     }
 
 }

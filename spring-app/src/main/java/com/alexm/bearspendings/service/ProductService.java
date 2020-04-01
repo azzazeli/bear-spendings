@@ -4,7 +4,6 @@ import com.alexm.bearspendings.dto.UIProduct;
 import com.alexm.bearspendings.entity.Product;
 
 import java.util.List;
-import java.util.Optional;
 
 /**
  * @author AlexM
@@ -12,5 +11,5 @@ import java.util.Optional;
 public interface ProductService {
     List<Product> products();
 
-    Optional<UIProduct> findProduct(Long id);
+    UIProduct findProduct(Long id);
 }

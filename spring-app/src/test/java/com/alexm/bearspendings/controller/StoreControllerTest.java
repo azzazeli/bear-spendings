@@ -14,7 +14,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.Optional;
+import java.util.NoSuchElementException;
 
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.eq;
@@ -31,40 +31,43 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(secure = false, controllers = StoreController.class)
 class StoreControllerTest {
+    private static final String STORES_URL = "/api/v1/stores";
 
     @Autowired
     MockMvc mvc;
 
     @MockBean
     StoreService storeService;
+    final long NO_STORE_ID = 10002L;
 
     @BeforeEach
     void setup() {
+
         when(storeService.allStores()).thenReturn(ImmutableSet.of(
                 Store.builder().id(1L).name("Nr.2").build(),
                 Store.builder().id(2L).name("Pegas").build()
         ));
         when(storeService.findStore(1L))
-                .thenReturn(Optional.of(Store.builder().id(1L).name("Nr.1").build()));
+                .thenReturn(Store.builder().id(1L).name("Nr.1").build());
         when(storeService.topProducts(eq(1L), anyInt())).thenReturn(ImmutableSet.of(
                 TopProduct.builder().productId(23L).quantity(1.0).price(23.00).build()
         ));
+        when(storeService.findStore(NO_STORE_ID)).thenThrow(new NoSuchElementException());
     }
 
     @Test
     void stores() throws Exception {
-        mvc.perform(get("/stores"))
+        mvc.perform(get(STORES_URL))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(2))
         .andDo(print())
         ;
     }
 
-
     @DisplayName("get store")
     @Test
     void store() throws Exception {
-        mvc.perform(get("/store/1"))
+        mvc.perform(get(STORES_URL + "/1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(1))
                 .andExpect(jsonPath("$.name").value("Nr.1"))
@@ -74,7 +77,7 @@ class StoreControllerTest {
     @DisplayName("store not found")
     @Test
     void noStore() throws Exception {
-        mvc.perform(get("/store/10002"))
+        mvc.perform(get(STORES_URL + NO_STORE_ID))
                 .andExpect(status().isNotFound())
                 .andDo(print());
     }
@@ -82,7 +85,7 @@ class StoreControllerTest {
     @DisplayName("test top store products")
     @Test
     void topStoreProducts() throws Exception {
-        mvc.perform(get("/top_store_products?storeId=1"))
+        mvc.perform(get(STORES_URL + "/1/top_products"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(1))
                 .andExpect(jsonPath("$.[0].productId").value(23L))

@@ -18,6 +18,7 @@ import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+import static com.alexm.bearspendings.BearSpendingsApplication.API_URL;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -33,7 +34,7 @@ class BearSpendingsApplicationTests {
 	 * just check if context is ok
 	 */
 	@Test
-	 void contextLoads() {
+	 void contextLoads() { //NOSONAR
 	}
 
 	@Autowired
@@ -48,7 +49,8 @@ class BearSpendingsApplicationTests {
 
 	@Test
 	 void getAllBills() throws Exception {
-		this.mvc.perform(get("/bills?page=0&size=10"))
+		this.mvc.perform(get(API_URL+"/bills?page=0&size=10"))
+				.andDo(print())
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("$.length()").value("2"))
 		;
@@ -69,13 +71,13 @@ class BearSpendingsApplicationTests {
 				)
 				.build();
 
-		mvc.perform(post("/add_bill")
+		mvc.perform(post(API_URL + "bills")
 				.content(writer.writeValueAsString(bill))
 				.contentType(MediaType.APPLICATION_JSON))
 				.andDo(print())
 				.andExpect(status().isOk());
 
-		this.mvc.perform(get("/bills?page=0&size=10"))
+		this.mvc.perform(get(API_URL+ "/bills?page=0&size=10"))
 				.andExpect(status().isOk())
 				.andDo(print())
 				.andExpect(jsonPath("[0].orderDate").value(dateTime.format(DateTimeFormatter

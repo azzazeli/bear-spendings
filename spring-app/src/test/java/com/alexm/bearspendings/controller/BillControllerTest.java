@@ -34,6 +34,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(secure = false, controllers = BillController.class)
 class BillControllerTest {
+    private static final String BILLS_URL = "/api/v1/bills";
 
     @MockBean
     BillService billService;
@@ -51,7 +52,7 @@ class BillControllerTest {
 
     @Test
     void bills() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.get("/bills?page=0&size=20"))
+        mvc.perform(MockMvcRequestBuilders.get(BILLS_URL+"?page=0&size=20"))
                 .andExpect(status().isOk());
         verify(billService).allBills(0, 20);
     }
@@ -68,7 +69,7 @@ class BillControllerTest {
                 ))
                 .build();
         mvc.perform(MockMvcRequestBuilders
-                .post("/add_bill")
+                .post(BILLS_URL)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(writer.writeValueAsString(bill)))
                 .andExpect(status().isOk());
@@ -79,7 +80,7 @@ class BillControllerTest {
     @MethodSource("uiBillProvider")
     void validateAddBillInput(BillCommand bill) throws Exception {
         mvc.perform(MockMvcRequestBuilders
-                .post("/add_bill")
+                .post(BILLS_URL)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(writer.writeValueAsString(bill)))
                 .andExpect(status().isBadRequest());
@@ -131,7 +132,8 @@ class BillControllerTest {
 
     @Test
     void allBillCounts() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.get("/bills/count"))
+        //todo: return count as metadata in bills
+        mvc.perform(MockMvcRequestBuilders.get(BILLS_URL + "/count"))
                 .andExpect(status().isOk())
                 .andExpect(content().string(totalRecords.toString())
                 );
