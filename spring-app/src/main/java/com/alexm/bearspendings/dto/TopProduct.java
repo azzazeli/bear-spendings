@@ -16,10 +16,6 @@ import lombok.Data;
 @JsonDeserialize(builder = BillCommand.BillCommandBuilder.class)
 @Data
 public class TopProduct {
-    /**
-     * product id
-     * //TODO may be rename field to productId
-     */
     private Long productId;
     private Double quantity;
     private Double price;

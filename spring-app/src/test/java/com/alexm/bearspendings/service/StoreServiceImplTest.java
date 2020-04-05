@@ -58,10 +58,10 @@ class StoreServiceImplTest {
     void testTopProducts() {
         //given
         //when
-        Set<TopProduct> products = storeService.topProducts(1L, 2);
+        Set<TopProduct> products = storeService.topProducts(1L, 3);
         //then
         assertAll(
-                () -> { assertEquals(2, products.size());}
+                () -> { assertEquals(3, products.size());}
         );
 
         TopProduct inghetata = products.stream().filter(topProduct -> topProduct.getProductId().equals(3L)).findFirst()
