@@ -7,6 +7,7 @@ insert into product(id, name) values (3, 'Inghetata Beriozka 1kg');
 
 insert into bill(id, order_date, store_id) values (1, '2019-04-18', 1);
 insert into bill(id, order_date, store_id, total) values (2, '2019-04-22', 1, 97.00);
+insert into bill(id, order_date, store_id, total) values (3, '2019-04-22', 1, 230.00);
 
 insert into bill_item(id, price, quantity, product_id, bill_id) values (1, 7.85, 1, 1, 1);
 insert into bill_item(id, price, quantity, product_id, bill_id) values (2, 9.85, 1, 2, 1);

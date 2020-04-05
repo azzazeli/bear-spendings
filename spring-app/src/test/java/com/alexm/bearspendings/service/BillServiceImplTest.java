@@ -39,8 +39,8 @@ class BillServiceImplTest {
     void allBills() {
         final List<BillCommand> actualBills = billService.allBills(0, 10);
         assertNotNull(actualBills);
-        assertEquals(2, actualBills.size());
-        BillCommand billCommand = actualBills.get(0);
+        assertEquals(3, actualBills.size());
+        BillCommand billCommand = actualBills.get(1);
         assertEquals(2L, billCommand.getId().longValue());
         assertEquals(1L, billCommand.getStoreId().longValue());
         assertEquals(Double.valueOf(97.00), billCommand.getTotal());
@@ -71,7 +71,7 @@ class BillServiceImplTest {
 
     @Test
     void allBillCounts() {
-        assertEquals(2L, billService.allBillsCount().longValue());
+        assertEquals(3L, billService.allBillsCount().longValue());
     }
 
     @DisplayName("Bill toString to not generate stack overflow")

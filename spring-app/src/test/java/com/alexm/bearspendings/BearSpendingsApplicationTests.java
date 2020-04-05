@@ -52,7 +52,7 @@ class BearSpendingsApplicationTests {
 		this.mvc.perform(get(API_URL+"/bills?page=0&size=10"))
 				.andDo(print())
 				.andExpect(status().isOk())
-				.andExpect(jsonPath("$.length()").value("2"))
+				.andExpect(jsonPath("$.length()").value("3"))
 		;
 	}
 

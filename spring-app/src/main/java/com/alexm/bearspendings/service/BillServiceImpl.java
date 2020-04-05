@@ -51,7 +51,7 @@ public class BillServiceImpl implements BillService  {
     @Transactional
     @Override
     public List<BillCommand> allBills(int page, int size) {
-        Sort byOrderDateDesc = Sort.by(Sort.Direction.DESC, "orderDate");
+        Sort byOrderDateDesc = Sort.by(Sort.Direction.DESC, "id", "orderDate");
         Pageable pageable = PageRequest.of(page, size, byOrderDateDesc);
         return StreamSupport.stream(billRepository.findAll(pageable).spliterator(), false)
                 .map(billToUiBillMap)
