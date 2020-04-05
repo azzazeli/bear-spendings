@@ -16,10 +16,20 @@ public interface BillItemRepository extends CrudRepository<BillItem, Long> {
      * get a page of more recent bill items from a store
      * @param storeId - store id
      * @param pageable - how much bill items to return
-     * @return
      */
-    @Query("select bi from BillItem bi " +
-            "where bi.bill.store.id = ?1 " +
-            "order by bi.bill.orderDate desc")
-    public List<BillItem> lastItemsWithDistinctProducts(Long storeId, Pageable pageable);
+    @Query(
+            value = "select bi2.* " +
+                    "from bill_item bi2 " +
+                    "inner join (" +
+                    "  select bi.product_id, max(bi.id) as id" +
+                    "  from bill_item bi " +
+                    "  inner join bill b on b.id = bi.bill_id" +
+                    "  where b.store_id=?1" +
+                    "  group by bi.product_id" +
+                    ") res on bi2.id = res.id " +
+                    "order by bi2.product_id",
+            nativeQuery = true
+    )
+
+    List<BillItem> lastItemsWithDistinctProducts(Long storeId, Pageable pageable);
 }
