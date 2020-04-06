@@ -8,6 +8,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {CoreModule} from '../core/core.module';
 import {ToastModule} from 'primeng/toast';
 import {TooltipModule} from 'primeng/tooltip';
+import {AutoCompleteModule} from 'primeng/autocomplete';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import {TooltipModule} from 'primeng/tooltip';
     CalendarModule,
     BrowserAnimationsModule,
     ToastModule,
-    TooltipModule
+    TooltipModule,
+    AutoCompleteModule
   ],
   exports: [
     AddBillComponent

@@ -24,16 +24,16 @@ export class SamplesDataService {
 
   sampleProducts(): Product[] {
     return [
-      new Product(1, 'Piine de secara', 12),
-      new Product(2, 'Chefir JLC 2.5 %', 8.55),
-      new Product(3, 'Unt BioButter', 78),
-      new Product(4, 'Pesmeti', 10),
-      new Product(5, 'Brinza Casuta mea', 18),
-      new Product(6, 'Cascaval Dor Blue', 37.4),
-      new Product(7, 'Cacaval Masdam', 44.6),
-      new Product(8, 'Masline mari', 33.1),
-      new Product(9, 'Banane', 33),
-      new Product(10, 'Lamie', 21)
+      new Product(1, 'Piine de secara'),
+      new Product(2, 'Chefir JLC 2.5 %'),
+      new Product(3, 'Unt BioButter'),
+      new Product(4, 'Pesmeti'),
+      new Product(5, 'Brinza Casuta mea'),
+      new Product(6, 'Cascaval Dor Blue'),
+      new Product(7, 'Cacaval Masdam'),
+      new Product(8, 'Masline mari'),
+      new Product(9, 'Banane'),
+      new Product(10, 'Lamie')
     ];
   }
 

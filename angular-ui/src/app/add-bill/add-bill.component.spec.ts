@@ -6,7 +6,7 @@ import {LoggerModule, NgxLoggerLevel} from 'ngx-logger';
 import {StoreService} from '../core/service/store.service';
 import {Store} from '../core/model/store.model';
 import {of} from 'rxjs/internal/observable/of';
-import {CalendarModule, MessageService} from 'primeng/primeng';
+import {AutoCompleteModule, CalendarModule, MessageService} from 'primeng/primeng';
 import {SamplesDataService} from '../core/service/samplesDataService';
 import {NewBillItemComponent} from './new-bill-item/new-bill-item.component';
 import {ProductsService} from '../core/service/products.service';
@@ -27,7 +27,7 @@ describe('AddBillComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [ ReactiveFormsModule, CalendarModule, ToastModule,
+      imports: [ ReactiveFormsModule, CalendarModule, ToastModule, AutoCompleteModule,
         LoggerModule.forRoot({level: NgxLoggerLevel.DEBUG})],
       providers: [
         MessageService,

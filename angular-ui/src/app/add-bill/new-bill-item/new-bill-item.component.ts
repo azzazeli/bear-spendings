@@ -2,6 +2,8 @@ import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {BillItem} from '../../core/model/bill-item.model';
 import {NGXLogger} from 'ngx-logger';
+import {Product} from "../../core/model/product.model";
+import {ProductsService} from "../../core/service/products.service";
 
 @Component({
   selector: 'app-new-bill-item',
@@ -15,13 +17,14 @@ export class NewBillItemComponent implements OnInit {
   addBillItemEvent: EventEmitter<BillItem> = new EventEmitter();
   billItem: BillItem;
   pricePerUnit : number;
+  productSuggestions: Product[];
 
-  constructor(private logger: NGXLogger) { }
+  constructor(private logger: NGXLogger,
+              private productService: ProductsService) { }
 
   ngOnInit() {
     this.newBillItemForm = new FormGroup({
-      'product-id': new FormControl(null),
-      'product-name': new FormControl(null, Validators.required),
+      'product': new FormControl(null, Validators.required),
       'price': new FormControl(null, [Validators.required, NewBillItemComponent.validateNegative]),
       'quantity': new FormControl(null, [Validators.required, NewBillItemComponent.validateNegative])
     });
@@ -30,8 +33,7 @@ export class NewBillItemComponent implements OnInit {
   setBillItem(billItem: BillItem): void {
     this.logger.debug('NewBillItemComponent: Set bill item:' + JSON.stringify(billItem));
     this.billItem = billItem;
-    this.newBillItemForm.get('product-id').setValue(billItem.productId);
-    this.newBillItemForm.get('product-name').setValue(billItem.productName);
+    this.newBillItemForm.get('product').setValue(new Product(billItem.productId, billItem.productName));
     this.newBillItemForm.get('price').setValue(billItem.price);
     this.newBillItemForm.get('quantity').setValue(billItem.quantity);
     this.calculatePricePerUnit(billItem.price, billItem.quantity);
@@ -42,11 +44,18 @@ export class NewBillItemComponent implements OnInit {
     this.pricePerUnit = undefined;
   }
 
+  searchProduct(event): void {
+    this.logger.debug(`search product suggestions by:${event.query}`);
+    this.productService.searchProductsBy(event.query).subscribe( (products: Product[]) => {
+        this.productSuggestions = products;
+    });
+  }
+
   onAddBillItem(): void {
     this.logger.debug('NewBillItemComponent: On add bill item');
     this.billItem = new BillItem(
-      this.newBillItemForm.get('product-id').value,
-      this.newBillItemForm.get('product-name').value,
+      this.newBillItemForm.get('product').value.id,
+      this.newBillItemForm.get('product').value.name,
       this.newBillItemForm.get('quantity').value,
       this.newBillItemForm.get('price').value,
     );
