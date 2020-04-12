@@ -65,10 +65,31 @@ describe('NewBillItemComponent', () => {
     expect(component.newBillItemForm.valid).toBe(true);
   });
 
+  it('#on add new bill new product name' , () => {
+    //given
+    const expected = {
+      'product': 'Chefir JLC 2.5%',
+      'price': 9.55,
+      'quantity': 2
+    };
+    component.newBillItemForm.setValue(expected);
+    spyOn(component.addBillItemEvent, 'emit').and.callThrough();
+
+    //then
+    component.addBillItemEvent.subscribe((newBillItem: BillItem) => {
+      expect(newBillItem.price).toBe(expected.price);
+      expect(newBillItem.productId).toBeUndefined();
+      expect(newBillItem.productName).toEqual(expected['product']);
+      expect(newBillItem.quantity).toBe(expected.quantity);
+    });
+    //when
+    component.onAddBillItem();
+  });
+
   it('#on add new bill fire event' , () => {
     //given
     const expected = {
-      'product': {id: 1, name: 'Chefir JLC 2.5%'},
+      'product': new Product(1,'Chefir JLC 2.5%'),
       'price': 9.55,
       'quantity': 2
     };
