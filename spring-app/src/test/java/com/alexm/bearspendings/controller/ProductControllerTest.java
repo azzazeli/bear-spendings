@@ -1,6 +1,5 @@
 package com.alexm.bearspendings.controller;
 
-import com.alexm.bearspendings.dto.UIProduct;
 import com.alexm.bearspendings.service.ProductService;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,7 +13,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.NoSuchElementException;
 
-import static com.alexm.bearspendings.controller.ProductControllerTest.SAMPLE_PRODUCTS.*;
+import static com.alexm.bearspendings.test.SAMPLE_PRODUCTS.*;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -32,22 +31,6 @@ class ProductControllerTest {
     @Autowired
     MockMvc mockMvc;
     private final Long UNKNOWN_PRODUCT = 122345L;
-
-    enum SAMPLE_PRODUCTS {
-        CARTOFI(1L, "Cartofi"),
-        CARNE(2L, "Carne"),
-        CHEFIR(1L, "Chefir");
-
-        private final UIProduct uiProduct;
-        private final Long id;
-        private final String name;
-
-        SAMPLE_PRODUCTS(long id, String name) {
-            this.id = id;
-            this.name = name;
-            this.uiProduct = UIProduct.builder().id(id).name(name).build();
-        }
-    }
 
     @MockBean
     ProductService productService;

@@ -6,9 +6,9 @@ import com.alexm.bearspendings.repository.ProductRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 /**
  * @author AlexM
@@ -38,7 +38,9 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<UIProduct> findStartWith(String prefix) {
-        //todo: implement me
-        return Collections.emptyList();
+        return repository.findByNameStartsWithIgnoreCase(prefix).stream()
+                //todo: extract this map
+                .map(product -> UIProduct.builder().id(product.getId()).name(product.getName()).build())
+                .collect(Collectors.toList());
     }
 }

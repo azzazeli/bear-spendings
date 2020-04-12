@@ -3,15 +3,20 @@ package com.alexm.bearspendings.service;
 import com.alexm.bearspendings.dto.UIProduct;
 import com.alexm.bearspendings.entity.Product;
 import com.alexm.bearspendings.repository.ProductRepository;
+import org.assertj.core.api.Assertions;
+import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
+import static com.alexm.bearspendings.test.SAMPLE_PRODUCTS.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -21,36 +26,46 @@ import static org.mockito.Mockito.*;
 /**
  * @author AlexM
  */
-@SpringBootTest
+@ExtendWith(MockitoExtension.class)
 class ProductServiceImplTest {
     @Mock
     ProductRepository productRepository;
     ProductService productService;
-    private final String PROODUCT_CHEFIR = "chefir jlc 1%";
 
     @BeforeEach
     void setUp() {
         productService = new ProductServiceImpl(productRepository);
-        when(productRepository.findAll()).thenReturn(Arrays.asList(
-                Product.builder().name("Lapte").build()
-        ));
-        when(productRepository.findById(1L)).thenReturn(Optional.of(Product.builder().id(1L).name(PROODUCT_CHEFIR).build()));
     }
 
     @Test
     void products() {
+        when(productRepository.findAll()).thenReturn(Arrays.asList(
+                Product.builder().name("Lapte").build()
+        ));
         assertThat(productService.products(), containsInAnyOrder(Product.builder().name("Lapte").build()));
     }
 
     @Test
     void product() {
-        UIProduct product = productService.findProduct(1L);
-        assertEquals(PROODUCT_CHEFIR , product.getName());
-        verify(productRepository, times(1)) .findById(1L);
+        when(productRepository.findById(CHEFIR.id)).thenReturn(Optional.of(Product.builder().id(1L).name(CHEFIR.name).build()));
+        UIProduct product = productService.findProduct(CHEFIR.id);
+        assertEquals(CHEFIR.name , product.getName());
+        verify(productRepository, times(1)) .findById(CHEFIR.id);
     }
 
     @Test
     void noProductFound(){
         assertThrows(NoSuchElementException.class, () -> productService.findProduct(222355L));
+    }
+
+    @Test
+    void findStartWith() {
+        //given
+        when(productRepository.findByNameStartsWithIgnoreCase("cA"))
+                .thenReturn(Lists.list(CARTOFI.product, CARNE.product));
+        //when
+        final List<UIProduct> uiProducts = productService.findStartWith("cA");
+        //then
+        Assertions.assertThat(uiProducts).extracting(UIProduct::getId).containsExactly(1L, 2L);
     }
 }
