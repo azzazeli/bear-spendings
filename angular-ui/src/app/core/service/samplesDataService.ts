@@ -37,6 +37,13 @@ export class SamplesDataService {
     ];
   }
 
+  productsStartsWithCa(): Product[] {
+    return [
+      new Product(122, 'Carne'),
+      new Product(123, 'Cartofi')
+    ];
+  }
+
   sampleStoreProducts(): StoreProduct[] {
     return [
       new StoreProduct(1, 2, 12),

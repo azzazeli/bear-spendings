@@ -1,6 +1,6 @@
 import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
-import {Observable, of} from 'rxjs';
+import {Observable} from 'rxjs';
 import {Product} from '../model/product.model';
 import {ObservableCacheService} from './observable.cache.service';
 import {environment} from "../../../environments/environment";
@@ -25,10 +25,7 @@ export class ProductsService extends ObservableCacheService<Product>{
   }
 
   searchProductsBy(productNamePrefix: string): Observable<Product[]> {
-    return of([
-      new Product(122, 'Carne'),
-      new Product(123, 'Cartofi')
-    ]);
+    return this.http.get<Product[]>(`${this.PRODUCTS_URL}/?startWith=${productNamePrefix}`);
   }
 
   //todo: better place is in store service

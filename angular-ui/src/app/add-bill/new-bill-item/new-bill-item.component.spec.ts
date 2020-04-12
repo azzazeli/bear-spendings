@@ -10,19 +10,25 @@ import {DebugElement} from "@angular/core";
 import {AutoCompleteModule} from "primeng/autocomplete";
 import {Product} from "../../core/model/product.model";
 import {ProductsService} from "../../core/service/products.service";
+import {of} from "rxjs";
 
 describe('NewBillItemComponent', () => {
   let component: NewBillItemComponent;
   let fixture: ComponentFixture<NewBillItemComponent>;
   let samplesDataService: SamplesDataService;
-  let productService: ProductsService;
+  let productServiceSpy: jasmine.SpyObj<ProductsService>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [ReactiveFormsModule,
         AutoCompleteModule,
         LoggerModule.forRoot({level: NgxLoggerLevel.DEBUG})],
-      providers: [SamplesDataService, NGXLogger, ProductsService],
+      providers: [
+        SamplesDataService,
+        NGXLogger,
+        { provide: ProductsService, useValue: jasmine.createSpyObj('ProductService',
+          ['searchProductsBy'])}
+      ],
       declarations: [ NewBillItemComponent ]
     })
     .compileComponents();
@@ -33,7 +39,11 @@ describe('NewBillItemComponent', () => {
     component = fixture.componentInstance;
     fixture.detectChanges();
     samplesDataService = TestBed.get(SamplesDataService);
-    productService = TestBed.get(ProductsService);
+    productServiceSpy = TestBed.get(ProductsService);
+    productServiceSpy.searchProductsBy.and.callFake(function (productPrefix) {
+      return of(samplesDataService.productsStartsWithCa());
+      }
+    );
   });
 
   it('#should create', () => {
@@ -151,7 +161,7 @@ describe('NewBillItemComponent', () => {
     expect(component.pricePerUnit).toBe(3.33);
   });
 
-  it('on price or quantity = 0,price per unit must be undefined', () => {
+  it('#on price or quantity = 0,price per unit must be undefined', () => {
     const billItem = samplesDataService.sampleBillItem(1);
     component.setBillItem(billItem);
     let priceField: DebugElement = fixture.debugElement.query(By.css('#bill-item-price'));
@@ -165,7 +175,7 @@ describe('NewBillItemComponent', () => {
     expect(component.pricePerUnit).toBeUndefined();
   });
 
-  it('search products ', () => {
+  it('#search products ', () => {
     let productInput: DebugElement = fixture.debugElement.query(By.css('#bill-item-product'));
     productInput.triggerEventHandler('completeMethod', {'query': 'car'});
     expect(component.productSuggestions).toEqual([

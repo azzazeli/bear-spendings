@@ -57,7 +57,17 @@ describe('ProductsServiceTest', () => {
     expect(req.request.method).toEqual('GET');
     req.flush(samplesDataService.sampleProducts()[0]);
 
-    productService.getObservableById(1);
-    httpTestingController.expectNone(productService.productUrl(1));
   });
+
+  it('#search product by prefix', () => {
+    //given
+    const productPrefix = 'ca';
+    //when
+    productService.searchProductsBy(productPrefix).subscribe();
+    //then
+    const req = httpTestingController.expectOne(`api/products/?startWith=${productPrefix}`);
+    expect(req.request.method).toEqual('GET');
+
+  });
+
 });
