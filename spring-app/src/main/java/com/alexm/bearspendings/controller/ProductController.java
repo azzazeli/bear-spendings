@@ -1,13 +1,11 @@
 package com.alexm.bearspendings.controller;
 
 import com.alexm.bearspendings.dto.UIProduct;
-import com.alexm.bearspendings.entity.Product;
 import com.alexm.bearspendings.service.ProductService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static com.alexm.bearspendings.BearSpendingsApplication.API_URL;
 import static com.alexm.bearspendings.bootstrap.DevBootstrap.ALLOWED_ORIGIN;
@@ -15,7 +13,7 @@ import static com.alexm.bearspendings.bootstrap.DevBootstrap.ALLOWED_ORIGIN;
 /**
  * @author AlexM
  */
-
+@Slf4j
 @RestController
 @CrossOrigin( origins = ALLOWED_ORIGIN)
 @RequestMapping(API_URL + "products")
@@ -26,10 +24,10 @@ public class ProductController {
         this.productService = productService;
     }
 
-
-    @GetMapping()
-    public List<Product> products() {
-        return Stream.of(Product.builder().name("Lapte").build()).collect(Collectors.toList());
+    @GetMapping("")
+    public List<UIProduct> startWith(@RequestParam(name = "startWith") String prefix) {
+        log.debug("Search products by name starts with:{}", prefix);
+        return productService.findStartWith(prefix);
     }
 
     @GetMapping("{id}")

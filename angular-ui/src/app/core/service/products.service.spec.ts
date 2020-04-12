@@ -26,7 +26,6 @@ describe('ProductsServiceTest', () => {
     productService = TestBed.get(ProductsService);
     storeService = TestBed.get(StoreService);
     samplesDataService = TestBed.get(SamplesDataService);
-    httpClient = TestBed.get(HttpClient);
     httpTestingController = TestBed.get(HttpTestingController);
   });
 
@@ -65,7 +64,7 @@ describe('ProductsServiceTest', () => {
     //when
     productService.searchProductsBy(productPrefix).subscribe();
     //then
-    const req = httpTestingController.expectOne(`api/products/?startWith=${productPrefix}`);
+    const req = httpTestingController.expectOne(`api/products?startWith=${productPrefix}`);
     expect(req.request.method).toEqual('GET');
 
   });

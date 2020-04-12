@@ -12,7 +12,7 @@ import javax.validation.constraints.Positive;
  **/
 @Data
 @Builder
-public class UIProduct {
+public class UIProduct { //todo: rename to ProductCommand
     @NotNull(message = "Id is mandatory")
     @Positive(message = "Id be a positive number")
     private Long id;

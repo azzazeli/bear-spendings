@@ -12,4 +12,6 @@ public interface ProductService {
     List<Product> products();
 
     UIProduct findProduct(Long id);
+
+    List<UIProduct> findStartWith(String prefix);
 }

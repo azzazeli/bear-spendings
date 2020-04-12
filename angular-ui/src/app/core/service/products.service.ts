@@ -25,7 +25,7 @@ export class ProductsService extends ObservableCacheService<Product>{
   }
 
   searchProductsBy(productNamePrefix: string): Observable<Product[]> {
-    return this.http.get<Product[]>(`${this.PRODUCTS_URL}/?startWith=${productNamePrefix}`);
+    return this.http.get<Product[]>(`${this.PRODUCTS_URL}?startWith=${productNamePrefix}`);
   }
 
   //todo: better place is in store service
