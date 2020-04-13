@@ -4,4 +4,4 @@ plugins {
 }
 
 group = 'com.alexm'
-sourceCompatibility = '1.8'
+sourceCompatibility = JavaVersion.VERSION_11
