@@ -9,6 +9,17 @@ Simple app that monitor bear spendings.
 
 ## Versions 
 
+### Version 0.3
+- Moved build to java 11
+- Suggestion of product list
+- Separate api call for url
+- Select today date by default in add new bill form UI
+
+How it looks :)
+
+![Version 0.0.3](docs/imgs/version_0_0_3.png)
+
+
 ### Version 0.2
  - Cost per unit of bill item
  - Bill total on 'Add bill' form

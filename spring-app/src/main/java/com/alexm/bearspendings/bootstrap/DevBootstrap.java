@@ -49,8 +49,6 @@ public class DevBootstrap implements ApplicationListener<ContextRefreshedEvent> 
     private void initData() {
         log.debug("Developer bootstrap. Initialize with sample data.");
         initStores();
-//        initProducts();
-//        initBills(nr1, products);
     }
 
     private void initBills(Store nr1, List<Product> products) {

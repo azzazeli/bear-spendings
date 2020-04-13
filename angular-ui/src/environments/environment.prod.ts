@@ -11,6 +11,6 @@ export const environment = {
   STORES_URL: 'stores',
   TOP_PRODUCTS: 'top_products',
 
-  PRODUCTS_URL: 'products/',
+  PRODUCTS_URL: 'products',
 
 };

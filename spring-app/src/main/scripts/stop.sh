@@ -1,4 +1,4 @@
 #!/bin/sh
 
-echo "Stoping application ..."
+echo "Stopping application ..."
 kill $(cat ./pid.file)

@@ -6,7 +6,7 @@ import {environment} from './environments/environment';
 
 if (environment.production) {
   enableProdMode();
-  environment.apiUrl = window.location.origin + '/';
+  environment.apiUrl = window.location.origin + '/api/v1/';
   console.log(`apiUrl:${environment.apiUrl}`);
 }
 
