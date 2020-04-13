@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Set;
 
 import static com.alexm.bearspendings.BearSpendingsApplication.API_URL;
-import static com.alexm.bearspendings.bootstrap.DevBootstrap.ALLOWED_ORIGIN;
 
 /**
  * @author AlexM
@@ -20,7 +19,6 @@ import static com.alexm.bearspendings.bootstrap.DevBootstrap.ALLOWED_ORIGIN;
 @Slf4j
 @RestController()
 @RequestMapping(API_URL + "stores")
-@CrossOrigin( origins = ALLOWED_ORIGIN)
 public class StoreController {
     private final StoreService storeService;
 

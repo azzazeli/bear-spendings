@@ -8,14 +8,12 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 import static com.alexm.bearspendings.BearSpendingsApplication.API_URL;
-import static com.alexm.bearspendings.bootstrap.DevBootstrap.ALLOWED_ORIGIN;
 
 /**
  * @author AlexM
  */
 @Slf4j
 @RestController
-@CrossOrigin( origins = ALLOWED_ORIGIN)
 @RequestMapping(API_URL + "products")
 public class ProductController {
     private final ProductService productService;

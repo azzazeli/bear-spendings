@@ -9,12 +9,10 @@ import javax.validation.Valid;
 import java.util.List;
 
 import static com.alexm.bearspendings.BearSpendingsApplication.API_URL;
-import static com.alexm.bearspendings.bootstrap.DevBootstrap.ALLOWED_ORIGIN;
 
 /**
  * @author AlexM created on 7/11/19
  */
-@CrossOrigin( origins = ALLOWED_ORIGIN)
 @RestController
 @RequestMapping(API_URL + "bills")
 @Slf4j
