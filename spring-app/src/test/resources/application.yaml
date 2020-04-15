@@ -28,6 +28,6 @@ logging:
       alexm:
         bearspendings: debug
     org:
-      springframework: debug
+      springframework: info
       hibernate:
         type: info #trace - to see sql bind values

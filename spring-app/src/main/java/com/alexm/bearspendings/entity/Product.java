@@ -27,7 +27,7 @@ public class Product extends BaseEntity {
 
     @Builder
     public Product(Long id, LocalDateTime createdDT, LocalDateTime modifiedDT,
-                   String name, String comment) {
+                   @NonNull String name, String comment) {
         super(id, createdDT, modifiedDT);
         this.name = name;
         this.comment = comment;

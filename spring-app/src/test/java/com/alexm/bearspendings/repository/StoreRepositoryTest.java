@@ -21,7 +21,7 @@ public class StoreRepositoryTest {
 
     @Test
     void createdDtExists() {
-        final Store store = Store.builder().build();
+        final Store store = Store.builder().name("sample store").build();
         final Store savedSTore = storeRepository.save(store);
         assertNotNull(savedSTore.getId());
         assertNotNull(savedSTore.getCreatedDT());

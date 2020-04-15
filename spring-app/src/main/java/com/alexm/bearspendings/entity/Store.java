@@ -20,7 +20,8 @@ public class Store extends BaseEntity {
     @Builder
     public Store(
             Long id, LocalDateTime createdDT, LocalDateTime modifiedDT,
-            String name, String country, String city, String location) {
+            @NonNull String name,
+            String country, String city, String location) {
         super(id, createdDT, modifiedDT);
         this.name = name;
         this.country = country;
