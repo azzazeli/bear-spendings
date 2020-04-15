@@ -3,3 +3,7 @@ server:
 spring:
   profiles:
     active: prod
+  security:
+    user:
+      name: ursu
+      password: hugobob

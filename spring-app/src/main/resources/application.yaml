@@ -7,8 +7,6 @@ com:
       initTestData: false
 
 spring:
-  profiles:
-    active: dev
   datasource:
     url: "jdbc:h2:file:~/.bear-spendings-data/db"
     username: sa

@@ -9,6 +9,10 @@ spring:
     driverClassName: org.h2.Driver
   jpa:
     show_sql: true
+  security:
+    user:
+      name: admin
+      password: manager
 #  h2:
 #    console:
 #      enabled: true
@@ -24,5 +28,6 @@ logging:
       alexm:
         bearspendings: debug
     org:
+      springframework: debug
       hibernate:
         type: info #trace - to see sql bind values

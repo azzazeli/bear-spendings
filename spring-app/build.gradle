@@ -19,7 +19,7 @@ ext {
 
 dependencies {
 	implementation (project(':angular-ui'))
-//	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
@@ -27,8 +27,10 @@ dependencies {
 	compile 'com.google.guava:guava:28.0-jre'
 
 	compileOnly 'org.projectlombok:lombok'
+	testCompileOnly 'org.projectlombok:lombok'
 
     annotationProcessor 'org.projectlombok:lombok'
+	testAnnotationProcessor 'org.projectlombok:lombok'
 
 	runtimeOnly 'com.h2database:h2'
 
@@ -41,6 +43,7 @@ dependencies {
 	testRuntime "org.junit.jupiter:junit-jupiter-engine:${junitVersion}"
 //	testImplementation 'org.springframework.security:spring-security-test'
 
+	annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
 }
 
 test {
