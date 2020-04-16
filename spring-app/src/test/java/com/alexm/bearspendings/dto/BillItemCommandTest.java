@@ -10,6 +10,7 @@ import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * @author AlexM
@@ -35,6 +36,16 @@ class BillItemCommandTest {
         assertThat(constraintViolations.size()).isEqualTo(1);
         ConstraintViolation<BillItemCommand> uiBillItemConstraintViolation = constraintViolations.iterator().next();
         assertEquals("UiBillItem must contains product id or product name", uiBillItemConstraintViolation.getMessage());
+    }
+
+    @Test
+    void builderPerformValidation() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> BillItemCommand.builder().productId(1L).quantity(-1.0).price(2.2).build());
+        assertEquals("Provided quantity:-1.0 is invalid. Quantity must be positive", exception.getMessage());
+        exception = assertThrows(IllegalArgumentException.class,
+                () -> BillItemCommand.builder().productId(1L).quantity(1.0).price(-2.2).build());
+        assertEquals("Provided price:-2.2 is invalid. Price must be positive", exception.getMessage());
     }
 
     void assertValidUiBillItem(Set<ConstraintViolation<BillItemCommand>> constraintViolations) {

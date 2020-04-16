@@ -10,8 +10,7 @@ import javax.validation.Validator;
 import java.time.LocalDateTime;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @author AlexM
@@ -23,16 +22,23 @@ class BillCommandTest {
     @DisplayName("validate total")
     @Test
     void validateTotal() {
-        BillCommand billCmd = BillCommand.builder()
-                .storeId(100L)
-                .orderDate(LocalDateTime.now())
-                .total(-2.9)
-                .items(ImmutableSet.of(BillItemCommand.builder().productId(234L).price(22.2).quantity(1.0).build()))
-                .build();
+        BillCommand billCmd = new BillCommand();
+        billCmd.setStoreId(100L);
+        billCmd.setOrderDate(LocalDateTime.now());
+        billCmd.setTotal(-2.9);
+        billCmd.setItems(ImmutableSet.of(BillItemCommand.builder().productId(234L).price(22.2).quantity(1.0).build()));
         Set<ConstraintViolation<BillCommand>> validationResult = validator.validate(billCmd);
         assertNotNull(validationResult);
         assertEquals(1, validationResult.size());
         ConstraintViolation<BillCommand> violation = validationResult.iterator().next();
         assertEquals("Total must be greater than zero", violation.getMessage());
+    }
+
+    @DisplayName("validate that builder builds valid objects")
+    @Test
+    void buildValidation() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> BillCommand.builder().total(-20.0).build());
+        assertEquals("Provided total:-20.0 is invalid. Total must be positive", exception.getMessage());
     }
 }
