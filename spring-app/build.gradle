@@ -1,9 +1,9 @@
 plugins {
 	id 'org.springframework.boot' version '2.1.4.RELEASE'
 	id 'java'
+	id "io.spring.dependency-management" version "1.0.9.RELEASE"
 }
 
-apply plugin: 'io.spring.dependency-management'
 
 group = 'com.alexm'
 sourceCompatibility = JavaVersion.VERSION_11
@@ -18,7 +18,7 @@ ext {
 }
 
 dependencies {
-	implementation (project(':angular-ui'))
+	runtimeOnly project(':angular-ui')
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
@@ -33,7 +33,6 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok'
 	annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
 
-
 	runtimeOnly 'com.h2database:h2'
 
 	testImplementation ('org.springframework.boot:spring-boot-starter-test') {
@@ -44,9 +43,8 @@ dependencies {
 	testImplementation 'org.mockito:mockito-junit-jupiter:2.23.4'
 	testRuntime "org.junit.jupiter:junit-jupiter-engine:${junitVersion}"
 //	testImplementation 'org.springframework.security:spring-security-test'
+
 	testAnnotationProcessor 'org.projectlombok:lombok'
-
-
 }
 
 test {

@@ -2,7 +2,7 @@
   <configuration default="false" name="BearSpendingsApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
     <module name="bear-spendings.spring-app.main" />
     <option name="SPRING_BOOT_MAIN_CLASS" value="com.alexm.bearspendings.BearSpendingsApplication" />
-    <option name="VM_PARAMETERS" value="-Dspring.profiles.active=dev" />
+    <option name="ACTIVE_PROFILES" value="dev" />
     <option name="ALTERNATIVE_JRE_PATH" />
     <method v="2">
       <option name="Make" enabled="true" />
