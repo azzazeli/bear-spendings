@@ -18,11 +18,6 @@ private dependsOnTasks () {
   if (!Boolean.valueOf(System.getProperty('skip.ui.test'))) {
     dependsOnTasks.add('npm_run_test-build')
   }
-
-  if (!Boolean.valueOf(System.getProperty('skip.ui.build'))) {
-    println 'Skipping Angular UI App build'
-    dependsOnTasks.add('npm_run_build')
-  }
   dependsOnTasks
 }
 
