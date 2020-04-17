@@ -6,7 +6,6 @@ plugins {
 
 
 group = 'com.alexm'
-sourceCompatibility = JavaVersion.VERSION_11
 archivesBaseName = 'bear-spendings'
 
 repositories {
