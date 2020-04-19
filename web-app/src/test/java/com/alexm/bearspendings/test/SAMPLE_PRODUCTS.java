@@ -15,12 +15,12 @@ public enum SAMPLE_PRODUCTS {
     public final UIProduct uiProduct;
     public final Product product;
     public final Long id;
-    public final String name;
+    public final String productName;
 
-    SAMPLE_PRODUCTS(long id, String name) {
+    SAMPLE_PRODUCTS(long id, String productName) {
         this.id = id;
-        this.name = name;
-        this.uiProduct = UIProduct.builder().id(id).name(name).build();
-        this.product = Product.builder().id(id).name(name).build();
+        this.productName = productName;
+        this.uiProduct = UIProduct.builder().id(id).name(productName).build();
+        this.product = Product.builder().id(id).name(productName).build();
     }
 }

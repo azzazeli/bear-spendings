@@ -49,7 +49,7 @@ class ProductControllerTest {
         mockMvc.perform(get(PRODUCTS_URL + "/" + CHEFIR.id))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(CHEFIR.id))
-                .andExpect(jsonPath("$.name").value(CHEFIR.name))
+                .andExpect(jsonPath("$.name").value(CHEFIR.productName))
                 .andDo(print());
         mockMvc.perform(get(PRODUCTS_URL + UNKNOWN_PRODUCT.toString()))
                 .andExpect(status().isNotFound())
@@ -62,9 +62,9 @@ class ProductControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(2))
                 .andExpect(jsonPath("$.[0].id").value(CARNE.id))
-                .andExpect(jsonPath("$.[0].name").value(CARNE.name))
+                .andExpect(jsonPath("$.[0].name").value(CARNE.productName))
                 .andExpect(jsonPath("$.[1].id").value(CARTOFI.id))
-                .andExpect(jsonPath("$.[1].name").value(CARTOFI.name))
+                .andExpect(jsonPath("$.[1].name").value(CARTOFI.productName))
                 .andDo(print());
     }
 }

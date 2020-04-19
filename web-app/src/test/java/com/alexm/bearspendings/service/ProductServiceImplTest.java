@@ -47,9 +47,9 @@ class ProductServiceImplTest {
 
     @Test
     void product() {
-        when(productRepository.findById(CHEFIR.id)).thenReturn(Optional.of(Product.builder().id(1L).name(CHEFIR.name).build()));
+        when(productRepository.findById(CHEFIR.id)).thenReturn(Optional.of(Product.builder().id(1L).name(CHEFIR.productName).build()));
         UIProduct product = productService.findProduct(CHEFIR.id);
-        assertEquals(CHEFIR.name , product.getName());
+        assertEquals(CHEFIR.productName, product.getName());
         verify(productRepository, times(1)) .findById(CHEFIR.id);
     }
 
