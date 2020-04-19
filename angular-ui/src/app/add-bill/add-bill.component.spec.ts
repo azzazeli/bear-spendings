@@ -128,14 +128,13 @@ describe('AddBillComponent', () => {
   });
 
   it('#on delete bill item - remove item from array form', ()=> {
-    //given
+    // given
     fixture.detectChanges();
     component.onAddBillItem(samplesDataService.sampleBillItem(1));
     component.onAddBillItem(samplesDataService.sampleBillItem(2));
     // when
     component.onDeleteBillItem(0);
-    //then
-    let billItems = <FormArray>component.addBillForm.get('bill-items');
+    // then
     expect((<FormArray>component.addBillForm.get('bill-items')).length).toBe(1);
     expect((<FormArray>component.addBillForm.get('bill-items')).at(0).get('product-id').value).toBe(2);
     expect(component.billTotal).toEqual(20.31);
@@ -210,23 +209,23 @@ describe('AddBillComponent', () => {
 
   it('#on clear form click - expect form reset ', () => {
     fixture.detectChanges();
-    //given
+    // given
     component.addBillForm.get('bill-date').setValue(new Date('2019-09-19T00:00:00'));
     component.addBillForm.get('store-id').setValue(1);
     component.onStoreSelected();
     component.onAddBillItem(samplesDataService.sampleBillItem(1));
-    //when
+    // when
     component.onClearForm();
-    //then
+    // then
     expectFormReset();
   });
 
-  it('bill date default value: today', ()=> {
+  it('bill date default value: today', () => {
     const before = moment();
     fixture.detectChanges();
     const after = component.addBillForm.get('bill-date').value.getTime();
-    expect(before.isBefore(after)).toBeTruthy();
-    expect(after).toBeGreaterThan(before.toDate().getTime());
+    expect(before.isSameOrBefore(after)).toBeTruthy();
+    expect(after).toBeGreaterThanOrEqual(before.toDate().getTime());
   });
 
   function expectFormReset () {

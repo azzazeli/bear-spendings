@@ -6,34 +6,25 @@ plugins {
 group = 'com.alexm'
 archivesBaseName = 'bear-spendings'
 
-repositories {
-	mavenCentral()
-}
-
 dependencies {
 	runtimeOnly project(':angular-ui')
+	runtimeOnly 'com.h2database:h2'
+
+	implementation project(':core')
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.apache.commons:commons-lang3'
+	implementation 'com.google.guava:guava:28.0-jre'
 
-	compile 'com.google.guava:guava:28.0-jre'
 
-	compileOnly 'org.projectlombok:lombok'
-	testCompileOnly 'org.projectlombok:lombok'
 
-    annotationProcessor 'org.projectlombok:lombok'
 	annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
-
-	runtimeOnly 'com.h2database:h2'
 
 	testImplementation ('org.springframework.boot:spring-boot-starter-test') {
 		exclude  group: 'junit' , module:'junit'
 	}
-
-}
-
-test {
-	useJUnitPlatform()
+	testAnnotationProcessor 'org.projectlombok:lombok'
+	testCompileOnly 'org.projectlombok:lombok'
 }

@@ -1,6 +1,6 @@
 rootProject.name = 'bear-spendings'
 
 include 'core'
-include 'import-export'
+//include 'import-export'
 include 'spring-app'
 include 'angular-ui'

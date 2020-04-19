@@ -9,6 +9,7 @@ node {
 }
 
 private dependsOnTasks () {
+  //todo: review it is invoked when web is build
   def dependsOnTasks = []
   println '------------------'
   println 'Skip UI test: ' + Boolean.valueOf(System.getProperty('skip.ui.test'))
