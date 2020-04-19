@@ -32,8 +32,6 @@ class BillServiceImplTest {
 
     private LocalDateTime orderDate = LocalDateTime.of(2019, 2, 12, 12, 33);
 
-    @BeforeEach
-    void setup() {}
 
     @Test
     void allBills() {
