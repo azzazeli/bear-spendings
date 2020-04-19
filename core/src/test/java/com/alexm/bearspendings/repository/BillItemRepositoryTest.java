@@ -1,9 +1,11 @@
 package com.alexm.bearspendings.repository;
 
 import com.alexm.bearspendings.entity.BillItem;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.PageRequest;
 
 import java.util.List;
@@ -25,7 +27,7 @@ class BillItemRepositoryTest {
     void lastItemsWithDistinctProducts() {
         final List<BillItem> billItems = billItemRepository.lastItemsWithDistinctProducts(1L, PageRequest.of(0, 20));
         assertEquals(3, billItems.size());
-        assertThat(billItems).extracting(billItem -> billItem.getProduct().getId())
+        Assertions.assertThat(billItems).extracting(billItem -> billItem.getProduct().getId())
                 .containsExactly(1L, 2L, 3L);
     }
 }

@@ -8,7 +8,6 @@ archivesBaseName = 'bear-spendings'
 
 dependencies {
 	runtimeOnly project(':angular-ui')
-	runtimeOnly 'com.h2database:h2'
 
 	implementation project(':core')
 	implementation 'org.springframework.boot:spring-boot-starter-security'
@@ -18,13 +17,8 @@ dependencies {
 	implementation 'org.apache.commons:commons-lang3'
 	implementation 'com.google.guava:guava:28.0-jre'
 
-
-
 	annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
 
-	testImplementation ('org.springframework.boot:spring-boot-starter-test') {
-		exclude  group: 'junit' , module:'junit'
-	}
 	testAnnotationProcessor 'org.projectlombok:lombok'
 	testCompileOnly 'org.projectlombok:lombok'
 }
