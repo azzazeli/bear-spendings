@@ -21,7 +21,7 @@ private dependsOnTasks () {
   dependsOnTasks
 }
 
-jar.dependsOn dependsOnTasks()
+build.dependsOn dependsOnTasks()
 
 jar {
 	from 'dist/angular-ui' into 'static'
