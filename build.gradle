@@ -6,10 +6,6 @@ plugins {
 group = 'com.alexm'
 sourceCompatibility = JavaVersion.VERSION_11
 
-repositories {
-	mavenCentral()
-}
-
 allprojects {
 	apply plugin: 'java'
 }
