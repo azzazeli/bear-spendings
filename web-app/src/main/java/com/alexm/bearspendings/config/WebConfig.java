@@ -5,8 +5,6 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import static com.alexm.bearspendings.bootstrap.DevBootstrap.ALLOWED_ORIGIN;
-
 /**
  * @author AlexM
  * Date: 4/13/20
@@ -14,6 +12,7 @@ import static com.alexm.bearspendings.bootstrap.DevBootstrap.ALLOWED_ORIGIN;
 @Profile("dev")
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
+    private static final String ALLOWED_ORIGIN = "http://localhost:4200";
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {

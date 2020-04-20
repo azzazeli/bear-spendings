@@ -10,6 +10,7 @@ import com.alexm.bearspendings.repository.StoreRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationListener;
+import org.springframework.context.annotation.Profile;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 
@@ -20,11 +21,10 @@ import java.util.concurrent.ThreadLocalRandom;
 /**
  * @author AlexM
  */
+@Profile("dev")
 @Component
 @Slf4j
 public class DevBootstrap implements ApplicationListener<ContextRefreshedEvent> {
-
-    public static final String ALLOWED_ORIGIN = "http://localhost:4200";
 
     private ProductRepository productRepository;
     private StoreRepository storeRepository;
