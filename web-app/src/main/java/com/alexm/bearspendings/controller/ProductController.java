@@ -1,6 +1,6 @@
 package com.alexm.bearspendings.controller;
 
-import com.alexm.bearspendings.dto.UIProduct;
+import com.alexm.bearspendings.dto.ProductCommand;
 import com.alexm.bearspendings.service.ProductService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -23,13 +23,13 @@ public class ProductController {
     }
 
     @GetMapping("")
-    public List<UIProduct> startWith(@RequestParam(name = "startWith") String prefix) {
+    public List<ProductCommand> startWith(@RequestParam(name = "startWith") String prefix) {
         log.debug("Search products by name starts with:{}", prefix);
         return productService.findStartWith(prefix);
     }
 
     @GetMapping("{id}")
-    public UIProduct product(@PathVariable Long id) {
+    public ProductCommand product(@PathVariable Long id) {
         return productService.findProduct(id);
     }
 

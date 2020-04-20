@@ -1,6 +1,6 @@
 package com.alexm.bearspendings.service;
 
-import com.alexm.bearspendings.dto.UIProduct;
+import com.alexm.bearspendings.dto.ProductCommand;
 import com.alexm.bearspendings.entity.Product;
 
 import java.util.List;
@@ -11,7 +11,7 @@ import java.util.List;
 public interface ProductService {
     List<Product> products();
 
-    UIProduct findProduct(Long id);
+    ProductCommand findProduct(Long id);
 
-    List<UIProduct> findStartWith(String prefix);
+    List<ProductCommand> findStartWith(String prefix);
 }

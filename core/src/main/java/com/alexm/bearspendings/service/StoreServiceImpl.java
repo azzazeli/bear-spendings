@@ -1,6 +1,6 @@
 package com.alexm.bearspendings.service;
 
-import com.alexm.bearspendings.dto.TopProduct;
+import com.alexm.bearspendings.dto.TopProductCommand;
 import com.alexm.bearspendings.entity.Store;
 import com.alexm.bearspendings.repository.BillItemRepository;
 import com.alexm.bearspendings.repository.StoreRepository;
@@ -51,11 +51,11 @@ public class StoreServiceImpl implements StoreService {
      * @return
      */
     @Override
-    public Set<TopProduct> topProducts(Long storeId, int size) {
+    public Set<TopProductCommand> topProducts(Long storeId, int size) {
         log.debug("Obtaining top product for store with id:{}", storeId);
         return billItemRepository.lastItemsWithDistinctProducts(storeId, PageRequest.of(0, size))
                 .stream()
-                .map(billItem -> TopProduct.builder()
+                .map(billItem -> TopProductCommand.builder()
                         .productId(billItem.getProduct().getId())
                         .price(billItem.getPrice())
                         .quantity(billItem.getQuantity())

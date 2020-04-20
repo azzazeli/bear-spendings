@@ -1,6 +1,6 @@
 package com.alexm.bearspendings.service;
 
-import com.alexm.bearspendings.dto.TopProduct;
+import com.alexm.bearspendings.dto.TopProductCommand;
 import com.alexm.bearspendings.entity.Store;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -58,13 +58,13 @@ class StoreServiceImplTest {
     void testTopProducts() {
         //given
         //when
-        Set<TopProduct> products = storeService.topProducts(1L, 3);
+        Set<TopProductCommand> products = storeService.topProducts(1L, 3);
         //then
         assertAll(
                 () -> { assertEquals(3, products.size());}
         );
 
-        TopProduct inghetata = products.stream().filter(topProduct -> topProduct.getProductId().equals(3L)).findFirst()
+        TopProductCommand inghetata = products.stream().filter(topProduct -> topProduct.getProductId().equals(3L)).findFirst()
                 .orElseThrow(RuntimeException::new);
         assertThat(inghetata,
                 allOf(
@@ -73,7 +73,7 @@ class StoreServiceImplTest {
                         hasProperty("price", equalTo(87.00))
                 )
         );
-        TopProduct chefir25 = products.stream().filter(topProduct -> topProduct.getProductId().equals(2L)).findFirst()
+        TopProductCommand chefir25 = products.stream().filter(topProduct -> topProduct.getProductId().equals(2L)).findFirst()
                 .orElseThrow(RuntimeException::new);
         assertThat(chefir25,
                 allOf(

@@ -12,7 +12,7 @@ import javax.validation.constraints.Positive;
 @Builder
 @Data
 @JsonDeserialize(builder = BillItemCommand.BillItemCommandBuilder.class)
-@ValidUIBillItem
+@ValidBillItemCommand
 public class BillItemCommand {
     private Long id;
     private String productName;

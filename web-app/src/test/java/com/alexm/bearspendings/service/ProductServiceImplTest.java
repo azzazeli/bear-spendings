@@ -1,6 +1,6 @@
 package com.alexm.bearspendings.service;
 
-import com.alexm.bearspendings.dto.UIProduct;
+import com.alexm.bearspendings.dto.ProductCommand;
 import com.alexm.bearspendings.entity.Product;
 import com.alexm.bearspendings.repository.ProductRepository;
 import org.assertj.core.api.Assertions;
@@ -48,7 +48,7 @@ class ProductServiceImplTest {
     @Test
     void product() {
         when(productRepository.findById(CHEFIR.id)).thenReturn(Optional.of(Product.builder().id(1L).name(CHEFIR.productName).build()));
-        UIProduct product = productService.findProduct(CHEFIR.id);
+        ProductCommand product = productService.findProduct(CHEFIR.id);
         assertEquals(CHEFIR.productName, product.getName());
         verify(productRepository, times(1)) .findById(CHEFIR.id);
     }
@@ -64,8 +64,8 @@ class ProductServiceImplTest {
         when(productRepository.findByNameStartsWithIgnoreCase("cA"))
                 .thenReturn(Lists.list(CARTOFI.product, CARNE.product));
         //when
-        final List<UIProduct> uiProducts = productService.findStartWith("cA");
+        final List<ProductCommand> productCommands = productService.findStartWith("cA");
         //then
-        Assertions.assertThat(uiProducts).extracting(UIProduct::getId).containsExactly(1L, 2L);
+        Assertions.assertThat(productCommands).extracting(ProductCommand::getId).containsExactly(1L, 2L);
     }
 }

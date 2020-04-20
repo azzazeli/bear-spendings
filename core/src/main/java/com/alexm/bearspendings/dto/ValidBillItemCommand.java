@@ -13,8 +13,8 @@ import java.lang.annotation.Target;
  **/
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = UIBillItemValidator.class)
-public @interface ValidUIBillItem {
+@Constraint(validatedBy = BillItemCommandValidator.class)
+public @interface ValidBillItemCommand {
     String message() default "UiBillItem must contains product id or product name";
     Class<?>[] groups () default {};
     Class<? extends Payload>[] payload () default {};

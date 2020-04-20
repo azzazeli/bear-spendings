@@ -1,6 +1,6 @@
 package com.alexm.bearspendings.controller;
 
-import com.alexm.bearspendings.dto.TopProduct;
+import com.alexm.bearspendings.dto.TopProductCommand;
 import com.alexm.bearspendings.entity.Store;
 import com.alexm.bearspendings.service.StoreService;
 import lombok.extern.slf4j.Slf4j;
@@ -40,7 +40,7 @@ public class StoreController {
     }
 
     @GetMapping("/{id}/top_products")
-    public ResponseEntity<Iterable<TopProduct>> topStoreProduct(@PathVariable Long id) {
+    public ResponseEntity<Iterable<TopProductCommand>> topStoreProduct(@PathVariable Long id) {
         log.debug("Getting top products for store with id:{}", id);
         return ResponseEntity.ok(storeService.topProducts(id, 10));
     }

@@ -10,7 +10,7 @@ import java.util.Objects;
  * @author AlexM
  * Date: 9/10/19
  **/
-public class UIBillItemValidator implements ConstraintValidator<ValidUIBillItem, BillItemCommand> {
+public class BillItemCommandValidator implements ConstraintValidator<ValidBillItemCommand, BillItemCommand> {
 
     @Override
     public boolean isValid(BillItemCommand value, ConstraintValidatorContext context) {
@@ -18,7 +18,7 @@ public class UIBillItemValidator implements ConstraintValidator<ValidUIBillItem,
     }
 
     @Override
-    public void initialize(ValidUIBillItem constraintAnnotation) {
+    public void initialize(ValidBillItemCommand constraintAnnotation) {
         // no initialization
     }
 }

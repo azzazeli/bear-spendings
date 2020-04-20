@@ -37,10 +37,10 @@ class ProductControllerTest {
 
     @BeforeEach
     void setup() {
-        when(productService.findProduct(CHEFIR.id)).thenReturn(CHEFIR.uiProduct);
+        when(productService.findProduct(CHEFIR.id)).thenReturn(CHEFIR.productCommand);
         when(productService.findProduct(UNKNOWN_PRODUCT)).thenThrow(NoSuchElementException.class);
         when(productService.findStartWith("ca")).thenReturn(Lists.list(
-           CARNE.uiProduct, CARTOFI.uiProduct
+           CARNE.productCommand, CARTOFI.productCommand
         ));
     }
 

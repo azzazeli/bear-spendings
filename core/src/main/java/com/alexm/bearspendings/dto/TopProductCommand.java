@@ -15,7 +15,7 @@ import lombok.Data;
 @Builder
 @JsonDeserialize(builder = BillCommand.BillCommandBuilder.class)
 @Data
-public class TopProduct {
+public class TopProductCommand {
     private Long productId;
     private Double quantity;
     private Double price;

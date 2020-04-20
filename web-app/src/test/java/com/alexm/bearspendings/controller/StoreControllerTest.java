@@ -1,6 +1,6 @@
 package com.alexm.bearspendings.controller;
 
-import com.alexm.bearspendings.dto.TopProduct;
+import com.alexm.bearspendings.dto.TopProductCommand;
 import com.alexm.bearspendings.entity.Store;
 import com.alexm.bearspendings.service.StoreService;
 import com.google.common.collect.ImmutableSet;
@@ -50,7 +50,7 @@ class StoreControllerTest {
         when(storeService.findStore(1L))
                 .thenReturn(Store.builder().id(1L).name("Nr.1").build());
         when(storeService.topProducts(eq(1L), anyInt())).thenReturn(ImmutableSet.of(
-                TopProduct.builder().productId(23L).quantity(1.0).price(23.00).build()
+                TopProductCommand.builder().productId(23L).quantity(1.0).price(23.00).build()
         ));
         when(storeService.findStore(NO_STORE_ID)).thenThrow(new NoSuchElementException());
     }

@@ -1,6 +1,6 @@
 package com.alexm.bearspendings.service;
 
-import com.alexm.bearspendings.dto.TopProduct;
+import com.alexm.bearspendings.dto.TopProductCommand;
 import com.alexm.bearspendings.entity.Product;
 import com.alexm.bearspendings.entity.Store;
 
@@ -20,5 +20,5 @@ public interface StoreService {
      * @param size number of returned products
      * @return set of {@link Product}s
      */
-    Set<TopProduct> topProducts(Long storeId, int size);
+    Set<TopProductCommand> topProducts(Long storeId, int size);
 }

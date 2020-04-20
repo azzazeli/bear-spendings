@@ -1,6 +1,6 @@
 package com.alexm.bearspendings.service;
 
-import com.alexm.bearspendings.dto.UIProduct;
+import com.alexm.bearspendings.dto.ProductCommand;
 import com.alexm.bearspendings.entity.Product;
 import com.alexm.bearspendings.repository.ProductRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -30,17 +30,17 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public UIProduct findProduct(Long id) {
+    public ProductCommand findProduct(Long id) {
         log.debug("Finding product by id:{}", id);
         final Product product = repository.findById(id).orElseThrow(() -> new NoSuchElementException("No value present"));
-        return UIProduct.builder().id(product.getId()).name(product.getName()).build();
+        return ProductCommand.builder().id(product.getId()).name(product.getName()).build();
     }
 
     @Override
-    public List<UIProduct> findStartWith(String prefix) {
+    public List<ProductCommand> findStartWith(String prefix) {
         return repository.findByNameStartsWithIgnoreCase(prefix).stream()
                 //todo: extract this map
-                .map(product -> UIProduct.builder().id(product.getId()).name(product.getName()).build())
+                .map(product -> ProductCommand.builder().id(product.getId()).name(product.getName()).build())
                 .collect(Collectors.toList());
     }
 }
