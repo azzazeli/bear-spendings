@@ -28,21 +28,34 @@ public class ExcelBillImporter implements BillImporter {
             throw new ImportsException(String.format("Invalid source for bills import. Path %1$s does not exists", source.toString()));
         }
         try(Workbook workbook = new XSSFWorkbook(source.toFile())) {
-            Sheet sheet = workbook.getSheetAt(1);
-            //check if sheet exists
+            Sheet sheet = workbook.getSheetAt(0);
+            log.debug("Sheet contains {} rows.", sheet.getLastRowNum());
             for (Row row : sheet) {
-                StringBuilder sb = new StringBuilder(row.getRowNum());
-                sb.append(SPACE);
-                sb.append(SPACE);
-                for (Cell cell : row) {
-                    sb.append(SPACE);
-                    sb.append(cell);
-                }
-                log.debug(sb.toString());
+                processRow(row);
             }
         } catch (IOException |  InvalidFormatException e) {
-            throw new ImportsException("Failed to load XSSFWorkbook. " , e);
+            throw new ImportsException("Failed to load XSSFWorkbook." , e);
         }
+    }
 
+    private void processRow(Row row) {
+        if (0 == row.getRowNum()) {
+            // skip header
+            return;
+        }
+        logRowInDebug(row);
+    }
+
+    private void logRowInDebug(Row row) {
+        if (log.isDebugEnabled()) {
+            StringBuilder sb = new StringBuilder(row.getRowNum());
+            sb.append(SPACE);
+            sb.append(SPACE);
+            for (Cell cell : row) {
+                sb.append(SPACE);
+                sb.append(cell);
+            }
+            log.debug(sb.toString());
+        }
     }
 }

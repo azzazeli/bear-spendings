@@ -1,0 +1,9 @@
+logging:
+  level:
+    com:
+      alexm:
+        bearspendings: debug
+    org:
+      springframework: info
+      hibernate:
+        type: info #trace - to see sql bind values

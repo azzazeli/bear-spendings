@@ -18,13 +18,12 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 class ExcelBillImporterTest {
 
     ExcelBillImporter importer = new ExcelBillImporter();
-    private ImportsException exception;
 
     @Test
     void wrongPath() {
         final String wrongPath = "sss";
         Path source = Paths.get(wrongPath);
-        exception = assertThrows(ImportsException.class, () -> importer.imports(source));
+        ImportsException exception = assertThrows(ImportsException.class, () -> importer.imports(source));
         final String expected = "Invalid source for bills import. Path " + wrongPath + " does not exists";
         assertEquals(expected, exception.getMessage());
     }
