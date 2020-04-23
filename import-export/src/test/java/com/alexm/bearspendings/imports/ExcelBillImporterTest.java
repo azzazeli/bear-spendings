@@ -51,6 +51,12 @@ class ExcelBillImporterTest {
         verify(mockStoreService, times(22)).getOrInsert("Alimarket");
     }
 
-    //todo: test excel file with wrong date
+    @Test
+    void importsInvalidOrderDate() throws FileNotFoundException, ImportsException {
+        File file = ResourceUtils.getFile("classpath:import_invalid_date_format.xlsm");
+        importer.imports(file.toPath());
+        //just log the error
+    }
+
 
 }

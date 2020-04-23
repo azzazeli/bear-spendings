@@ -50,12 +50,10 @@ public class ExcelBillImporter implements BillImporter {
             }
         } catch (IOException |  InvalidFormatException e) {
             throw new ImportsException("Failed to load XSSFWorkbook." , e);
-        } catch (RowProcessingException e) {
-            log.error("Exception occurred during processing o row from excel file.", e);
         }
     }
 
-    private void processRow(Row row) throws RowProcessingException {
+    private void processRow(Row row) {
         log.debug("Processing row:" + row.getRowNum());
         if (0 == row.getRowNum()) {
             // skip header
@@ -63,10 +61,14 @@ public class ExcelBillImporter implements BillImporter {
             return;
         }
         logRowInDebug(row);
-        LocalDate orderDate = parseOrderDate(row.getCell(ORDER_DATE_CELL_INDEX));
-        log.debug("--- order date:" + orderDate.format(DateTimeFormatter.ISO_DATE));
-        Store store = parseStore(row.getCell(STORE_CELL_INDEX));
-        log.debug("--- store: " + store);
+        try {
+            LocalDate orderDate = parseOrderDate(row.getCell(ORDER_DATE_CELL_INDEX));
+            log.debug("--- order date:" + orderDate.format(DateTimeFormatter.ISO_DATE));
+            Store store = parseStore(row.getCell(STORE_CELL_INDEX));
+            log.debug("--- store: " + store);
+        } catch (RowProcessingException e) {
+            log.error("Exception occurred during processing o row:" + row.getRowNum()+ " from excel file.", e);
+        }
     }
 
     private Store parseStore(Cell cell) throws RowProcessingException {
