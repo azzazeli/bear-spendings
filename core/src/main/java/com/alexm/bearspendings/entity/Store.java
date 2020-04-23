@@ -9,7 +9,8 @@ import java.time.LocalDateTime;
  * @author AlexM
  */
 @Entity
-@Setter @Getter @ToString @NoArgsConstructor
+@Setter @Getter @NoArgsConstructor
+@ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true, of = {})
 public class Store extends BaseEntity {
     private String name;

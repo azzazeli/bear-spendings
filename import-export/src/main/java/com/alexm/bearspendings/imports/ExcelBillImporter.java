@@ -1,5 +1,6 @@
 package com.alexm.bearspendings.imports;
 
+import com.alexm.bearspendings.entity.Bill;
 import com.alexm.bearspendings.entity.Store;
 import com.alexm.bearspendings.service.StoreService;
 import lombok.extern.slf4j.Slf4j;
@@ -18,6 +19,8 @@ import java.nio.file.Path;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author AlexM
@@ -31,6 +34,8 @@ public class ExcelBillImporter implements BillImporter {
     private static final int STORE_CELL_INDEX = 14;
 
     private final StoreService storeService;
+
+    private Map<ImportBill, Bill> billsToImport = new HashMap<>();
 
     public ExcelBillImporter(StoreService storeService) {
         this.storeService = storeService;
@@ -78,11 +83,23 @@ public class ExcelBillImporter implements BillImporter {
             log.debug("--- order date:" + orderDate.format(DateTimeFormatter.ISO_DATE));
             Store store = parseStore(row.getCell(STORE_CELL_INDEX));
             log.debug("--- store: " + store);
+            final ImportBill importBill = new ImportBill(orderDate, store);
+            billsToImport.putIfAbsent(importBill, Bill.builder().build());
+            addBillItem(billsToImport.get(importBill), row);
+            saveBillsInBatch();
         } catch (RowProcessingException e) {
             log.error("Exception occurred during processing o row:" + row.getRowNum()+ " from excel file.", e);
             withSuccess = false;
         }
         return withSuccess;
+    }
+
+    private void saveBillsInBatch() {
+        //todo: implement me
+    }
+
+    private void addBillItem(Bill bill, Row row) {
+        //todo: implement me
     }
 
     private Store parseStore(Cell cell) throws RowProcessingException {

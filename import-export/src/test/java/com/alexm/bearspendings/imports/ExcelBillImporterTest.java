@@ -1,5 +1,6 @@
 package com.alexm.bearspendings.imports;
 
+import com.alexm.bearspendings.entity.Store;
 import com.alexm.bearspendings.service.StoreService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -12,11 +13,12 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 /**
  * @author AlexM
@@ -25,13 +27,18 @@ import static org.mockito.Mockito.verify;
 @ExtendWith(MockitoExtension.class)
 class ExcelBillImporterTest {
 
+    private static final String farmaciaFamiliei = "Farmacia Familiei";
+    private final String alimarket = "Alimarket";
     @Mock
     StoreService mockStoreService;
     ExcelBillImporter importer;
+    Map<String, Store> storesMap = new HashMap<>();
 
     @BeforeEach
     void setup() {
         importer = new ExcelBillImporter(mockStoreService);
+        storesMap.put(farmaciaFamiliei, Store.builder().id(100L).name(farmaciaFamiliei).build());
+        storesMap.put(alimarket, Store.builder().id(200L).name(alimarket).build());
     }
 
     @Test
@@ -45,10 +52,15 @@ class ExcelBillImporterTest {
 
     @Test
     void imports() throws FileNotFoundException, ImportsException {
+        when(mockStoreService.getOrInsert(anyString())).thenAnswer(invocation -> {
+            final Object name = invocation.getArgument(0);
+            return storesMap.get(name);
+        });
+
         File file = ResourceUtils.getFile("classpath:import_sample.xlsm");
         importer.imports(file.toPath());
-        verify(mockStoreService, times(10)).getOrInsert("Farmacia Familiei");
-        verify(mockStoreService, times(22)).getOrInsert("Alimarket");
+        verify(mockStoreService, times(10)).getOrInsert(farmaciaFamiliei);
+        verify(mockStoreService, times(22)).getOrInsert(alimarket);
     }
 
     @Test
