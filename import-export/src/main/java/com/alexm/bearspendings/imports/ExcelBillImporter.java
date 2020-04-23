@@ -1,6 +1,7 @@
 package com.alexm.bearspendings.imports;
 
 import com.alexm.bearspendings.entity.Store;
+import com.alexm.bearspendings.service.StoreService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Cell;
@@ -9,6 +10,7 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -26,7 +28,14 @@ import java.time.format.DateTimeParseException;
 public class ExcelBillImporter implements BillImporter {
     private static final String SPACE = " ";
     private static final int ORDER_DATE_CELL_INDEX = 1;
-    private static final int STORE_CELL_INDEX = 11;
+    private static final int STORE_CELL_INDEX = 14;
+
+    private final StoreService storeService;
+
+    public ExcelBillImporter(StoreService storeService) {
+        this.storeService = storeService;
+    }
+
 
     @Override
     public void imports(Path source) throws ImportsException {
@@ -60,8 +69,12 @@ public class ExcelBillImporter implements BillImporter {
         log.debug("--- store: " + store);
     }
 
-    private Store parseStore(Cell cell) {
-        return null;
+    private Store parseStore(Cell cell) throws RowProcessingException {
+        String storeName = cell.getStringCellValue();
+        if(StringUtils.isEmpty(storeName)) {
+            throw new RowProcessingException("No store name found in provided cell. column index:" + cell.getColumnIndex());
+        }
+        return storeService.getOrInsert(storeName);
     }
 
     private LocalDate parseOrderDate(Cell cell) throws RowProcessingException {

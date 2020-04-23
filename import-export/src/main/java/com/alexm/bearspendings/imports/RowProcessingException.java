@@ -8,4 +8,8 @@ public class RowProcessingException extends Exception {
     public RowProcessingException(Throwable cause) {
         super(cause);
     }
+
+    public RowProcessingException(String message) {
+        super(message);
+    }
 }

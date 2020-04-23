@@ -61,4 +61,9 @@ public class StoreServiceImpl implements StoreService {
                         .quantity(billItem.getQuantity())
                         .build()).collect(Collectors.toCollection(LinkedHashSet::new));
     }
+
+    @Override
+    public Store getOrInsert(String storeName) {
+        return null;
+    }
 }

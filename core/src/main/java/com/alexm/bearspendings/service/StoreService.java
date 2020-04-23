@@ -21,4 +21,7 @@ public interface StoreService {
      * @return set of {@link Product}s
      */
     Set<TopProductCommand> topProducts(Long storeId, int size);
+
+
+    Store getOrInsert(String storeName);
 }
