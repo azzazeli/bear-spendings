@@ -42,23 +42,35 @@ public class ExcelBillImporter implements BillImporter {
         if(!Files.exists(source)) {
             throw new ImportsException(String.format("Invalid source for bills import. Path %1$s does not exists", source.toString()));
         }
+        log.info("Starting bill import process");
+        boolean successProcessingRow = true;
         try(Workbook workbook = new XSSFWorkbook(source.toFile())) {
             Sheet sheet = workbook.getSheetAt(0);
             log.debug("Sheet contains {} rows.", sheet.getLastRowNum());
             for (Row row : sheet) {
-                processRow(row);
+                successProcessingRow = successProcessingRow && processRow(row);
             }
         } catch (IOException |  InvalidFormatException e) {
             throw new ImportsException("Failed to load XSSFWorkbook." , e);
         }
+        logFinishProcessingMessage(successProcessingRow);
     }
 
-    private void processRow(Row row) {
+    private void logFinishProcessingMessage(boolean successProcessingRow) {
+        if (successProcessingRow) {
+            log.info("Bill import process finished with success");
+        } else {
+            log.info("Bill import process finished with errors. See logs for details");
+        }
+    }
+
+    private boolean processRow(Row row) {
+        boolean withSuccess = true;
         log.debug("Processing row:" + row.getRowNum());
         if (0 == row.getRowNum()) {
             // skip header
             log.debug("Skip processing sheet header row.");
-            return;
+            return withSuccess;
         }
         logRowInDebug(row);
         try {
@@ -68,7 +80,9 @@ public class ExcelBillImporter implements BillImporter {
             log.debug("--- store: " + store);
         } catch (RowProcessingException e) {
             log.error("Exception occurred during processing o row:" + row.getRowNum()+ " from excel file.", e);
+            withSuccess = false;
         }
+        return withSuccess;
     }
 
     private Store parseStore(Cell cell) throws RowProcessingException {
