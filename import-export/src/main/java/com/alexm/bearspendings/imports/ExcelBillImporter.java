@@ -1,5 +1,6 @@
 package com.alexm.bearspendings.imports;
 
+import com.alexm.bearspendings.entity.Store;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Cell;
@@ -12,6 +13,9 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
 /**
  * @author AlexM
@@ -21,6 +25,8 @@ import java.nio.file.Path;
 @Component
 public class ExcelBillImporter implements BillImporter {
     private static final String SPACE = " ";
+    private static final int ORDER_DATE_CELL_INDEX = 1;
+    private static final int STORE_CELL_INDEX = 11;
 
     @Override
     public void imports(Path source) throws ImportsException {
@@ -35,15 +41,35 @@ public class ExcelBillImporter implements BillImporter {
             }
         } catch (IOException |  InvalidFormatException e) {
             throw new ImportsException("Failed to load XSSFWorkbook." , e);
+        } catch (RowProcessingException e) {
+            log.error("Exception occurred during processing o row from excel file.", e);
         }
     }
 
-    private void processRow(Row row) {
+    private void processRow(Row row) throws RowProcessingException {
+        log.debug("Processing row:" + row.getRowNum());
         if (0 == row.getRowNum()) {
             // skip header
+            log.debug("Skip processing sheet header row.");
             return;
         }
         logRowInDebug(row);
+        LocalDate orderDate = parseOrderDate(row.getCell(ORDER_DATE_CELL_INDEX));
+        log.debug("--- order date:" + orderDate.format(DateTimeFormatter.ISO_DATE));
+        Store store = parseStore(row.getCell(STORE_CELL_INDEX));
+        log.debug("--- store: " + store);
+    }
+
+    private Store parseStore(Cell cell) {
+        return null;
+    }
+
+    private LocalDate parseOrderDate(Cell cell) throws RowProcessingException {
+        try {
+            return LocalDate.parse(cell.getStringCellValue(), DateTimeFormatter.ofPattern("yy/M/d"));
+        } catch (DateTimeParseException e) {
+            throw new RowProcessingException(e);
+        }
     }
 
     private void logRowInDebug(Row row) {

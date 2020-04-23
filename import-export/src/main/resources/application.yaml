@@ -2,7 +2,7 @@ logging:
   level:
     com:
       alexm:
-        bearspendings: debug
+        bearspendings: info
     org:
       springframework: info
       hibernate:
