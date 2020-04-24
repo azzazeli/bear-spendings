@@ -68,6 +68,11 @@ public class BillServiceImpl implements BillService  {
     public Long allBillsCount() {
         return billRepository.count();
     }
+
+    @Override
+    public void saveAll(Iterable<Bill> bills) {
+        //todo: implement me
+    }
 }
 
 

@@ -8,6 +8,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter'
     implementation "org.apache.poi:poi:${project['apache.poi.version']}"
     implementation "org.apache.poi:poi-ooxml:${project['apache.poi.version']}"
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 }
 
 jar {

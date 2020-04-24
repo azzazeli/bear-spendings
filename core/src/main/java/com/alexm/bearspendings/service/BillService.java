@@ -14,4 +14,6 @@ public interface BillService {
     Bill addBill(BillCommand bill);
 
     Long allBillsCount();
+
+    void saveAll(Iterable<Bill> bills);
 }

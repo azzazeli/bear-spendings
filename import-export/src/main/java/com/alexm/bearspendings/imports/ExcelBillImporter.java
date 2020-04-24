@@ -2,6 +2,7 @@ package com.alexm.bearspendings.imports;
 
 import com.alexm.bearspendings.entity.Bill;
 import com.alexm.bearspendings.entity.Store;
+import com.alexm.bearspendings.service.BillService;
 import com.alexm.bearspendings.service.StoreService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
@@ -10,6 +11,7 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
@@ -19,6 +21,7 @@ import java.nio.file.Path;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -34,13 +37,21 @@ public class ExcelBillImporter implements BillImporter {
     private static final int STORE_CELL_INDEX = 14;
 
     private final StoreService storeService;
+    private final BillService billService;
 
-    private Map<ImportBill, Bill> billsToImport = new HashMap<>();
+    private final Map<ImportBill, Bill> billsToImport = new HashMap<>();
 
-    public ExcelBillImporter(StoreService storeService) {
+    public ExcelBillImporter(StoreService storeService, BillService billService) {
+        this.billService = billService;
         this.storeService = storeService;
     }
 
+    @Value("#{new Integer('${com.alexm.bearspendings.imports.billsbatchsize}')}")
+    private int billsBatchSize;
+
+    public void setBillsBatchSize(int billsBatchSize) {
+        this.billsBatchSize = billsBatchSize;
+    }
 
     @Override
     public void imports(Path source) throws ImportsException {
@@ -55,10 +66,15 @@ public class ExcelBillImporter implements BillImporter {
             for (Row row : sheet) {
                 successProcessingRow = successProcessingRow && processRow(row);
             }
+            saveLastBillsBatch();
         } catch (IOException |  InvalidFormatException e) {
             throw new ImportsException("Failed to load XSSFWorkbook." , e);
         }
         logFinishProcessingMessage(successProcessingRow);
+    }
+
+    private void saveLastBillsBatch() {
+        billService.saveAll(billsToImport.values());
     }
 
     private void logFinishProcessingMessage(boolean successProcessingRow) {
@@ -75,7 +91,7 @@ public class ExcelBillImporter implements BillImporter {
         if (0 == row.getRowNum()) {
             // skip header
             log.debug("Skip processing sheet header row.");
-            return withSuccess;
+            return true;
         }
         logRowInDebug(row);
         try {
@@ -84,9 +100,12 @@ public class ExcelBillImporter implements BillImporter {
             Store store = parseStore(row.getCell(STORE_CELL_INDEX));
             log.debug("--- store: " + store);
             final ImportBill importBill = new ImportBill(orderDate, store);
-            billsToImport.putIfAbsent(importBill, Bill.builder().build());
+            if (billsToImport.get(importBill) == null) {
+                saveBillsInBatch();
+                billsToImport.put(importBill, Bill.builder().store(store).build());
+            }
             addBillItem(billsToImport.get(importBill), row);
-            saveBillsInBatch();
+
         } catch (RowProcessingException e) {
             log.error("Exception occurred during processing o row:" + row.getRowNum()+ " from excel file.", e);
             withSuccess = false;
@@ -95,7 +114,10 @@ public class ExcelBillImporter implements BillImporter {
     }
 
     private void saveBillsInBatch() {
-        //todo: implement me
+        if(this.billsToImport.size() == billsBatchSize) {
+            billService.saveAll(new ArrayList<>(billsToImport.values()));
+            billsToImport.clear();
+        }
     }
 
     private void addBillItem(Bill bill, Row row) {

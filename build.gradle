@@ -27,6 +27,8 @@ configure(subprojects.findAll { it.name != "angular-ui" }) {
 		}
 		testRuntime "org.junit.jupiter:junit-jupiter-engine:${project['junit.version']}"
 //	testImplementation 'org.springframework.security:spring-security-test'
+
+		annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
 	}
 
 	test {

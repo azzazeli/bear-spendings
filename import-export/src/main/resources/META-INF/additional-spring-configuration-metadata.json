@@ -1,0 +1,8 @@
+{
+  "properties": [
+    {
+      "name": "com.alexm.bearspendings.imports.billsbatchsize",
+      "type": "java.lang.String",
+      "description": "Batch size of imported bills."
+  }
+] }

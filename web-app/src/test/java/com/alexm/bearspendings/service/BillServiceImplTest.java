@@ -78,4 +78,9 @@ class BillServiceImplTest {
         assertNotNull(bill.toString());
     }
 
+    @Test
+    void saveAll() {
+        //todo: implement me
+    }
+
 }

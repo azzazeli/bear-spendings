@@ -11,4 +11,4 @@ com:
   alexm:
     bearspendings:
       imports:
-        billsbatchsize: 10
+        billsbatchsize: 2
