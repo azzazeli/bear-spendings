@@ -68,4 +68,9 @@ class ProductServiceImplTest {
         //then
         Assertions.assertThat(productCommands).extracting(ProductCommand::getId).containsExactly(1L, 2L);
     }
+
+    @Test
+    void getOrInsert() {
+        //todo: implement me
+    }
 }

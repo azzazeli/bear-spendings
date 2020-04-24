@@ -11,6 +11,8 @@ import java.util.List;
 public interface ProductService {
     List<Product> products();
 
+    Product getOrInsert(String productName);
+
     ProductCommand findProduct(Long id);
 
     List<ProductCommand> findStartWith(String prefix);

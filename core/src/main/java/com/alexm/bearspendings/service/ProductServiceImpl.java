@@ -43,4 +43,10 @@ public class ProductServiceImpl implements ProductService {
                 .map(product -> ProductCommand.builder().id(product.getId()).name(product.getName()).build())
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public Product getOrInsert(String productName) {
+        //todo: implement me
+        throw new UnsupportedOperationException();
+    }
 }

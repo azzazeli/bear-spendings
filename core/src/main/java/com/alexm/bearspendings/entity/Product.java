@@ -15,7 +15,7 @@ import java.util.Set;
 @NoArgsConstructor
 @Getter
 @Setter
-@ToString()
+@ToString(callSuper = true, of = {"name", "comment"})
 @EqualsAndHashCode(callSuper=true, of = {"name"})
 public class Product extends BaseEntity {
     private String name;
