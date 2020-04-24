@@ -19,12 +19,18 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
+import static com.alexm.bearspendings.imports.ExcelBillImporter.DATE_PATTERN;
 import static com.alexm.bearspendings.imports.ExcelBillImporterTest.TEST_IMPORT_PRODUCTS.*;
+import static java.time.format.DateTimeFormatter.ofPattern;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -108,20 +114,21 @@ class ExcelBillImporterTest {
                     .map(testProduct -> Product.builder().id(testProduct.id).name(testProduct.productName).build())
                     .findFirst().orElseThrow();
         });
-
         when(mockStoreService.getOrInsert(anyString())).thenAnswer(invocation -> {
             final Object name = invocation.getArgument(0);
             return storesMap.get(name.toString());
         });
-
         File file = ResourceUtils.getFile("classpath:import_sample.xlsm");
 
         importer.imports(file.toPath());
+
         verify(mockStoreService, times(10)).getOrInsert(farmaciaFamiliei);
         verify(mockStoreService, times(22)).getOrInsert(alimarket);
-
         verifyProducts();
+        verifyBills();
+    }
 
+    private void verifyBills() {
         verify(mockBillService, times(2)).saveAll(anyIterable());
         verify(mockBillService, times(2)).saveAll(iterableBillsCaptor.capture());
         final List<Iterable<Bill>> savedList = iterableBillsCaptor.getAllValues();
@@ -130,7 +137,22 @@ class ExcelBillImporterTest {
         Iterable<Bill> firstBatch = savedList.get(0);
         Iterable<Bill> secondBatch = savedList.get(1);
         assertEquals(2 , firstBatch.spliterator().estimateSize());
+        final Iterator<Bill> iterator = firstBatch.iterator();
+        assertThat(iterator.next())
+                .hasFieldOrPropertyWithValue("orderDate", orderDate("20/4/10"))
+                .hasFieldOrPropertyWithValue("store.id", storesMap.get(farmaciaFamiliei).getId())
+//                .extracting("items").extracting("")isIn(new BillItem[] {BillItem.builder().build()})
+        ;
+
+        assertThat(iterator.next())
+                .hasFieldOrPropertyWithValue("orderDate", orderDate("20/4/10"))
+                .hasFieldOrPropertyWithValue("store.id", storesMap.get(alimarket).getId())
+        ;
         assertEquals(1 , secondBatch.spliterator().estimateSize());
+    }
+
+    private LocalDateTime orderDate(String dateValue) {
+        return LocalDate.parse(dateValue, ofPattern(DATE_PATTERN)).atStartOfDay();
     }
 
     private void verifyProducts() {

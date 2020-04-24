@@ -7,6 +7,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -29,7 +30,7 @@ public class Bill extends BaseEntity {
     @NotEmpty
 //    @Singular
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "bill")
-    private Set<BillItem> items;
+    private Set<BillItem> items = new HashSet<>();
     private Double total;
 
     @Builder
@@ -43,8 +44,12 @@ public class Bill extends BaseEntity {
     }
 
     public void setItems(Set<BillItem> items) {
-        this.items = items;
-        this.items.forEach(billItem -> billItem.setBill(this));
+        items.forEach(billItem -> billItem.setBill(this));
+        this.items.addAll(items);
+    }
+
+    public Set<BillItem> getItems() {
+        return Collections.unmodifiableSet(items);
     }
 
     @Override

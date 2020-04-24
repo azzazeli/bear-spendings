@@ -24,7 +24,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import static java.util.Objects.isNull;
@@ -45,7 +45,8 @@ public class ExcelBillImporter implements BillImporter {
     private final ProductService productService;
     private final BillService billService;
 
-    private final Map<ImportBill, Bill> billsToImport = new HashMap<>();
+    private final Map<ImportBill, Bill> billsToImport = new LinkedHashMap<>();
+    static final String DATE_PATTERN = "yy/M/d";
 
     public ExcelBillImporter(StoreService storeService, BillService billService, ProductService productService) {
         this.billService = billService;
@@ -109,7 +110,7 @@ public class ExcelBillImporter implements BillImporter {
             final ImportBill importBill = new ImportBill(orderDate, store);
             if (billsToImport.get(importBill) == null) {
                 saveBillsInBatch();
-                billsToImport.put(importBill, Bill.builder().store(store).build());
+                billsToImport.put(importBill, Bill.builder().store(store).orderDate(orderDate.atStartOfDay()).build());
             }
             addBillItem(billsToImport.get(importBill), row);
         } catch (RowProcessingException e) {
@@ -157,7 +158,7 @@ public class ExcelBillImporter implements BillImporter {
 
     private LocalDate parseOrderDate(Cell cell) throws RowProcessingException {
         try {
-            return LocalDate.parse(cell.getStringCellValue(), DateTimeFormatter.ofPattern("yy/M/d"));
+            return LocalDate.parse(cell.getStringCellValue(), DateTimeFormatter.ofPattern(DATE_PATTERN));
         } catch (DateTimeParseException e) {
             throw new RowProcessingException(e);
         }

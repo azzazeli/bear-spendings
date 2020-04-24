@@ -18,7 +18,7 @@ import static javax.persistence.CascadeType.ALL;
 @AllArgsConstructor
 @Builder
 @EqualsAndHashCode(callSuper = true, of = {})
-public class BillItem  extends BaseEntity {
+public class BillItem extends BaseEntity {
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, cascade = ALL)
     @JoinColumn(name = "product_id")
