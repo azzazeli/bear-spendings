@@ -41,9 +41,8 @@ import static org.mockito.Mockito.*;
  **/
 @ExtendWith(MockitoExtension.class)
 class ExcelBillImporterTest {
-
-    private static final String farmaciaFamiliei = "Farmacia Familiei";
-    private final String alimarket = "Alimarket";
+    static final String farmaciaFamiliei = "Farmacia Familiei";
+    static final String alimarket = "Alimarket";
     @Mock
     StoreService mockStoreService;
     @Mock
@@ -81,6 +80,9 @@ class ExcelBillImporterTest {
         public final Long id;
         public final String productName;
 
+        public Product product() {
+            return Product.builder().name(productName).id(id).build();
+        }
     }
 
     @Captor
