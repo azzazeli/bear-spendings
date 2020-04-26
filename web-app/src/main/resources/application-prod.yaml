@@ -5,5 +5,5 @@ spring:
     active: prod
   security:
     user:
-      name: ursu
-      password: hugobob
+      name: admin
+      password: manager
