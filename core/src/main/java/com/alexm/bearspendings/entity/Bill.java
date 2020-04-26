@@ -52,12 +52,17 @@ public class Bill extends BaseEntity {
         return Collections.unmodifiableSet(items);
     }
 
+    public void addItem(BillItem item) {
+        item.setBill(this);
+        this.items.add(item);
+    }
+
     @Override
     public String toString() {
         return "Bill{" +
                 "id=" + id +
                 ", orderDate=" + orderDate +
-                ", storeId=" + store.getId() +
+                ", storeId=" + (store != null ? store.getId() : null) +
                 ", createdDT=" + createdDT +
                 ", createdDT=" + modifiedDT +
                 '}';

@@ -12,4 +12,8 @@ public class RowProcessingException extends Exception {
     public RowProcessingException(String message) {
         super(message);
     }
+
+    public RowProcessingException(String message, Throwable cause) {
+        super(message, cause);
+    }
 }

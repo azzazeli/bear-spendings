@@ -1,6 +1,7 @@
 package com.alexm.bearspendings.imports;
 
 import com.alexm.bearspendings.entity.Bill;
+import com.alexm.bearspendings.entity.BillItem;
 import com.alexm.bearspendings.entity.Product;
 import com.alexm.bearspendings.entity.Store;
 import com.alexm.bearspendings.service.BillService;
@@ -37,9 +38,12 @@ import static java.util.Objects.isNull;
 @Component
 public class ExcelBillImporter implements BillImporter {
     private static final String SPACE = " ";
+    //todo: enum here
     private static final int ORDER_DATE_CELL_INDEX = 1;
     private static final int STORE_CELL_INDEX = 14;
     private static final int PRODUCT_CELL_INDEX = 5;
+    private static final int QUANTITY_CELL_INDEX = 10;
+    private static final int PRICE_CELL_INDEX = 11;
 
     private final StoreService storeService;
     private final ProductService productService;
@@ -94,6 +98,7 @@ public class ExcelBillImporter implements BillImporter {
     }
 
     private boolean processRow(Row row) {
+        //todo: extract to a class
         boolean withSuccess = true;
         log.debug("Processing row:" + row.getRowNum());
         if (0 == row.getRowNum()) {
@@ -103,9 +108,9 @@ public class ExcelBillImporter implements BillImporter {
         }
         logRowInDebug(row);
         try {
-            LocalDate orderDate = parseOrderDate(getRequiredCell(row, ORDER_DATE_CELL_INDEX));
+            LocalDate orderDate = parseOrderDate(nonEmptyCellValue(row, ORDER_DATE_CELL_INDEX));
             log.debug("--- order date:" + orderDate.format(DateTimeFormatter.ISO_DATE));
-            Store store = parseStore(getRequiredCell(row, STORE_CELL_INDEX));
+            Store store = parseStore(nonEmptyCellValue(row, STORE_CELL_INDEX));
             log.debug("--- store: " + store);
             final ImportBill importBill = new ImportBill(orderDate, store);
             if (billsToImport.get(importBill) == null) {
@@ -121,16 +126,16 @@ public class ExcelBillImporter implements BillImporter {
     }
 
     private void addBillItem(Bill bill, Row row) throws RowProcessingException {
-        Product product = parseProduct(getRequiredCell(row, PRODUCT_CELL_INDEX));
+        Product product = parseProduct(nonEmptyCellValue(row, PRODUCT_CELL_INDEX));
         log.debug("--- product:{}", product);
-    }
-
-    private Cell getRequiredCell(Row row, int index) throws RowProcessingException {
-        final Cell cell = row.getCell(index);
-        if(isNull(cell)) {
-            throw new RowProcessingException(String.format("Now cell with index %d found in row: %s", index, row.toString()));
-        }
-        return cell;
+        BillItem billItem = BillItem.builder().product(product).build();
+        final Double price = doubleCellValue(row, PRICE_CELL_INDEX);
+        log.debug("--- price:{}", product);
+        billItem.setPrice(price);
+        final Double quantity = doubleCellValue(row, QUANTITY_CELL_INDEX);
+        log.debug("--- quantity:{}", quantity);
+        billItem.setQuantity(quantity);
+        bill.addItem(billItem);
     }
 
     private void saveBillsInBatch() {
@@ -140,15 +145,16 @@ public class ExcelBillImporter implements BillImporter {
         }
     }
 
-    private Product parseProduct(Cell cell) throws RowProcessingException {
-        return productService.getOrInsert(nonEmptyCellValue(cell));
+    private Product parseProduct(String productName) {
+        return productService.getOrInsert(productName);
     }
 
-    private Store parseStore(Cell cell) throws RowProcessingException {
-        return storeService.getOrInsert(nonEmptyCellValue(cell));
+    private Store parseStore(String storeName) {
+        return storeService.getOrInsert(storeName);
     }
 
-    private String nonEmptyCellValue(Cell cell) throws RowProcessingException {
+    private String nonEmptyCellValue(Row row, int cellIndex) throws RowProcessingException {
+        Cell cell = nonNullCell(row, cellIndex);
         String value = cell.getStringCellValue();
         if(StringUtils.isEmpty(value)) {
             throw new RowProcessingException("No value name found in provided cell. column index:" + cell.getColumnIndex());
@@ -156,9 +162,27 @@ public class ExcelBillImporter implements BillImporter {
         return value;
     }
 
-    private LocalDate parseOrderDate(Cell cell) throws RowProcessingException {
+    private Cell nonNullCell(Row row, int cellIndex) throws RowProcessingException {
+        Cell cell = row.getCell(cellIndex);
+        if (isNull(cell)) {
+            throw new RowProcessingException(String.format("Now cell with index %d found in row: %s", cellIndex, row.toString()));
+        }
+        return cell;
+    }
+
+    private Double doubleCellValue(Row row, int cellIndex) throws RowProcessingException {
+        Cell cell = nonNullCell(row, cellIndex);
         try {
-            return LocalDate.parse(cell.getStringCellValue(), DateTimeFormatter.ofPattern(DATE_PATTERN));
+            return cell.getNumericCellValue();
+        } catch (Exception e) {
+            throw new RowProcessingException("Exception occurred during extracting double value from row:" + row +
+                    " cell index:" + cellIndex, e);
+        }
+    }
+
+    private LocalDate parseOrderDate(String dateValue) throws RowProcessingException {
+        try {
+            return LocalDate.parse(dateValue, DateTimeFormatter.ofPattern(DATE_PATTERN));
         } catch (DateTimeParseException e) {
             throw new RowProcessingException(e);
         }
