@@ -1,9 +1,10 @@
-package com.alexm.bearspendings.service;
+package com.alexm.bearspendings.service.impl;
 
 import com.alexm.bearspendings.dto.TopProductCommand;
 import com.alexm.bearspendings.entity.Store;
 import com.alexm.bearspendings.repository.BillItemRepository;
 import com.alexm.bearspendings.repository.StoreRepository;
+import com.alexm.bearspendings.service.StoreService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;

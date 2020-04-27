@@ -4,6 +4,7 @@ import com.alexm.bearspendings.dto.BillCommand;
 import com.alexm.bearspendings.dto.BillItemCommand;
 import com.alexm.bearspendings.entity.Bill;
 import com.alexm.bearspendings.repository.BillRepository;
+import com.alexm.bearspendings.service.impl.BillServiceImpl;
 import com.google.common.collect.ImmutableSet;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

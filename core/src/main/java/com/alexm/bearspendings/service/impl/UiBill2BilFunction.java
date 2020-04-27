@@ -1,4 +1,4 @@
-package com.alexm.bearspendings.service;
+package com.alexm.bearspendings.service.impl;
 
 import com.alexm.bearspendings.dto.BillCommand;
 import com.alexm.bearspendings.dto.BillItemCommand;

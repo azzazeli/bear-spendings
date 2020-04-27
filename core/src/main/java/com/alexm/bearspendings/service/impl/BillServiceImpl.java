@@ -1,10 +1,11 @@
-package com.alexm.bearspendings.service;
+package com.alexm.bearspendings.service.impl;
 
 import com.alexm.bearspendings.dto.BillCommand;
 import com.alexm.bearspendings.dto.BillItemCommand;
 import com.alexm.bearspendings.entity.Bill;
 import com.alexm.bearspendings.entity.BillItem;
 import com.alexm.bearspendings.repository.BillRepository;
+import com.alexm.bearspendings.service.BillService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -22,7 +23,7 @@ import java.util.stream.StreamSupport;
  */
 @Slf4j
 @Service
-public class BillServiceImpl implements BillService  {
+public class BillServiceImpl implements BillService {
     private final BillRepository billRepository;
     private final Function<BillCommand, Bill> uiBill2BilFunction;
 

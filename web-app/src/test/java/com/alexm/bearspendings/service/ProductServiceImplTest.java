@@ -3,6 +3,7 @@ package com.alexm.bearspendings.service;
 import com.alexm.bearspendings.dto.ProductCommand;
 import com.alexm.bearspendings.entity.Product;
 import com.alexm.bearspendings.repository.ProductRepository;
+import com.alexm.bearspendings.service.impl.ProductServiceImpl;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.BeforeEach;

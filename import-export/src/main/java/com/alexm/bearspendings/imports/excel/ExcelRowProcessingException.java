@@ -26,6 +26,10 @@ public class ExcelRowProcessingException extends Exception {
         this.cellIndex = cellIndex;
     }
 
+    public ExcelRowProcessingException(ERROR_CODE errorCode, Row row, CELL_COLUMN cellIndex ) {
+        this(errorCode, row, cellIndex, null);
+    }
+
     @Override
     public String getMessage() {
         switch (this.errorCode) {
@@ -42,7 +46,5 @@ public class ExcelRowProcessingException extends Exception {
         }
     }
 
-    public ExcelRowProcessingException(ERROR_CODE errorCode, Row row, CELL_COLUMN cellIndex ) {
-        this(errorCode, row, cellIndex, null);
-    }
+
 }
