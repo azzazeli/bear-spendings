@@ -1,12 +1,12 @@
-package com.alexm.bearspendings.service;
+package com.alexm.bearspendings.service.impl;
 
 import com.alexm.bearspendings.dto.BillCommand;
 import com.alexm.bearspendings.dto.BillItemCommand;
 import com.alexm.bearspendings.entity.Bill;
 import com.alexm.bearspendings.entity.BillItem;
-import com.alexm.bearspendings.service.impl.UiBill2BilFunction;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +15,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import javax.transaction.Transactional;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * @author AlexM
@@ -53,7 +54,7 @@ class UiBill2BilFunctionTest {
         BillCommand billCommand = BillCommand.builder().storeId(1L).total(total).items(items).build();
         Bill bill = uiBill2BilFunction.apply(billCommand);
         for (BillItem billItem : bill.getItems()) {
-            assertTrue(ImmutableList.of(lapte, piine).contains(billItem.getProduct().getName()));
+            Assertions.assertTrue(ImmutableList.of(lapte, piine).contains(billItem.getProduct().getName()));
         }
         assertEquals(total, bill.getTotal());
     }

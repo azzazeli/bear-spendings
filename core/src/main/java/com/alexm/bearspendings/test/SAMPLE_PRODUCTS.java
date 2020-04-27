@@ -8,6 +8,7 @@ import com.alexm.bearspendings.entity.Product;
  * Date: 4/12/20
  **/
 public enum SAMPLE_PRODUCTS {
+    //todo: move to test
     CARTOFI(1L, "Cartofi"),
     CARNE(2L, "Carne"),
     CHEFIR(3L, "Chefir");

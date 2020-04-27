@@ -1,8 +1,7 @@
-package com.alexm.bearspendings.service;
+package com.alexm.bearspendings.service.impl;
 
 import com.alexm.bearspendings.dto.TopProductCommand;
 import com.alexm.bearspendings.entity.Store;
-import com.alexm.bearspendings.service.impl.StoreServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
