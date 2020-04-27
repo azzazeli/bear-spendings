@@ -1,6 +1,6 @@
 package com.alexm.bearspendings.imports;
 
-import com.alexm.bearspendings.imports.ExcelRowProcessor.CELL_INDEX;
+import com.alexm.bearspendings.imports.ExcelRowProcessor.CELL_COLUMN;
 import org.apache.poi.ss.usermodel.Row;
 
 /**
@@ -9,7 +9,7 @@ import org.apache.poi.ss.usermodel.Row;
  **/
 public class RowProcessingException extends Exception {
     private transient Row row;
-    private CELL_INDEX cellIndex;
+    private CELL_COLUMN cellIndex;
     private ERROR_CODE errorCode;
 
     public enum ERROR_CODE {
@@ -19,7 +19,7 @@ public class RowProcessingException extends Exception {
         INVALID_DATE_VALUE
     }
 
-    public RowProcessingException(ERROR_CODE errorCode, Row row, CELL_INDEX cellIndex, Throwable cause ) {
+    public RowProcessingException(ERROR_CODE errorCode, Row row, CELL_COLUMN cellIndex, Throwable cause ) {
         super(cause);
         this.errorCode = errorCode;
         this.row = row;
@@ -30,14 +30,19 @@ public class RowProcessingException extends Exception {
     public String getMessage() {
         switch (this.errorCode) {
             case INVALID_DOUBLE_VALUE:
-                return "Exception occurred during extracting double value from row:" + row + " cell index:" + cellIndex;
+                return String.format("Exception occurred during extracting double value from cell index:%d row:%s", cellIndex.index, row);
             case INVALID_DATE_VALUE:
-                return "Exception occurred during parsing date in cell:" + cellIndex.index + " from row:" + row;
+                return String.format("Exception occurred during parsing date in cell index:%d from row:%s", cellIndex.index, row);
+            case EMPTY_CELL:
+                return String.format("No value name found in provided cell. column index:%d from row:%s", cellIndex.index, row);
+            case NULL_CELL:
+                return String.format("Null cell with index %d found in row: %s", cellIndex.index, row);
+            default:
+                return "Generic error";
         }
-        return "Generic message";
     }
 
-    public RowProcessingException(ERROR_CODE errorCode, Row row, CELL_INDEX cellIndex ) {
+    public RowProcessingException(ERROR_CODE errorCode, Row row, CELL_COLUMN cellIndex ) {
         this(errorCode, row, cellIndex, null);
     }
 

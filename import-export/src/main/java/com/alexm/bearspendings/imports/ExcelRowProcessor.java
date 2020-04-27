@@ -15,9 +15,8 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
-import static com.alexm.bearspendings.imports.ExcelRowProcessor.CELL_INDEX.*;
-import static com.alexm.bearspendings.imports.RowProcessingException.ERROR_CODE.INVALID_DATE_VALUE;
-import static com.alexm.bearspendings.imports.RowProcessingException.ERROR_CODE.INVALID_DOUBLE_VALUE;
+import static com.alexm.bearspendings.imports.ExcelRowProcessor.CELL_COLUMN.*;
+import static com.alexm.bearspendings.imports.RowProcessingException.ERROR_CODE.*;
 import static java.util.Objects.isNull;
 
 /**
@@ -33,7 +32,8 @@ public class ExcelRowProcessor {
     private final StoreService storeService;
     private final ProductService productService;
 
-    enum CELL_INDEX {
+    //todo: rename to cell column
+    enum CELL_COLUMN {
         ORDER_DATE_CELL(1),
         STORE_CELL(14),
         PRODUCT_CELL(5),
@@ -42,7 +42,7 @@ public class ExcelRowProcessor {
 
         int index;
 
-        CELL_INDEX(int index) {
+        CELL_COLUMN(int index) {
             this.index = index;
         }
     }
@@ -68,13 +68,13 @@ public class ExcelRowProcessor {
     public ImportBill processBill(Row row) throws RowProcessingException {
         LocalDate orderDate = parseOrderDate(row);
         log.debug("--- order date:" + orderDate.format(DateTimeFormatter.ISO_DATE));
-        Store store = parseStore(nonEmptyCellValue(row, STORE_CELL.index));
+        Store store = parseStore(nonEmptyCellValue(row, STORE_CELL));
         log.debug("--- store: " + store);
         return new ImportBill(orderDate, store);
     }
 
     public BillItem processBillItem(Row row) throws RowProcessingException {
-        Product product = parseProduct(nonEmptyCellValue(row, PRODUCT_CELL.index));
+        Product product = parseProduct(nonEmptyCellValue(row, PRODUCT_CELL));
         log.debug("--- product:{}", product);
         BillItem billItem = BillItem.builder().product(product).build();
         final Double price = doubleCellValue(row, PRICE_CELL);
@@ -95,7 +95,7 @@ public class ExcelRowProcessor {
     }
 
     private LocalDate parseOrderDate(Row row) throws RowProcessingException {
-        String dateValue = nonEmptyCellValue(row, ORDER_DATE_CELL.index);
+        String dateValue = nonEmptyCellValue(row, ORDER_DATE_CELL);
         try {
             return LocalDate.parse(dateValue, DateTimeFormatter.ofPattern(DATE_PATTERN));
         } catch (DateTimeParseException e) {
@@ -103,30 +103,28 @@ public class ExcelRowProcessor {
         }
     }
 
-    private String nonEmptyCellValue(Row row, int cellIndex) throws RowProcessingException {
-        Cell cell = nonNullCell(row, cellIndex);
+    private String nonEmptyCellValue(Row row, CELL_COLUMN cellColumn) throws RowProcessingException {
+        Cell cell = nonNullCell(row, cellColumn);
         String value = cell.getStringCellValue();
         if(StringUtils.isEmpty(value)) {
-            throw new RowProcessingException("No value name found in provided cell. column index:" + cell.getColumnIndex());
+            throw new RowProcessingException(EMPTY_CELL, row, cellColumn);
         }
         return value;
     }
 
-    private Double doubleCellValue(Row row, CELL_INDEX cellIndex) throws RowProcessingException {
-        Cell cell = nonNullCell(row, cellIndex.index);
+    private Double doubleCellValue(Row row, CELL_COLUMN cellColumn) throws RowProcessingException {
+        Cell cell = nonNullCell(row, cellColumn);
         try {
             return cell.getNumericCellValue();
         } catch (Exception e) {
-            throw new RowProcessingException(INVALID_DOUBLE_VALUE, row, cellIndex, e);
-//            throw new RowProcessingException("Exception occurred during extracting double value from row:" + row +
-//                    " cell index:" + cellIndex, e);
+            throw new RowProcessingException(INVALID_DOUBLE_VALUE, row, cellColumn, e);
         }
     }
 
-    private Cell nonNullCell(Row row, int cellIndex) throws RowProcessingException {
-        Cell cell = row.getCell(cellIndex);
+    private Cell nonNullCell(Row row, CELL_COLUMN cellColumn) throws RowProcessingException {
+        Cell cell = row.getCell(cellColumn.index);
         if (isNull(cell)) {
-            throw new RowProcessingException(String.format("Now cell with index %d found in row: %s", cellIndex, row.toString()));
+            throw new RowProcessingException(NULL_CELL, row, cellColumn);
         }
         return cell;
     }
