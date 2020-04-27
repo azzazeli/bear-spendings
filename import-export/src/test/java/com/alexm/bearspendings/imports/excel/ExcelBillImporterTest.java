@@ -1,8 +1,10 @@
-package com.alexm.bearspendings.imports;
+package com.alexm.bearspendings.imports.excel;
 
 import com.alexm.bearspendings.entity.Bill;
 import com.alexm.bearspendings.entity.Product;
 import com.alexm.bearspendings.entity.Store;
+import com.alexm.bearspendings.imports.ImportsException;
+import com.alexm.bearspendings.imports.TestImportProducts;
 import com.alexm.bearspendings.service.BillService;
 import com.alexm.bearspendings.service.ProductService;
 import com.alexm.bearspendings.service.StoreService;
@@ -28,8 +30,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
-import static com.alexm.bearspendings.imports.ExcelBillImporter.DATE_PATTERN;
-import static com.alexm.bearspendings.imports.ExcelBillImporterTest.TEST_IMPORT_PRODUCTS.*;
+import static com.alexm.bearspendings.imports.TestImportProducts.*;
+import static com.alexm.bearspendings.imports.excel.ExcelRowProcessor.DATE_PATTERN;
 import static java.time.format.DateTimeFormatter.ofPattern;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -50,41 +52,6 @@ class ExcelBillImporterTest {
     @Mock
     ProductService mockProductService;
 
-    enum TEST_IMPORT_PRODUCTS {
-        Medicamente(1000L, "Medicamente"),
-        Calmante(1001L, "Calmante"),
-        Misc(1002L, "Misc"),
-        Pachet(1003L, "Pachet"),
-        Vitamine(1004L, "Vitamine"),
-        AppaMorshinska(1005L, "Appa Morshinska, 6L"),
-        Ridiche(1006L, "Ridiche"),
-        Lamii(1007L, "Lamii"),
-        Banane(1008L, "Banane"),
-        Smintina20(1009L, "Smintina 20%"),
-        ArahideFiesta(1010L, "Arahide Fiesta, cu sare, 130g"),
-        Chefir(1011L, "Chefir"),
-        Lapte05(1012L, "Lapte, 0.5l"),
-        VarzaNoua(1013L, "Varza noua"),
-        Avocado(1014L, "Avocado"),
-        Brinzica(1015L, "Brinzica"),
-        Bere(1016L, "Bere"),
-        Drojdie(1017L, "Drojdie uscata"),
-        Grapefruit(1018L, "Grapefruit"),
-        Ceapa(1019L, "Ceapa"),
-        PiineFranzela(1020L, "Piine, franzela capitala");
-
-        TEST_IMPORT_PRODUCTS(Long id, String name) {
-            this.id = id;
-            this.productName = name;
-        }
-        public final Long id;
-        public final String productName;
-
-        public Product product() {
-            return Product.builder().name(productName).id(id).build();
-        }
-    }
-
     @Captor
     ArgumentCaptor<Iterable<Bill>> iterableBillsCaptor;
 
@@ -93,7 +60,8 @@ class ExcelBillImporterTest {
 
     @BeforeEach
     void setup() {
-        importer = new ExcelBillImporter(mockStoreService, mockBillService, mockProductService);
+        ExcelRowProcessor rowProcessor = new ExcelRowProcessor(mockStoreService, mockProductService);
+        importer = new ExcelBillImporter(mockBillService, rowProcessor);
         importer.setBillsBatchSize(2);
         storesMap.put(farmaciaFamiliei, Store.builder().id(100L).name(farmaciaFamiliei).build());
         storesMap.put(alimarket, Store.builder().id(200L).name(alimarket).build());
@@ -112,7 +80,7 @@ class ExcelBillImporterTest {
     void imports() throws FileNotFoundException, ImportsException {
         when(mockProductService.getOrInsert(anyString())).thenAnswer(invocation -> {
             final Object name = invocation.getArgument(0);
-            return Stream.of(TEST_IMPORT_PRODUCTS.values())
+            return Stream.of(TestImportProducts.values())
                     .filter(testProduct -> testProduct.productName.equals(name.toString()))
                     .map(testProduct -> Product.builder().id(testProduct.id).name(testProduct.productName).build())
                     .findFirst().orElseThrow();

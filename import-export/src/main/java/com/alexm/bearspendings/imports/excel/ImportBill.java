@@ -1,4 +1,4 @@
-package com.alexm.bearspendings.imports;
+package com.alexm.bearspendings.imports.excel;
 
 import com.alexm.bearspendings.entity.Store;
 import lombok.Value;
