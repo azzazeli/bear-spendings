@@ -16,6 +16,8 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
 import static com.alexm.bearspendings.imports.ExcelRowProcessor.CELL_INDEX.*;
+import static com.alexm.bearspendings.imports.RowProcessingException.ERROR_CODE.INVALID_DATE_VALUE;
+import static com.alexm.bearspendings.imports.RowProcessingException.ERROR_CODE.INVALID_DOUBLE_VALUE;
 import static java.util.Objects.isNull;
 
 /**
@@ -64,7 +66,7 @@ public class ExcelRowProcessor {
     }
 
     public ImportBill processBill(Row row) throws RowProcessingException {
-        LocalDate orderDate = parseOrderDate(nonEmptyCellValue(row, ORDER_DATE_CELL.index));
+        LocalDate orderDate = parseOrderDate(row);
         log.debug("--- order date:" + orderDate.format(DateTimeFormatter.ISO_DATE));
         Store store = parseStore(nonEmptyCellValue(row, STORE_CELL.index));
         log.debug("--- store: " + store);
@@ -75,10 +77,10 @@ public class ExcelRowProcessor {
         Product product = parseProduct(nonEmptyCellValue(row, PRODUCT_CELL.index));
         log.debug("--- product:{}", product);
         BillItem billItem = BillItem.builder().product(product).build();
-        final Double price = doubleCellValue(row, PRICE_CELL.index);
+        final Double price = doubleCellValue(row, PRICE_CELL);
         log.debug("--- price:{}", product);
         billItem.setPrice(price);
-        final Double quantity = doubleCellValue(row, QUANTITY_CELL.index);
+        final Double quantity = doubleCellValue(row, QUANTITY_CELL);
         log.debug("--- quantity:{}", quantity);
         billItem.setQuantity(quantity);
         return billItem;
@@ -92,11 +94,12 @@ public class ExcelRowProcessor {
         return storeService.getOrInsert(storeName);
     }
 
-    private LocalDate parseOrderDate(String dateValue) throws RowProcessingException {
+    private LocalDate parseOrderDate(Row row) throws RowProcessingException {
+        String dateValue = nonEmptyCellValue(row, ORDER_DATE_CELL.index);
         try {
             return LocalDate.parse(dateValue, DateTimeFormatter.ofPattern(DATE_PATTERN));
         } catch (DateTimeParseException e) {
-            throw new RowProcessingException(e);
+            throw new RowProcessingException(INVALID_DATE_VALUE, row, ORDER_DATE_CELL, e);
         }
     }
 
@@ -109,13 +112,14 @@ public class ExcelRowProcessor {
         return value;
     }
 
-    private Double doubleCellValue(Row row, int cellIndex) throws RowProcessingException {
-        Cell cell = nonNullCell(row, cellIndex);
+    private Double doubleCellValue(Row row, CELL_INDEX cellIndex) throws RowProcessingException {
+        Cell cell = nonNullCell(row, cellIndex.index);
         try {
             return cell.getNumericCellValue();
         } catch (Exception e) {
-            throw new RowProcessingException("Exception occurred during extracting double value from row:" + row +
-                    " cell index:" + cellIndex, e);
+            throw new RowProcessingException(INVALID_DOUBLE_VALUE, row, cellIndex, e);
+//            throw new RowProcessingException("Exception occurred during extracting double value from row:" + row +
+//                    " cell index:" + cellIndex, e);
         }
     }
 
