@@ -28,9 +28,6 @@ public class ExcelRowProcessingException extends Exception {
 
     @Override
     public String getMessage() {
-        if (this.errorCode == null) {
-            return "OK";
-        }
         switch (this.errorCode) {
             case INVALID_DOUBLE_VALUE:
                 return String.format("Exception occurred during extracting double value from cell index:%d row:%s", cellIndex.index, row);
