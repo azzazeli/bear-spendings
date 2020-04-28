@@ -14,8 +14,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.transaction.Transactional;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.tuple;
@@ -34,8 +36,7 @@ class BillServiceImplTest {
     @Autowired
     private ProductRepository productRepository;
 
-    private LocalDateTime orderDate = LocalDateTime.of(2019, 2, 12, 12, 33);
-
+    private final LocalDateTime orderDate = LocalDateTime.of(2019, 2, 12, 12, 33);
 
     @Test
     void allBills() {
@@ -106,6 +107,16 @@ class BillServiceImplTest {
                 )
                 .orderDate(LocalDateTime.now())
                 .build();
+    }
+
+    @Test
+    void findById() {
+        final Optional<Bill> byId = billService.findById(1L);
+        assertTrue(byId.isPresent());
+        assertThat(byId.orElseThrow())
+                .hasFieldOrPropertyWithValue("orderDate", LocalDate.of(2019, 4, 18).atStartOfDay())
+                .hasFieldOrPropertyWithValue("store.id", 1L)
+                .hasFieldOrPropertyWithValue("total", 21.0);
     }
 
 }

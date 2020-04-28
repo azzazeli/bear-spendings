@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -73,6 +74,11 @@ public class BillServiceImpl implements BillService {
     @Override
     public Iterable<Bill> saveAll(Iterable<Bill> bills) {
         return billRepository.saveAll(bills);
+    }
+
+    @Override
+    public Optional<Bill> findById(Long id) {
+        return billRepository.findById(id);
     }
 }
 

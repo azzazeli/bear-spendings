@@ -29,7 +29,7 @@ public class Bill extends BaseEntity {
     @Setter(AccessLevel.NONE)
     @NotEmpty
 //    @Singular
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "bill")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "bill", fetch = FetchType.EAGER)
     private Set<BillItem> items = new HashSet<>();
     private Double total;
 

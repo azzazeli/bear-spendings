@@ -42,9 +42,9 @@ import static org.mockito.Mockito.*;
  * Date: 4/22/20
  **/
 @ExtendWith(MockitoExtension.class)
-class ExcelBillImporterTest {
-    static final String farmaciaFamiliei = "Farmacia Familiei";
-    static final String alimarket = "Alimarket";
+public class ExcelBillImporterTest {
+    public static final String farmaciaFamiliei = "Farmacia Familiei";
+    public static final String alimarket = "Alimarket";
     @Mock
     StoreService mockStoreService;
     @Mock
