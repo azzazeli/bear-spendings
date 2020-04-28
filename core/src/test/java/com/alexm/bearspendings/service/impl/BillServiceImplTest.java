@@ -3,7 +3,10 @@ package com.alexm.bearspendings.service.impl;
 import com.alexm.bearspendings.dto.BillCommand;
 import com.alexm.bearspendings.dto.BillItemCommand;
 import com.alexm.bearspendings.entity.Bill;
+import com.alexm.bearspendings.entity.BillItem;
+import com.alexm.bearspendings.entity.Product;
 import com.alexm.bearspendings.repository.BillRepository;
+import com.alexm.bearspendings.repository.ProductRepository;
 import com.google.common.collect.ImmutableSet;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -28,6 +31,8 @@ class BillServiceImplTest {
     private BillRepository billRepository;
     @Autowired
     private BillServiceImpl billService;
+    @Autowired
+    private ProductRepository productRepository;
 
     private LocalDateTime orderDate = LocalDateTime.of(2019, 2, 12, 12, 33);
 
@@ -80,7 +85,27 @@ class BillServiceImplTest {
 
     @Test
     void saveAll() {
-        //todo: implement me
+        final long initialCount = billRepository.count();
+        final List<Bill> bills = List.of(billToSave(), billToSave(), billToSave());
+        final Iterable<Bill> saved = billService.saveAll(bills);
+        assertEquals(initialCount + bills.size(), billRepository.count());
+        assertThat(saved).extracting("id").doesNotContainNull();
+    }
+
+    private Bill billToSave() {
+        final Bill previousBill = billRepository.findById(1L).orElseThrow();
+        final Product sampleProduct = productRepository.findAll().get(0);
+        return Bill.builder()
+                .store(previousBill.getStore())
+                .items(List.of(
+                        BillItem.builder()
+                                .price(12.0)
+                                .quantity(2.0)
+                                .product(sampleProduct)
+                                .build())
+                )
+                .orderDate(LocalDateTime.now())
+                .build();
     }
 
 }

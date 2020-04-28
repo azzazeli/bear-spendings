@@ -65,6 +65,7 @@ public class StoreServiceImpl implements StoreService {
 
     @Override
     public Store getOrInsert(String storeName) {
-        return null;
+        return storeRepository.findByName(storeName)
+                .orElseGet(() -> storeRepository.save(Store.builder().name(storeName).build()));
     }
 }

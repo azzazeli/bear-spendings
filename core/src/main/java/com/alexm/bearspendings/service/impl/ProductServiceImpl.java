@@ -47,7 +47,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Product getOrInsert(String productName) {
-        //todo: implement me
-        throw new UnsupportedOperationException();
+       return this.repository.findByName(productName)
+               .orElseGet(() -> repository.save(Product.builder().name(productName).build()));
     }
 }

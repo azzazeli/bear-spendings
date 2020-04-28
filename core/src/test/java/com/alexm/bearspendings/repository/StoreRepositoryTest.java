@@ -6,7 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @author AlexM
@@ -26,5 +28,13 @@ public class StoreRepositoryTest {
         assertNotNull(savedSTore.getId());
         assertNotNull(savedSTore.getCreatedDT());
         assertNotNull(savedSTore.getModifiedDT());
+    }
+
+    @Test
+    void findByName() {
+        final Optional<Store> byName = storeRepository.findByName("Nr.1");
+        assertNotNull(byName.orElseThrow());
+        assertEquals(1L, byName.orElseThrow().getId().longValue());
+        assertFalse(storeRepository.findByName("Nr.2").isPresent());
     }
 }

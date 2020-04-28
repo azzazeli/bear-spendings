@@ -8,7 +8,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 
-import static javax.persistence.CascadeType.ALL;
+import static javax.persistence.CascadeType.MERGE;
 
 /**
  * @author AlexM
@@ -20,7 +20,7 @@ import static javax.persistence.CascadeType.ALL;
 @EqualsAndHashCode(callSuper = true, of = {"product", "quantity", "price"})
 public class BillItem extends BaseEntity {
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, cascade = ALL)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = MERGE)
     @JoinColumn(name = "product_id")
     private Product product;
     @NotNull

@@ -20,6 +20,7 @@ import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
@@ -71,6 +72,13 @@ class ProductServiceImplTest {
 
     @Test
     void getOrInsert() {
-        //todo: implement me
+        String avocadoName = "Avocado";
+        when(productRepository.findByName(avocadoName)).thenReturn(Optional.empty());
+        final Product avocado = Product.builder().id(1244L).name(avocadoName).build();
+        when(productRepository.save(any(Product.class))).thenReturn(avocado);
+        final Product saved = productService.getOrInsert(avocadoName);
+        when(productRepository.findByName(avocadoName)).thenReturn(Optional.of(avocado));
+        final Product second = productService.getOrInsert(avocadoName);
+        assertEquals(saved.getId(), second.getId());
     }
 }

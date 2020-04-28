@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import javax.transaction.Transactional;
 import java.util.NoSuchElementException;
 import java.util.Set;
 
@@ -27,9 +28,7 @@ class StoreServiceImplTest {
 
     @BeforeEach
     void setup() {
-//        storeService = new StoreServiceImpl();
     }
-
 
     @DisplayName("all stores test")
     @Test
@@ -84,8 +83,14 @@ class StoreServiceImplTest {
         );
     }
 
+    @Transactional
     @Test
     void getOrInsert() {
-        //todo: implement me
+        String pegas = "Pegas";
+        final Store saved = storeService.getOrInsert(pegas);
+        final Store second = storeService.getOrInsert(pegas);
+        final Store third = storeService.getOrInsert(pegas);
+        assertEquals(saved.getId(), second.getId());
+        assertEquals(saved.getId(), third.getId());
     }
 }

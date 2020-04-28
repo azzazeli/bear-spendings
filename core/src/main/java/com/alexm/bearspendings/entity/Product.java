@@ -3,10 +3,7 @@ package com.alexm.bearspendings.entity;
 import lombok.*;
 
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.OneToMany;
 import java.time.LocalDateTime;
-import java.util.Set;
 
 /**
  * @author AlexM
@@ -21,8 +18,6 @@ public class Product extends BaseEntity {
     private String name;
     private String comment;
 
-    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
-    private Set<BillItem> billItems;
     //todo: list of optional product properties
 
     @Builder

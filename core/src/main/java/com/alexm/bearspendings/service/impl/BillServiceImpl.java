@@ -71,8 +71,8 @@ public class BillServiceImpl implements BillService {
     }
 
     @Override
-    public void saveAll(Iterable<Bill> bills) {
-        //todo: implement me
+    public Iterable<Bill> saveAll(Iterable<Bill> bills) {
+        return billRepository.saveAll(bills);
     }
 }
 
