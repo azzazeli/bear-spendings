@@ -60,7 +60,7 @@ class ExcelRowProcessorTest {
         row = sheet.getRow(1);
     }
 
-        @Test
+    @Test
     void processBill() throws Exception {
         long storeId = 1200L;
         when(mockStoreService.getOrInsert(farmaciaFamiliei)).thenReturn(

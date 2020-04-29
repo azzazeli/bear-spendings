@@ -11,6 +11,32 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 }
 
+sourceSets {
+    integrationTest {
+        java.srcDir "$projectDir/src/integration/java"
+        compileClasspath += sourceSets.main.output + sourceSets.test.output
+        runtimeClasspath += sourceSets.main.output + sourceSets.test.output
+    }
+}
+
+configurations {
+    integrationTestCompile.extendsFrom testCompile
+    integrationTestImplementation.extendsFrom testImplementation
+    integrationTestRuntime.extendsFrom testRuntime
+}
+
+task integrationTest(type: Test) {
+    description = 'Runs integration tests.'
+    group = 'verification'
+
+    testClassesDirs = sourceSets.integrationTest.output.classesDirs
+    classpath = sourceSets.integrationTest.runtimeClasspath
+    useJUnitPlatform()
+    shouldRunAfter test
+}
+
+check.dependsOn integrationTest
+
 jar {
     baseName 'bs-import-export'
 }
