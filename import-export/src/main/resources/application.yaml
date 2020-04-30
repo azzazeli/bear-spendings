@@ -12,3 +12,4 @@ com:
     bearspendings:
       imports:
         billsbatchsize: 10
+        importpath: 'build/import'

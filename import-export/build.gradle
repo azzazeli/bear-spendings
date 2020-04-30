@@ -18,12 +18,16 @@ sourceSets {
         runtimeClasspath += sourceSets.main.output + sourceSets.test.output
     }
 }
-
 configurations {
     integrationTestCompile.extendsFrom testCompile
     integrationTestImplementation.extendsFrom testImplementation
     integrationTestRuntime.extendsFrom testRuntime
+    dependencies {
+        integrationTestCompileOnly 'org.projectlombok:lombok'
+        integrationTestAnnotationProcessor 'org.projectlombok:lombok'
+    }
 }
+
 
 task integrationTest(type: Test) {
     description = 'Runs integration tests.'
@@ -36,7 +40,9 @@ task integrationTest(type: Test) {
 }
 
 check.dependsOn integrationTest
+compileJava.dependsOn(processResources)
 
 jar {
     baseName 'bs-import-export'
 }
+

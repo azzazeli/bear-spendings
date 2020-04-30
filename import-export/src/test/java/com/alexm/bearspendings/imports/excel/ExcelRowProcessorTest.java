@@ -5,6 +5,7 @@ import com.alexm.bearspendings.entity.Store;
 import com.alexm.bearspendings.imports.excel.ExcelRowProcessor.CELL_COLUMN;
 import com.alexm.bearspendings.service.ProductService;
 import com.alexm.bearspendings.service.StoreService;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -37,6 +38,7 @@ import static org.mockito.Mockito.when;
  * @author AlexM
  * Date: 4/26/20
  **/
+@Slf4j
 @ExtendWith(MockitoExtension.class)
 class ExcelRowProcessorTest {
     @Mock
@@ -62,6 +64,7 @@ class ExcelRowProcessorTest {
 
     @Test
     void processBill() throws Exception {
+        log.info("test");
         long storeId = 1200L;
         when(mockStoreService.getOrInsert(farmaciaFamiliei)).thenReturn(
                 Store.builder().id(storeId).name(farmaciaFamiliei).build()
