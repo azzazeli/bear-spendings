@@ -33,16 +33,16 @@ public class Bill extends BaseEntity {
     private Set<BillItem> items = new HashSet<>();
     //todo: apply
 //    @Formula("(select min(o.creation_date) from Orders o where o.customer_id = id)")
-    private Double total;
+    private Double total = 0.0;
 
     @Builder
     public Bill(Long id, @NotNull LocalDateTime orderDate, @NotNull Store store,
-         @NotEmpty Set<BillItem> items, @NotNull Double total) {
+         @NotEmpty Set<BillItem> items, Double total) {
         this.id = id;
         this.orderDate = orderDate;
         this.store = store;
         this.setItems(items);
-        this.total = total;
+        this.total = (total == null ) ? 0.0 : total;
     }
 
     public void setItems(Set<BillItem> items) {
