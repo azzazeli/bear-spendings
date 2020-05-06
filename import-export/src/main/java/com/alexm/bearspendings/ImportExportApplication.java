@@ -1,8 +1,9 @@
 package com.alexm.bearspendings;
 
+import com.alexm.bearspendings.imports.BillImporter;
+import com.alexm.bearspendings.imports.ImportsException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -17,7 +18,7 @@ import java.nio.file.*;
  **/
 @Slf4j
 @SpringBootApplication
-public class ImportExportApplication implements CommandLineRunner {
+public class ImportExportApplication {
 
     @Value("${com.alexm.bearspendings.imports.importpath}")
     private String importPath;
@@ -28,11 +29,6 @@ public class ImportExportApplication implements CommandLineRunner {
         final Runnable watchFile = run.getBean("watchFile", Runnable.class);
         watchFile.run();
         log.info("Application started.");
-    }
-
-    @Override
-    public void run(String... args) throws Exception {
-        // app here
     }
 
     @Bean
@@ -52,20 +48,48 @@ public class ImportExportApplication implements CommandLineRunner {
     }
 
     @Bean
-    Runnable watchFile(WatchService watchService) {
+    Runnable watchFile(WatchService watchService, BillImporter importer, Path importPath) {
         return () -> {
-            try {
+            try (watchService) {
                 WatchKey key;
+                log.info("Waiting for files in path:{}",importPath.toAbsolutePath());
                 while ((key = watchService.take()) != null) {
                     for (WatchEvent<?> event : key.pollEvents()) {
-                        System.out.println("Event kind:" + event.kind() + ". File affected: " + event.context() + ".");
+                        log.info("Event kind:{}. File affected:{} ",event.kind(), event.context());
+                        processInputFile(importer, event);
                     }
                     key.reset();
                 }
             } catch (InterruptedException e) {
                 log.warn("Interrupted!", e);
                 Thread.currentThread().interrupt();
+            } catch (IOException e) {
+                log.warn("Exception on access watch service", e);
+            } catch (ClosedWatchServiceException e) {
+                log.info("Closed Watch service exception.");
             }
         };
     }
+
+    private void processInputFile(BillImporter importer, WatchEvent<?> event)  {
+        try {
+            importer.imports(importPath().resolve(event.context().toString()));
+        } catch (ImportsException e) {
+            log.error("Exception occurred during import of file with bills.", e);
+        } catch (IOException e) {
+            log.warn("Exception on access watch service", e);
+        }
+    }
+
+
+//    todo:
+//    + 1. test when exception occurs in imports method
+//    + 2. fix path with path.resolve()
+//    + 3. configure logging for tool
+//    4. move file to processed on complete
+//    5. CommandLineRunner remove or move to it method
 }
+
+
+
+

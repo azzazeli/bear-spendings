@@ -3,31 +3,22 @@ plugins {
     id "io.spring.dependency-management" version "${springIoDepManagement}"
 }
 
-dependencies {
-    implementation project(':core')
-    implementation 'org.springframework.boot:spring-boot-starter'
-    implementation "org.apache.poi:poi:${project['apache.poi.version']}"
-    implementation "org.apache.poi:poi-ooxml:${project['apache.poi.version']}"
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-}
 
 sourceSets {
     integrationTest {
         java.srcDir "$projectDir/src/integration/java"
+        resources.srcDir "$projectDir/src/integration/resources"
         compileClasspath += sourceSets.main.output + sourceSets.test.output
         runtimeClasspath += sourceSets.main.output + sourceSets.test.output
     }
 }
+
 configurations {
     integrationTestCompile.extendsFrom testCompile
     integrationTestImplementation.extendsFrom testImplementation
     integrationTestRuntime.extendsFrom testRuntime
-    dependencies {
-        integrationTestCompileOnly 'org.projectlombok:lombok'
-        integrationTestAnnotationProcessor 'org.projectlombok:lombok'
-    }
+    integrationTestAnnotationProcessor.extendsFrom testAnnotationProcessor
 }
-
 
 task integrationTest(type: Test) {
     description = 'Runs integration tests.'
@@ -46,3 +37,17 @@ jar {
     baseName 'bs-import-export'
 }
 
+dependencies {
+    implementation project(':core')
+    implementation 'org.springframework.boot:spring-boot-starter'
+    implementation "org.apache.poi:poi:${project['apache.poi.version']}"
+    implementation "org.apache.poi:poi-ooxml:${project['apache.poi.version']}"
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+    integrationTestImplementation 'org.awaitility:awaitility:4.0.2'
+
+    integrationTestCompileOnly 'org.projectlombok:lombok'
+    integrationTestAnnotationProcessor 'org.projectlombok:lombok'
+    testAnnotationProcessor 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+}

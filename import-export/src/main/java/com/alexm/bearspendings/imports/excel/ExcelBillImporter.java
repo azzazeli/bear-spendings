@@ -6,6 +6,7 @@ import com.alexm.bearspendings.imports.ImportsException;
 import com.alexm.bearspendings.service.BillService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.apache.poi.openxml4j.exceptions.InvalidOperationException;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -14,7 +15,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -46,14 +46,11 @@ public class ExcelBillImporter implements BillImporter {
 
     @Override
     public void imports(Path source) throws ImportsException {
-        if(!Files.exists(source)) {
-            throw new ImportsException(String.format("Invalid source for bills import. Path %1$s does not exists", source.toString()));
-        }
-        log.info("Starting bill import process");
+        log.info("Starting bill import process of bath:" + source.toAbsolutePath());
         boolean successProcessing;
         try(Workbook workbook = new XSSFWorkbook(source.toFile())) {
             successProcessing = processWorkBook(workbook);
-        } catch (IOException |  InvalidFormatException e) {
+        } catch (IOException |  InvalidFormatException | InvalidOperationException e) {
             throw new ImportsException("Failed to load XSSFWorkbook." , e);
         }
         logFinishProcessingMessage(successProcessing);

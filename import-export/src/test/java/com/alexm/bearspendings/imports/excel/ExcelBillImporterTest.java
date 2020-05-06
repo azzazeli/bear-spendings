@@ -72,8 +72,8 @@ public class ExcelBillImporterTest {
         final String wrongPath = "sss";
         Path source = Paths.get(wrongPath);
         ImportsException exception = assertThrows(ImportsException.class, () -> importer.imports(source));
-        final String expected = "Invalid source for bills import. Path " + wrongPath + " does not exists";
-        assertEquals(expected, exception.getMessage());
+        final String expected = "Failed to load XSSFWorkbook.";
+        assertThat(exception.getMessage()).startsWith(expected);
     }
 
     @Test

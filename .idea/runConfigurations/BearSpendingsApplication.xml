@@ -1,6 +1,6 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="BearSpendingsApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
-    <module name="bear-spendings.spring-app.main" />
+    <module name="bear-spendings.web-app.main" />
     <option name="SPRING_BOOT_MAIN_CLASS" value="com.alexm.bearspendings.BearSpendingsApplication" />
     <option name="ACTIVE_PROFILES" value="dev" />
     <option name="ALTERNATIVE_JRE_PATH" />

@@ -2,28 +2,26 @@ logging:
   level:
     com:
       alexm:
-        bearspendings: debug
+        bearspendings: info
     org:
       springframework: info
       hibernate:
         type: info #trace - to see sql bind values
-  file: import.log
-
 com:
   alexm:
     bearspendings:
       imports:
-        billsbatchsize: 10
-        importpath: 'import'
-
+        billsbatchsize: 2
+        importpath: 'build/import'
 spring:
   datasource:
-    url: "jdbc:h2:file:~/.bear-spendings-data/db"
+    url: "jdbc:h2:mem:bear-spendings-test-data"
     username: sa
     password: manager
     driverClassName: org.h2.Driver
   jpa:
     show_sql: true
-    hibernate:
-      ddl-auto: update
-    database-platform: org.hibernate.dialect.H2Dialect
+  security:
+    user:
+      name: admin
+      password: manager

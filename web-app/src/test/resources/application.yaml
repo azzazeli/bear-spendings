@@ -1,6 +1,6 @@
 #server:
 #  port: 8399
-
+#todo: to be removed - not needed anymore here
 spring:
   datasource:
     url: "jdbc:h2:mem:bear-spendings-test-data"
