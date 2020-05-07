@@ -15,6 +15,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import javax.transaction.Transactional;
 import java.util.Set;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -55,6 +56,7 @@ class UiBill2BilFunctionTest {
         Bill bill = uiBill2BilFunction.apply(billCommand);
         for (BillItem billItem : bill.getItems()) {
             Assertions.assertTrue(ImmutableList.of(lapte, piine).contains(billItem.getProduct().getName()));
+            assertThat(bill.getItems()).extracting("product.id").doesNotContainNull();
         }
         assertEquals(total, bill.getTotal());
     }

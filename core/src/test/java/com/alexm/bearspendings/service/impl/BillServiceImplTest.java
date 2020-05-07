@@ -5,9 +5,12 @@ import com.alexm.bearspendings.dto.BillItemCommand;
 import com.alexm.bearspendings.entity.Bill;
 import com.alexm.bearspendings.entity.BillItem;
 import com.alexm.bearspendings.entity.Product;
+import com.alexm.bearspendings.entity.Store;
 import com.alexm.bearspendings.repository.BillRepository;
 import com.alexm.bearspendings.repository.ProductRepository;
+import com.alexm.bearspendings.repository.StoreRepository;
 import com.google.common.collect.ImmutableSet;
+import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +22,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+import static com.alexm.bearspendings.entity.ProductTest.FIRST_PRODUCT_ID;
+import static com.alexm.bearspendings.entity.StoreTest.FIRST_STORE_ID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.tuple;
 import static org.junit.jupiter.api.Assertions.*;
@@ -35,6 +40,8 @@ class BillServiceImplTest {
     private BillServiceImpl billService;
     @Autowired
     private ProductRepository productRepository;
+    @Autowired
+    private StoreRepository storeRepository;
 
     private final LocalDateTime orderDate = LocalDateTime.of(2019, 2, 12, 12, 33);
 
@@ -99,11 +106,7 @@ class BillServiceImplTest {
         return Bill.builder()
                 .store(previousBill.getStore())
                 .items(List.of(
-                        BillItem.builder()
-                                .price(12.0)
-                                .quantity(2.0)
-                                .product(sampleProduct)
-                                .build())
+                        BillItem.builder().price(12.0).quantity(2.0).product(sampleProduct).build())
                 )
                 .orderDate(LocalDateTime.now())
                 .build();
@@ -119,4 +122,21 @@ class BillServiceImplTest {
                 .hasFieldOrPropertyWithValue("total", 21.0);
     }
 
+
+    @Transactional
+    @Test
+    void saveBillExistingProduct() {
+        final BillItem billItem = BillItem.builder()
+                .price(1.0).quantity(2.0)
+                .product(productRepository.findById(FIRST_PRODUCT_ID).orElseThrow())
+                .build();
+        Bill fromUI = Bill.builder()
+                .store(sampleStore()).orderDate(LocalDateTime.now()).items(Lists.list(billItem))
+                .build();
+        assertNotNull(billRepository.save(fromUI));
+    }
+
+    private Store sampleStore() {
+        return storeRepository.getOne(FIRST_STORE_ID);
+    }
 }

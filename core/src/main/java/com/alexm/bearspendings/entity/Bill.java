@@ -59,6 +59,12 @@ public class Bill extends BaseEntity {
         this.items.add(item);
     }
 
+    @PrePersist
+    void calculateTotal() {
+        this.total = items.stream().mapToDouble(item ->  item.getPrice() * item.getQuantity())
+                .reduce(0, Double::sum);
+    }
+
     @Override
     public String toString() {
         return "Bill{" +

@@ -40,13 +40,13 @@ public class UiBill2BilFunction implements Function<BillCommand, Bill> {
                                 .quantity(uiBillItem.getQuantity())
                                 .build()).collect(Collectors.toSet())
                 )
-                .total(billCommand.getTotal()) //todo: maybe calculate total here ???
+                .total(billCommand.getTotal())
                 .build();
     }
 
     private Product newOrExistingProduct(BillItemCommand billItemCommand) {
         if (Objects.isNull(billItemCommand.getProductId())) {
-            return Product.builder().name(billItemCommand.getProductName()).build();
+            return productRepository.save(Product.builder().name(billItemCommand.getProductName()).build());
         }
         return productRepository.getOne(billItemCommand.getProductId());
     }

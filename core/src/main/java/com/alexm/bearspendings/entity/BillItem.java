@@ -2,10 +2,7 @@ package com.alexm.bearspendings.entity;
 
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -18,7 +15,9 @@ import javax.validation.constraints.NotNull;
 @EqualsAndHashCode(callSuper = true, of = {"product", "quantity", "price"})
 public class BillItem extends BaseEntity {
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY
+            , cascade = CascadeType.MERGE
+    )
     @JoinColumn(name = "product_id")
     private Product product;
     @NotNull

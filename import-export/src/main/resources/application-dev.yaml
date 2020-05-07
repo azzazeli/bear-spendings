@@ -1,0 +1,18 @@
+logging:
+  level:
+    com:
+      alexm:
+        bearspendings: debug
+    org:
+      springframework: info
+      hibernate:
+        type: info #trace - to see sql bind values
+  file: import-export/build/import.log
+
+com:
+  alexm:
+    bearspendings:
+      imports:
+        billsbatchsize: 10
+        importpath: 'import-export/build/import'
+
