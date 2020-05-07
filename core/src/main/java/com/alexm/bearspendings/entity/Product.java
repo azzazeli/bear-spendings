@@ -18,8 +18,6 @@ public class Product extends BaseEntity {
     private String name;
     private String comment;
 
-    //todo: list of optional product properties
-
     @Builder
     public Product(Long id, LocalDateTime createdDT, LocalDateTime modifiedDT,
                    @NonNull String name, String comment) {

@@ -13,7 +13,9 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 @Builder
 @EqualsAndHashCode(callSuper = true, of = {"product", "quantity", "price"})
+@SuppressWarnings("JpaDataSourceORMInspection")
 public class BillItem extends BaseEntity {
+
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY
             , cascade = CascadeType.MERGE

@@ -81,13 +81,6 @@ public class ImportExportApplication {
         }
     }
 
-
-//    todo:
-//    + 1. test when exception occurs in imports method
-//    + 2. fix path with path.resolve()
-//    + 3. configure logging for tool
-//    4. move file to processed on complete
-//    5. CommandLineRunner remove or move to it method
 }
 
 

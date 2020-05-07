@@ -28,11 +28,8 @@ public class Bill extends BaseEntity {
 
     @Setter(AccessLevel.NONE)
     @NotEmpty
-//    @Singular
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "bill", fetch = FetchType.EAGER)
     private Set<BillItem> items = new HashSet<>();
-    //todo: apply
-//    @Formula("(select min(o.creation_date) from Orders o where o.customer_id = id)")
     private Double total = 0.0;
 
     @Builder
