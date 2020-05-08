@@ -13,8 +13,8 @@ com:
   alexm:
     bearspendings:
       imports:
-        billsbatchsize: 10
-        importpath: 'import'
+        billsBatchSize: 10
+        importPath: 'import'
 
 spring:
   datasource:

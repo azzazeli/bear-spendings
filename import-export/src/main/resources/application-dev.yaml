@@ -13,6 +13,6 @@ com:
   alexm:
     bearspendings:
       imports:
-        billsbatchsize: 10
-        importpath: 'import-export/build/import'
+        billsBatchSize: 10
+        importPath: 'import-export/build/import'
 

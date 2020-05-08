@@ -2,6 +2,7 @@ package com.alexm.bearspendings.imports.excel;
 
 import com.alexm.bearspendings.entity.Bill;
 import com.alexm.bearspendings.imports.BillImporter;
+import com.alexm.bearspendings.imports.ImportsConfig;
 import com.alexm.bearspendings.imports.ImportsException;
 import com.alexm.bearspendings.service.BillService;
 import lombok.extern.slf4j.Slf4j;
@@ -11,7 +12,6 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -32,17 +32,13 @@ public class ExcelBillImporter implements BillImporter {
 
     private final Map<ImportBill, Bill> billsToImport = new LinkedHashMap<>();
 
-    public ExcelBillImporter(BillService billService, ExcelRowProcessor rowProcessor) {
+    public ExcelBillImporter(BillService billService, ExcelRowProcessor rowProcessor, ImportsConfig importsConfig) {
         this.billService = billService;
         this.rowProcessor = rowProcessor;
+        this.importsConfig = importsConfig;
     }
 
-    @Value("#{new Integer('${com.alexm.bearspendings.imports.billsbatchsize}')}")
-    private int billsBatchSize;
-
-    public void setBillsBatchSize(int billsBatchSize) {
-        this.billsBatchSize = billsBatchSize;
-    }
+    private final ImportsConfig importsConfig;
 
     @Override
     public void imports(Path source) throws ImportsException {
@@ -106,7 +102,7 @@ public class ExcelBillImporter implements BillImporter {
     }
 
     private void saveBillsInBatch() {
-        if (this.billsToImport.size() == billsBatchSize) {
+        if (this.billsToImport.size() == importsConfig.getBillsBatchSize()) {
             billService.saveAll(new ArrayList<>(billsToImport.values()));
             billsToImport.clear();
         }

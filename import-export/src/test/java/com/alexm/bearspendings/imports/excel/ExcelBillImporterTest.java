@@ -3,6 +3,7 @@ package com.alexm.bearspendings.imports.excel;
 import com.alexm.bearspendings.entity.Bill;
 import com.alexm.bearspendings.entity.Product;
 import com.alexm.bearspendings.entity.Store;
+import com.alexm.bearspendings.imports.ImportsConfig;
 import com.alexm.bearspendings.imports.ImportsException;
 import com.alexm.bearspendings.imports.TestImportProducts;
 import com.alexm.bearspendings.service.BillService;
@@ -60,9 +61,10 @@ public class ExcelBillImporterTest {
 
     @BeforeEach
     void setup() {
+        ImportsConfig importsConfig = new ImportsConfig();
+        importsConfig.setBillsBatchSize(2);
         ExcelRowProcessor rowProcessor = new ExcelRowProcessor(mockStoreService, mockProductService);
-        importer = new ExcelBillImporter(mockBillService, rowProcessor);
-        importer.setBillsBatchSize(2);
+        importer = new ExcelBillImporter(mockBillService, rowProcessor, importsConfig);
         storesMap.put(farmaciaFamiliei, Store.builder().id(100L).name(farmaciaFamiliei).build());
         storesMap.put(alimarket, Store.builder().id(200L).name(alimarket).build());
     }

@@ -1,11 +1,12 @@
 package com.alexm.bearspendings;
 
 import com.alexm.bearspendings.imports.BillImporter;
+import com.alexm.bearspendings.imports.ImportsConfig;
 import com.alexm.bearspendings.imports.ImportsException;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
 
@@ -18,10 +19,8 @@ import java.nio.file.*;
  **/
 @Slf4j
 @SpringBootApplication
+@EnableConfigurationProperties(ImportsConfig.class)
 public class ImportExportApplication {
-
-    @Value("${com.alexm.bearspendings.imports.importpath}")
-    private String importPath;
 
     public static void main(String[] args) {
         log.info("Starting import/export application ...");
@@ -32,8 +31,8 @@ public class ImportExportApplication {
     }
 
     @Bean
-    Path importPath() throws IOException {
-        Path path = Paths.get(importPath);
+    Path importPath(ImportsConfig importsConfig) throws IOException {
+        Path path = Paths.get(importsConfig.getImportPath());
         if (Files.exists(path)) {
             return path;
         }
@@ -56,7 +55,7 @@ public class ImportExportApplication {
                 while ((key = watchService.take()) != null) {
                     for (WatchEvent<?> event : key.pollEvents()) {
                         log.info("Event kind:{}. File affected:{} ",event.kind(), event.context());
-                        processInputFile(importer, event);
+                        processInputFile(importer, resolveImportPath(event, importPath));
                     }
                     key.reset();
                 }
@@ -71,13 +70,15 @@ public class ImportExportApplication {
         };
     }
 
-    private void processInputFile(BillImporter importer, WatchEvent<?> event)  {
+    private Path resolveImportPath(WatchEvent<?> event, Path importPath) {
+        return importPath.resolve(event.context().toString());
+    }
+
+    private void processInputFile(BillImporter importer,Path path)  {
         try {
-            importer.imports(importPath().resolve(event.context().toString()));
+            importer.imports(path);
         } catch (ImportsException e) {
             log.error("Exception occurred during import of file with bills.", e);
-        } catch (IOException e) {
-            log.warn("Exception on access watch service", e);
         }
     }
 
