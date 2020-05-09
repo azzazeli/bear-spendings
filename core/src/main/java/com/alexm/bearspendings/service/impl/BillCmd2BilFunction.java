@@ -18,12 +18,12 @@ import java.util.stream.Collectors;
  * Date: 8/16/19
  **/
 @Component
-public class UiBill2BilFunction implements Function<BillCommand, Bill> {
+public class BillCmd2BilFunction implements Function<BillCommand, Bill> {
 
     private final ProductRepository productRepository;
     private final StoreRepository storeRepository;
 
-    public UiBill2BilFunction(ProductRepository productRepository, StoreRepository storeRepository) {
+    public BillCmd2BilFunction(ProductRepository productRepository, StoreRepository storeRepository) {
         this.productRepository = productRepository;
         this.storeRepository = storeRepository;
     }
@@ -36,7 +36,7 @@ public class UiBill2BilFunction implements Function<BillCommand, Bill> {
                 .items(
                         billCommand.getItems().stream().map(uiBillItem -> BillItem.builder()
                                 .product(newOrExistingProduct(uiBillItem))
-                                .price(uiBillItem.getPrice())
+                                .pricePerUnit(uiBillItem.getPrice())
                                 .quantity(uiBillItem.getQuantity())
                                 .build()).collect(Collectors.toSet())
                 )

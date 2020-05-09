@@ -80,7 +80,7 @@ class ExcelRowProcessorTest {
         final BillItem billItem = processor.processBillItem(row);
         assertThat(billItem)
                 .hasFieldOrPropertyWithValue("product.id", Medicamente.id)
-                .hasFieldOrPropertyWithValue("price", 284.99)
+                .hasFieldOrPropertyWithValue("pricePerUnit", 284.99)
                 .hasFieldOrPropertyWithValue("quantity", 1.0)
                 .hasFieldOrPropertyWithValue("bill", null)
         ;
@@ -96,7 +96,7 @@ class ExcelRowProcessorTest {
     }
 
     @ParameterizedTest
-    @EnumSource(value = CELL_COLUMN.class, names = {"PRICE_CELL", "QUANTITY_CELL"})
+    @EnumSource(value = CELL_COLUMN.class, names = {"PRICE_PER_UNIT_CELL", "QUANTITY_CELL"})
     void invalidPriceQuantity(CELL_COLUMN cellColumn) {
         final double defaultValue = row.getCell(cellColumn.index).getNumericCellValue();
         row.getCell(cellColumn.index).setCellValue("wwww");

@@ -10,9 +10,9 @@ insert into bill(id, order_date, store_id, total) values (2, '2019-04-22', 1, 97
 insert into bill(id, order_date, store_id, total) values (3, '2019-04-22', 1, 230.00);
 
 -- bill 2
-insert into bill_item(id, price, quantity, product_id, bill_id) values (1, 7.85, 1, 1, 1);
-insert into bill_item(id, price, quantity, product_id, bill_id) values (2, 9.85, 1, 2, 1);
+insert into bill_item(id, price_per_unit, quantity, total_price, product_id, bill_id) values (1, 7.85, 1, 7.85, 1, 1);
+insert into bill_item(id, price_per_unit, quantity, total_price, product_id, bill_id) values (2, 9.85, 1, 9.85, 2, 1);
 
 --bill 3
-insert into bill_item(id, price, quantity, product_id, bill_id) values (3, 87.00, 1, 3, 2);
-insert into bill_item(id, price, quantity, product_id, bill_id) values (4, 10.00, 1, 2, 2);
+insert into bill_item(id, price_per_unit, quantity, total_price, product_id, bill_id) values (3, 87.00, 1, 87.00, 3, 2);
+insert into bill_item(id, price_per_unit, quantity, total_price,product_id, bill_id) values (4, 10.00, 1, 10.00, 2, 2);

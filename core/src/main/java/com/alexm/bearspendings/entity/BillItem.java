@@ -12,20 +12,21 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor @Getter @Setter
 @AllArgsConstructor
 @Builder
-@EqualsAndHashCode(callSuper = true, of = {"product", "quantity", "price"})
+@EqualsAndHashCode(callSuper = true, of = {"product", "quantity", "pricePerUnit"})
 @SuppressWarnings("JpaDataSourceORMInspection")
 public class BillItem extends BaseEntity {
 
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY
-            , cascade = CascadeType.MERGE
-    )
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     @JoinColumn(name = "product_id")
     private Product product;
     @NotNull
     private Double quantity;
     @NotNull
-    private Double price;
+    private Double pricePerUnit;
+    @NotNull
+    @Builder.Default
+    private Double totalPrice = 0.0;
 
     //TODO: please implement m2: issue #35
     // spring jpa generate n+1 query; @FetchMode does not work properly
@@ -35,13 +36,25 @@ public class BillItem extends BaseEntity {
     @JoinColumn(name = "bill_id")
     private Bill bill;
 
+    @PrePersist
+    private void calculateTotalPrice() {
+        this.totalPrice = twoDigits(quantity * pricePerUnit);
+    }
+
+    public Double getTotalPrice() {
+        if (totalPrice == null || totalPrice == 0.0) {
+            calculateTotalPrice();
+        }
+        return totalPrice;
+    }
+
     @Override
     public String toString() {
         return "BillItem{" +
                 "id=" + id +
-                ", productId=" + product.getId() +
+                ", productId=" + ((product == null) ? null : product.getId()) +
                 ", quantity=" + quantity +
-                ", price=" + price +
+                ", price=" + pricePerUnit +
                 ", billId=" + bill.getId() +
                 '}';
     }

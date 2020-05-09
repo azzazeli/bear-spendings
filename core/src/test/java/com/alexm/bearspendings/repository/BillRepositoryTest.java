@@ -42,7 +42,7 @@ public class BillRepositoryTest {
                 .store(sampleStore())
                 .items(Lists.list(BillItem.builder()
                         .quantity(1.0)
-                        .price(2.0)
+                        .pricePerUnit(2.0)
                         .product(template.getItems().iterator().next().getProduct())
                         .build()))
                 .build();
@@ -65,18 +65,18 @@ public class BillRepositoryTest {
                 .orderDate(LocalDateTime.now())
                 .store(sampleStore())
                 .items(Lists.list(
-                        BillItem.builder().quantity(1.0).price(2.0).product(sampleProduct()).build(),
-                        BillItem.builder().quantity(3.0).price(2.0).product(sampleProduct()).build()
+                        BillItem.builder().quantity(1.1).pricePerUnit(2.0).product(sampleProduct()).build(),
+                        BillItem.builder().quantity(3.2).pricePerUnit(2.0).product(sampleProduct()).build()
                 ))
                 .build();
         final Bill save = billRepository.save(bill);
-        assertThat(save.getTotal()).isEqualTo(8.0);
+        assertThat(save.getTotal()).isEqualTo(8.60);
     }
 
     @Test
     void saveBillFromUIExistingProduct() {
         Bill fromUI = Bill.builder().store(sampleStore()).orderDate(LocalDateTime.now()).build();
-        fromUI.addItem(BillItem.builder().price(1.0).quantity(2.0).product(productRepository.getOne(FIRST_PRODUCT_ID)).build());
+        fromUI.addItem(BillItem.builder().pricePerUnit(1.0).quantity(2.0).product(productRepository.getOne(FIRST_PRODUCT_ID)).build());
         assertNotNull(billRepository.save(fromUI));
     }
 }

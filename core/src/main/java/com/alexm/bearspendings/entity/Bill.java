@@ -58,8 +58,9 @@ public class Bill extends BaseEntity {
 
     @PrePersist
     void calculateTotal() {
-        this.total = items.stream().mapToDouble(item ->  item.getPrice() * item.getQuantity())
-                .reduce(0, Double::sum);
+        this.total = twoDigits(items.stream()
+                .mapToDouble(BillItem::getTotalPrice)
+                .reduce(0, Double::sum));
     }
 
     @Override

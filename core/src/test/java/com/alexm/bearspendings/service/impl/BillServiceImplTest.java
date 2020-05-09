@@ -106,7 +106,7 @@ class BillServiceImplTest {
         return Bill.builder()
                 .store(previousBill.getStore())
                 .items(List.of(
-                        BillItem.builder().price(12.0).quantity(2.0).product(sampleProduct).build())
+                        BillItem.builder().pricePerUnit(12.0).quantity(2.0).product(sampleProduct).build())
                 )
                 .orderDate(LocalDateTime.now())
                 .build();
@@ -127,7 +127,7 @@ class BillServiceImplTest {
     @Test
     void saveBillExistingProduct() {
         final BillItem billItem = BillItem.builder()
-                .price(1.0).quantity(2.0)
+                .pricePerUnit(1.0).quantity(2.0)
                 .product(productRepository.findById(FIRST_PRODUCT_ID).orElseThrow())
                 .build();
         Bill fromUI = Bill.builder()

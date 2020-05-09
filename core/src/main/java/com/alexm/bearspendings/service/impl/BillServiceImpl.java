@@ -28,10 +28,10 @@ public class BillServiceImpl implements BillService {
     private final BillRepository billRepository;
     private final Function<BillCommand, Bill> uiBill2BilFunction;
 
-    private final Function<BillItem, BillItemCommand> billItemToUiBillItemMap = billItem ->
+    private final Function<BillItem, BillItemCommand> billItem2BillItemCmdMap = billItem ->
             BillItemCommand.builder()
                     .id(billItem.getId())
-                    .price(billItem.getPrice())
+                    .price(billItem.getPricePerUnit())
                     .quantity(billItem.getQuantity())
                     .productId(billItem.getProduct().getId())
                     .build();
@@ -41,7 +41,7 @@ public class BillServiceImpl implements BillService {
                     .orderDate(bill.getOrderDate())
                     .storeId(bill.getStore().getId())
                     .total(bill.getTotal())
-                    .items(bill.getItems().stream().map(billItemToUiBillItemMap).collect(Collectors.toSet()))
+                    .items(bill.getItems().stream().map(billItem2BillItemCmdMap).collect(Collectors.toSet()))
                     .build();
 
 

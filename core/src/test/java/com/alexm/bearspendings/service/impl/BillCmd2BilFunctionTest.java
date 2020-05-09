@@ -24,10 +24,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * Date: 9/10/19
  **/
 @SpringBootTest
-class UiBill2BilFunctionTest {
+class BillCmd2BilFunctionTest {
 
     @Autowired
-    UiBill2BilFunction uiBill2BilFunction;
+    BillCmd2BilFunction billCmd2BilFunction;
 
     @Transactional
     @DisplayName("transform UiBill that contains existing product to Bill")
@@ -35,7 +35,7 @@ class UiBill2BilFunctionTest {
     void existingProduct() {
         Set<BillItemCommand> items = ImmutableSet.of(BillItemCommand.builder().productId(1L).quantity(1.0).price(2.2).build());
         BillCommand billCommand = BillCommand.builder().storeId(1L).items(items).build();
-        Bill bill = uiBill2BilFunction.apply(billCommand);
+        Bill bill = billCmd2BilFunction.apply(billCommand);
         assertAll(() -> {
             assertEquals(1L, bill.getStore().getId().longValue());
             assertEquals(1L, bill.getItems().iterator().next().getProduct().getId().longValue());
@@ -53,7 +53,7 @@ class UiBill2BilFunctionTest {
                 BillItemCommand.builder().productName(piine).quantity(2.3).price(12.1).build()
         );
         BillCommand billCommand = BillCommand.builder().storeId(1L).total(total).items(items).build();
-        Bill bill = uiBill2BilFunction.apply(billCommand);
+        Bill bill = billCmd2BilFunction.apply(billCommand);
         for (BillItem billItem : bill.getItems()) {
             Assertions.assertTrue(ImmutableList.of(lapte, piine).contains(billItem.getProduct().getName()));
             assertThat(bill.getItems()).extracting("product.id").doesNotContainNull();

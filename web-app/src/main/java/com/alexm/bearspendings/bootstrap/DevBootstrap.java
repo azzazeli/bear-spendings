@@ -70,7 +70,7 @@ public class DevBootstrap implements ApplicationListener<ContextRefreshedEvent> 
     }
 
     private BillItem buildBillItem(Product product, Double price, Double quantiy) {
-        return BillItem.builder().product(product).price(price).quantity(quantiy).build();
+        return BillItem.builder().product(product).pricePerUnit(price).quantity(quantiy).build();
     }
 
     private void initStores() {

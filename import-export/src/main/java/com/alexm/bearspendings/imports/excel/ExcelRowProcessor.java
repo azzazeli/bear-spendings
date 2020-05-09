@@ -37,7 +37,7 @@ public class ExcelRowProcessor {
         STORE_CELL(14),
         PRODUCT_CELL(5),
         QUANTITY_CELL(10),
-        PRICE_CELL(11);
+        PRICE_PER_UNIT_CELL(11);
 
         int index;
 
@@ -76,9 +76,9 @@ public class ExcelRowProcessor {
         Product product = parseProduct(nonEmptyCellValue(row, PRODUCT_CELL));
         log.debug("--- product:{}", product);
         BillItem billItem = BillItem.builder().product(product).build();
-        final Double price = doubleCellValue(row, PRICE_CELL);
-        log.debug("--- price:{}", product);
-        billItem.setPrice(price);
+        final Double pricePerUnit = doubleCellValue(row, PRICE_PER_UNIT_CELL);
+        log.debug("--- pricePerUnit:{}", product);
+        billItem.setPricePerUnit(pricePerUnit);
         final Double quantity = doubleCellValue(row, QUANTITY_CELL);
         log.debug("--- quantity:{}", quantity);
         billItem.setQuantity(quantity);

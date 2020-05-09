@@ -16,8 +16,8 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.Map;
 
 /**
@@ -64,7 +64,7 @@ public class ExcelBillImporter implements BillImporter {
     }
 
     private void saveLastBillsBatch() {
-        billService.saveAll(billsToImport.values());
+        billService.saveAll(new LinkedList<>(billsToImport.values()));
     }
 
     private void logFinishProcessingMessage(boolean successProcessingRow) {
@@ -103,7 +103,7 @@ public class ExcelBillImporter implements BillImporter {
 
     private void saveBillsInBatch() {
         if (this.billsToImport.size() == importsConfig.getBillsBatchSize()) {
-            billService.saveAll(new ArrayList<>(billsToImport.values()));
+            billService.saveAll(new LinkedList<>(billsToImport.values()));
             billsToImport.clear();
         }
     }

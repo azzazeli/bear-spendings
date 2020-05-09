@@ -58,7 +58,7 @@ public class StoreServiceImpl implements StoreService {
                 .stream()
                 .map(billItem -> TopProductCommand.builder()
                         .productId(billItem.getProduct().getId())
-                        .price(billItem.getPrice())
+                        .price(billItem.getPricePerUnit())
                         .quantity(billItem.getQuantity())
                         .build()).collect(Collectors.toCollection(LinkedHashSet::new));
     }

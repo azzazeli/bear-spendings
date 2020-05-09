@@ -28,4 +28,12 @@ class BillItemRepositoryTest {
         Assertions.assertThat(billItems).extracting(billItem -> billItem.getProduct().getId())
                 .containsExactly(1L, 2L, 3L);
     }
+
+    @Test
+    void calculateTotalPrice() {
+        final BillItem template = billItemRepository.findById(1L).orElseThrow();
+        BillItem item = BillItem.builder().pricePerUnit(2.0).quantity(2.0).product(template.getProduct()).build();
+        final BillItem save = billItemRepository.save(item);
+        assertEquals(4.0, save.getTotalPrice().doubleValue());
+    }
 }

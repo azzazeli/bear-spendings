@@ -30,6 +30,13 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 class ImportExportApplicationTest {
 
+    private static final String ORDER_DATE_FIELD = "orderDate";
+    private static final String STORE_ID_FIELD = "store.id";
+    private static final String TOTAL_FIELD = "total";
+    private static final String PRODUCT_ID_FIELD = "product.id";
+    private static final String QUANTITY_FIELD = "quantity";
+    private static final String PRICE_PER_UNIT_FIELD = "pricePerUnit";
+
     @Autowired
     BillImporter importer;
 
@@ -59,11 +66,12 @@ class ImportExportApplicationTest {
         assertTrue(byId1.isPresent());
         final Bill bill1 = byId1.orElseThrow();
         Assertions.assertThat(bill1)
-                .hasFieldOrPropertyWithValue("orderDate", LocalDate.of(2020, 4, 10).atStartOfDay())
-                .hasFieldOrPropertyWithValue("store.id", 1L);
-        //todo: total as calculated field
+                .hasFieldOrPropertyWithValue(ORDER_DATE_FIELD, LocalDate.of(2020, 4, 10).atStartOfDay())
+                .hasFieldOrPropertyWithValue(STORE_ID_FIELD, 1L)
+                .hasFieldOrPropertyWithValue(TOTAL_FIELD, 789.34);
+
         assertEquals(10, bill1.getItems().size());
-        Assertions.assertThat(bill1.getItems()).extracting("product.id", "quantity", "price")
+        Assertions.assertThat(bill1.getItems()).extracting(PRODUCT_ID_FIELD, QUANTITY_FIELD, PRICE_PER_UNIT_FIELD)
                 .containsExactlyInAnyOrder(
                         Tuple.tuple(TestImportProducts.Medicamente.id, 1.0, 284.99),
                         Tuple.tuple(TestImportProducts.Calmante.id, 2.0, 10.72),
@@ -79,10 +87,11 @@ class ImportExportApplicationTest {
         assertTrue(byId2.isPresent());
         final Bill bill2 = byId2.orElseThrow();
         Assertions.assertThat(bill2)
-                .hasFieldOrPropertyWithValue("orderDate", LocalDate.of(2020, 4, 10).atStartOfDay())
-                .hasFieldOrPropertyWithValue("store.id", 2L);
+                .hasFieldOrPropertyWithValue(ORDER_DATE_FIELD, LocalDate.of(2020, 4, 10).atStartOfDay())
+                .hasFieldOrPropertyWithValue(STORE_ID_FIELD, 2L)
+                .hasFieldOrPropertyWithValue(TOTAL_FIELD, 247.00);
         assertEquals(10, bill2.getItems().size());
-        Assertions.assertThat(bill2.getItems()).extracting("product.id", "quantity", "price")
+        Assertions.assertThat(bill2.getItems()).extracting(PRODUCT_ID_FIELD, QUANTITY_FIELD, PRICE_PER_UNIT_FIELD)
                 .containsExactlyInAnyOrder(
                         Tuple.tuple(TestImportProducts.AppaMorshinska.id, 2.0, 41.75),
                         Tuple.tuple(TestImportProducts.Ridiche.id, 0.47, 22.0),
@@ -100,9 +109,10 @@ class ImportExportApplicationTest {
         assertTrue(byId3.isPresent());
         final Bill bill3 = byId3.orElseThrow();
         Assertions.assertThat(bill3)
-                .hasFieldOrPropertyWithValue("orderDate", LocalDate.of(2020, 4, 5).atStartOfDay())
-                .hasFieldOrPropertyWithValue("store.id", 2L);
-        Assertions.assertThat(bill3.getItems()).extracting("product.id", "quantity", "price")
+                .hasFieldOrPropertyWithValue(ORDER_DATE_FIELD, LocalDate.of(2020, 4, 5).atStartOfDay())
+                .hasFieldOrPropertyWithValue(STORE_ID_FIELD, 2L)
+                .hasFieldOrPropertyWithValue(TOTAL_FIELD, 329.62);
+        Assertions.assertThat(bill3.getItems()).extracting(PRODUCT_ID_FIELD, QUANTITY_FIELD, PRICE_PER_UNIT_FIELD)
                 .containsExactlyInAnyOrder(
                         Tuple.tuple(TestImportProducts.Brinzica.id, 4.0, 5.75),
                         Tuple.tuple(TestImportProducts.Smintina20.id, 1.0, 23.0),

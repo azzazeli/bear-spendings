@@ -116,7 +116,7 @@ public class ExcelBillImporterTest {
         assertThat(bill)
                 .hasFieldOrPropertyWithValue("orderDate", orderDate("20/4/10"))
                 .hasFieldOrPropertyWithValue("store.id", storesMap.get(farmaciaFamiliei).getId());
-        assertThat(bill.getItems()).extracting("product.id", "quantity", "price")
+        assertThat(bill.getItems()).extracting("product.id", "quantity", "pricePerUnit")
                     .containsExactlyInAnyOrder(
                             Tuple.tuple(Medicamente.id, 1.0, 284.99),
                             Tuple.tuple(Calmante.id, 2.0, 10.72),
@@ -134,7 +134,7 @@ public class ExcelBillImporterTest {
         assertThat(bill)
                 .hasFieldOrPropertyWithValue("orderDate", orderDate("20/4/10"))
                 .hasFieldOrPropertyWithValue("store.id", storesMap.get(alimarket).getId());
-        assertThat(bill.getItems()).extracting("product.id", "quantity", "price")
+        assertThat(bill.getItems()).extracting("product.id", "quantity", "pricePerUnit")
                 .containsExactlyInAnyOrder(
                         Tuple.tuple(AppaMorshinska.id, 2.0, 41.75),
                         Tuple.tuple(Ridiche.id, 0.47, 22.0),
@@ -154,7 +154,7 @@ public class ExcelBillImporterTest {
         assertThat(bill)
                 .hasFieldOrPropertyWithValue("orderDate", orderDate("20/4/05"))
                 .hasFieldOrPropertyWithValue("store.id", storesMap.get(alimarket).getId());
-        assertThat(bill.getItems()).extracting("product.id", "quantity", "price")
+        assertThat(bill.getItems()).extracting("product.id", "quantity", "pricePerUnit")
                 .containsExactlyInAnyOrder(
                         Tuple.tuple(Brinzica.id, 4.0, 5.75),
                         Tuple.tuple(Smintina20.id, 1.0, 23.0),

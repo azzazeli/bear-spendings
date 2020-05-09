@@ -6,6 +6,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
+import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 
 /**
@@ -28,4 +29,10 @@ public class BaseEntity {
     LocalDateTime createdDT;
     @LastModifiedDate
     LocalDateTime modifiedDT;
+
+    //todo: use BigDecimal
+    Double twoDigits(Double value) {
+        DecimalFormat df = new DecimalFormat("#.##");
+        return Double.parseDouble(df.format(value));
+    }
 }
