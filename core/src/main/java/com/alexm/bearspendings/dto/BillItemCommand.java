@@ -8,6 +8,7 @@ import org.apache.commons.lang3.Validate;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
 
 @Builder
 @Data
@@ -27,8 +28,9 @@ public class BillItemCommand {
     private Double pricePerUnit;
 
     @NotNull(message = "Total price is mandatory")
-    @Positive(message = "Total price per unit must be a positive number")
-    private Double totalPrice;
+    @PositiveOrZero(message = "Total price per unit must be a positive number or zero")
+    @Builder.Default
+    private Double totalPrice = 0.0;
 
     @JsonPOJOBuilder(withPrefix = "")
     public static class BillItemCommandBuilder {
@@ -43,6 +45,7 @@ public class BillItemCommand {
         private CustomBillItemCommandBuilder() {
             super.pricePerUnit = 0.0;
             super.quantity = 0.0;
+            super.totalPrice = 0.0;
         }
         @Override
         public BillItemCommand build() {

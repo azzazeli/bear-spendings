@@ -9,8 +9,7 @@ import javax.validation.Validator;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @author AlexM
@@ -52,6 +51,11 @@ class BillItemCommandTest {
         exception = assertThrows(IllegalArgumentException.class,
                 () -> BillItemCommand.builder().productId(1L).quantity(1.0).pricePerUnit(2.2).totalPrice(-3.3).build());
         assertEquals("Provided total price:-3.3 is invalid. Price must be positive", exception.getMessage());
+    }
+
+    @Test
+    void totalPriceCanBeZero() {
+        assertNotNull(BillItemCommand.builder().productId(1L).quantity(1.0).pricePerUnit(2.0).build());
     }
 
     void assertValidUiBillItem(Set<ConstraintViolation<BillItemCommand>> constraintViolations) {
