@@ -22,16 +22,19 @@ class BillItemCommandTest {
     @DisplayName("Validate that product id can be null")
     @Test
     void validateProductId() {
-        BillItemCommand billItemCommand = BillItemCommand.builder().quantity(1.0).productName("Peste").price(2.9).build();
+        BillItemCommand billItemCommand = BillItemCommand.builder().quantity(1.0).productName("Peste").pricePerUnit(2.9)
+                .totalPrice(2.9).build();
         assertValidUiBillItem(validator.validate(billItemCommand));
     }
 
     @DisplayName("BillItem product must contains product id or product name")
     @Test
     void validateProductInfo() {
-        assertValidUiBillItem(validator.validate(BillItemCommand.builder().productId(1L).quantity(1.0).price(2.2).build()));
-        assertValidUiBillItem(validator.validate(BillItemCommand.builder().productName("Lapte").quantity(1.0).price(2.2).build()));
-        BillItemCommand invalid = BillItemCommand.builder().quantity(1.0).price(2.2).build();
+        assertValidUiBillItem(validator.validate(BillItemCommand.builder().productId(1L).quantity(1.0).pricePerUnit(2.2)
+                .totalPrice(2.2).build()));
+        assertValidUiBillItem(validator.validate(BillItemCommand.builder().productName("Lapte").quantity(1.0)
+                .pricePerUnit(2.2).totalPrice(2.2).build()));
+        BillItemCommand invalid = BillItemCommand.builder().quantity(1.0).pricePerUnit(2.2).totalPrice(2.2).build();
         Set<ConstraintViolation<BillItemCommand>> constraintViolations = validator.validate(invalid);
         assertThat(constraintViolations.size()).isEqualTo(1);
         ConstraintViolation<BillItemCommand> uiBillItemConstraintViolation = constraintViolations.iterator().next();
@@ -41,11 +44,14 @@ class BillItemCommandTest {
     @Test
     void builderPerformValidation() {
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-                () -> BillItemCommand.builder().productId(1L).quantity(-1.0).price(2.2).build());
+                () -> BillItemCommand.builder().productId(1L).quantity(-1.0).pricePerUnit(2.2).totalPrice(2.2).build());
         assertEquals("Provided quantity:-1.0 is invalid. Quantity must be positive", exception.getMessage());
         exception = assertThrows(IllegalArgumentException.class,
-                () -> BillItemCommand.builder().productId(1L).quantity(1.0).price(-2.2).build());
-        assertEquals("Provided price:-2.2 is invalid. Price must be positive", exception.getMessage());
+                () -> BillItemCommand.builder().productId(1L).quantity(1.0).pricePerUnit(-2.2).totalPrice(2.2).build());
+        assertEquals("Provided price per unit:-2.2 is invalid. Price must be positive", exception.getMessage());
+        exception = assertThrows(IllegalArgumentException.class,
+                () -> BillItemCommand.builder().productId(1L).quantity(1.0).pricePerUnit(2.2).totalPrice(-3.3).build());
+        assertEquals("Provided total price:-3.3 is invalid. Price must be positive", exception.getMessage());
     }
 
     void assertValidUiBillItem(Set<ConstraintViolation<BillItemCommand>> constraintViolations) {

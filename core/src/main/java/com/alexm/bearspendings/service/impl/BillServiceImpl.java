@@ -1,11 +1,10 @@
 package com.alexm.bearspendings.service.impl;
 
 import com.alexm.bearspendings.dto.BillCommand;
-import com.alexm.bearspendings.dto.BillItemCommand;
 import com.alexm.bearspendings.entity.Bill;
-import com.alexm.bearspendings.entity.BillItem;
 import com.alexm.bearspendings.repository.BillRepository;
 import com.alexm.bearspendings.service.BillService;
+import com.alexm.bearspendings.service.impl.map.Bill2BillCmdFunction;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -27,27 +26,15 @@ import java.util.stream.StreamSupport;
 public class BillServiceImpl implements BillService {
     private final BillRepository billRepository;
     private final Function<BillCommand, Bill> uiBill2BilFunction;
-
-    private final Function<BillItem, BillItemCommand> billItem2BillItemCmdMap = billItem ->
-            BillItemCommand.builder()
-                    .id(billItem.getId())
-                    .price(billItem.getPricePerUnit())
-                    .quantity(billItem.getQuantity())
-                    .productId(billItem.getProduct().getId())
-                    .build();
-    private final Function<Bill, BillCommand> billToUiBillMap = bill ->
-            BillCommand.builder()
-                    .id(bill.getId())
-                    .orderDate(bill.getOrderDate())
-                    .storeId(bill.getStore().getId())
-                    .total(bill.getTotal())
-                    .items(bill.getItems().stream().map(billItem2BillItemCmdMap).collect(Collectors.toSet()))
-                    .build();
+    private final Bill2BillCmdFunction bill2BillCmdFunction;
 
 
-    public BillServiceImpl(BillRepository billRepository, Function<BillCommand, Bill> uiBill2BilFunction) {
+    public BillServiceImpl(BillRepository billRepository,
+                           Function<BillCommand, Bill> uiBill2BilFunction,
+                           Bill2BillCmdFunction bill2BillCmdFunction) {
         this.billRepository = billRepository;
         this.uiBill2BilFunction = uiBill2BilFunction;
+        this.bill2BillCmdFunction = bill2BillCmdFunction;
     }
 
     @Transactional
@@ -56,7 +43,7 @@ public class BillServiceImpl implements BillService {
         Sort byOrderDateDesc = Sort.by(Sort.Direction.DESC, "id", "orderDate");
         Pageable pageable = PageRequest.of(page, size, byOrderDateDesc);
         return StreamSupport.stream(billRepository.findAll(pageable).spliterator(), false)
-                .map(billToUiBillMap)
+                .map(bill2BillCmdFunction)
                 .collect(Collectors.toList());
     }
 

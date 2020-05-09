@@ -36,7 +36,7 @@ public class BillCmd2BilFunction implements Function<BillCommand, Bill> {
                 .items(
                         billCommand.getItems().stream().map(uiBillItem -> BillItem.builder()
                                 .product(newOrExistingProduct(uiBillItem))
-                                .pricePerUnit(uiBillItem.getPrice())
+                                .pricePerUnit(uiBillItem.getPricePerUnit())
                                 .quantity(uiBillItem.getQuantity())
                                 .build()).collect(Collectors.toSet())
                 )

@@ -26,16 +26,20 @@ import java.util.Set;
 @Data
 public class BillCommand {
     private Long id;
+
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @NotNull(message = "OrderDate is mandatory")
     private LocalDateTime orderDate;
+
     @NotNull(message = "Store id is mandatory")
     @Positive(message = "Store id must be positive")
     private Long storeId;
+
     @NotNull
     @PositiveOrZero(message = "Total must be greater than zero")
     private Double total;
+
     @Valid
     @NotEmpty(message = "Bill must contains at least one bill item")
     private Set<BillItemCommand> items;

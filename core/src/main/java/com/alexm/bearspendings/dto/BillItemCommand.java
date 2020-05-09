@@ -17,12 +17,18 @@ public class BillItemCommand {
     private Long id;
     private String productName;
     private Long productId;
+
     @NotNull(message = "Quantity is mandatory")
     @Positive(message = "Quantity must be a positive number")
     private Double quantity;
+
     @NotNull(message = "Price is mandatory")
-    @Positive(message = "Price must be a positive number")
-    private Double price;
+    @Positive(message = "Price per unit must be a positive number")
+    private Double pricePerUnit;
+
+    @NotNull(message = "Total price is mandatory")
+    @Positive(message = "Total price per unit must be a positive number")
+    private Double totalPrice;
 
     @JsonPOJOBuilder(withPrefix = "")
     public static class BillItemCommandBuilder {
@@ -35,13 +41,17 @@ public class BillItemCommand {
 
     private static class CustomBillItemCommandBuilder extends BillItemCommandBuilder {
         private CustomBillItemCommandBuilder() {
-            super.price = 0.0;
+            super.pricePerUnit = 0.0;
             super.quantity = 0.0;
         }
         @Override
         public BillItemCommand build() {
-            Validate.isTrue(super.price >= 0, "Provided price:%s is invalid. Price must be positive", super.price );
-            Validate.isTrue(super.quantity >= 0, "Provided quantity:%s is invalid. Quantity must be positive", super.quantity );
+            Validate.isTrue(super.pricePerUnit >= 0,
+                    "Provided price per unit:%s is invalid. Price must be positive", super.pricePerUnit );
+            Validate.isTrue(super.totalPrice >= 0,
+                    "Provided total price:%s is invalid. Price must be positive", super.totalPrice );
+            Validate.isTrue(super.quantity >= 0,
+                    "Provided quantity:%s is invalid. Quantity must be positive", super.quantity );
             return super.build();
         }
     }

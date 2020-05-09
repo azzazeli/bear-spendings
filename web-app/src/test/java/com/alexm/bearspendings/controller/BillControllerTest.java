@@ -64,8 +64,8 @@ class BillControllerTest {
                 .storeId(2L)
                 .total(20.0)
                 .items(ImmutableSet.of(
-                        BillItemCommand.builder().price(22.33).productId(22L).quantity(2.0).build(),
-                        BillItemCommand.builder().price(233.00).productId(12L).quantity(1.0).build()
+                        BillItemCommand.builder().pricePerUnit(22.33).productId(22L).quantity(2.0).build(),
+                        BillItemCommand.builder().pricePerUnit(233.00).productId(12L).quantity(1.0).build()
                 ))
                 .build();
         mvc.perform(MockMvcRequestBuilders
@@ -92,15 +92,15 @@ class BillControllerTest {
                 BillCommand.builder().build(),
                 BillCommand.builder().storeId(2L)
                         .items(ImmutableSet.of(
-                                BillItemCommand.builder().price(22.33).productId(22L).quantity(2.0).build(),
-                                BillItemCommand.builder().price(233.00).productId(12L).quantity(1.0).build()
+                                BillItemCommand.builder().pricePerUnit(22.33).productId(22L).quantity(2.0).build(),
+                                BillItemCommand.builder().pricePerUnit(233.00).productId(12L).quantity(1.0).build()
                         ))
                         .build(),
                 BillCommand.builder().storeId(2L).build(),
                 BillCommand.builder().orderDate(LocalDateTime.now())
                         .items(ImmutableSet.of(
-                                BillItemCommand.builder().price(22.33).productId(22L).quantity(2.0).build(),
-                                BillItemCommand.builder().price(233.00).productId(12L).quantity(1.0).build()
+                                BillItemCommand.builder().pricePerUnit(22.33).productId(22L).quantity(2.0).build(),
+                                BillItemCommand.builder().pricePerUnit(233.00).productId(12L).quantity(1.0).build()
                         ))
                         .build(),
                 BillCommand.builder()
@@ -108,23 +108,23 @@ class BillControllerTest {
                         .storeId(2L)
                         .items(ImmutableSet.of(
                                 BillItemCommand.builder().productId(22L).quantity(2.0).build(),
-                                BillItemCommand.builder().price(233.00).productId(12L).quantity(1.0).build()
+                                BillItemCommand.builder().pricePerUnit(233.00).productId(12L).quantity(1.0).build()
                         ))
                         .build(),
                 BillCommand.builder()
                         .orderDate(LocalDateTime.now())
                         .storeId(2L)
                         .items(ImmutableSet.of(
-                                BillItemCommand.builder().price(22.33).quantity(2.0).build(),
-                                BillItemCommand.builder().price(233.00).productId(12L).quantity(1.0).build()
+                                BillItemCommand.builder().pricePerUnit(22.33).quantity(2.0).build(),
+                                BillItemCommand.builder().pricePerUnit(233.00).productId(12L).quantity(1.0).build()
                         ))
                         .build(),
                 BillCommand.builder()
                         .orderDate(LocalDateTime.now())
                         .storeId(2L)
                         .items(ImmutableSet.of(
-                                BillItemCommand.builder().price(22.33).productId(22L).build(),
-                                BillItemCommand.builder().price(233.00).productId(12L).quantity(1.0).build()
+                                BillItemCommand.builder().pricePerUnit(22.33).productId(22L).build(),
+                                BillItemCommand.builder().pricePerUnit(233.00).productId(12L).quantity(1.0).build()
                         ))
                         .build()
         );

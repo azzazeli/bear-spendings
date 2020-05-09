@@ -26,7 +26,7 @@ class BillCommandTest {
         billCmd.setStoreId(100L);
         billCmd.setOrderDate(LocalDateTime.now());
         billCmd.setTotal(-2.9);
-        billCmd.setItems(ImmutableSet.of(BillItemCommand.builder().productId(234L).price(22.2).quantity(1.0).build()));
+        billCmd.setItems(ImmutableSet.of(BillItemCommand.builder().productId(234L).pricePerUnit(22.2).quantity(1.0).build()));
         Set<ConstraintViolation<BillCommand>> validationResult = validator.validate(billCmd);
         assertNotNull(validationResult);
         assertEquals(1, validationResult.size());
