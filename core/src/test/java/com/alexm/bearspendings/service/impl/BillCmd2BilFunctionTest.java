@@ -33,7 +33,8 @@ class BillCmd2BilFunctionTest {
     @DisplayName("transform UiBill that contains existing product to Bill")
     @Test
     void existingProduct() {
-        Set<BillItemCommand> items = ImmutableSet.of(BillItemCommand.builder().productId(1L).quantity(1.0).pricePerUnit(2.2).build());
+        Set<BillItemCommand> items = ImmutableSet.of(BillItemCommand.builder().productId(1L).quantity(1.0)
+                .pricePerUnit(2.2).totalPrice(2.2).build());
         BillCommand billCommand = BillCommand.builder().storeId(1L).items(items).build();
         Bill bill = billCmd2BilFunction.apply(billCommand);
         assertAll(() -> {
@@ -49,8 +50,8 @@ class BillCmd2BilFunctionTest {
         String piine = "Piine";
         Double total = 20.0;
         Set<BillItemCommand> items = ImmutableSet.of(
-                BillItemCommand.builder().productName(lapte).quantity(1.1).pricePerUnit(2.2).build(),
-                BillItemCommand.builder().productName(piine).quantity(2.3).pricePerUnit(12.1).build()
+                BillItemCommand.builder().productName(lapte).quantity(1.1).pricePerUnit(2.2).totalPrice(2.2).build(),
+                BillItemCommand.builder().productName(piine).quantity(2.3).pricePerUnit(12.1).totalPrice(12.1).build()
         );
         BillCommand billCommand = BillCommand.builder().storeId(1L).total(total).items(items).build();
         Bill bill = billCmd2BilFunction.apply(billCommand);
