@@ -10,8 +10,8 @@ import {ProductsService} from '../core/service/products.service';
 import {BillService} from '../core/service/bill.service';
 import {Bill} from '../core/model/bill.model';
 import * as moment from 'moment';
-import {MessageService} from "primeng/api";
-import {StoreProduct} from "../core/model/store-product.model";
+import {MessageService} from 'primeng/api';
+import {StoreProduct} from '../core/model/store-product.model';
 
 @Component({
   selector: 'app-add-bill',
@@ -80,7 +80,7 @@ export class AddBillComponent implements OnInit {
         'product-id': new FormControl(billItem.productId),
         'product-name': new FormControl(billItem.productName),
         'quantity': new FormControl(billItem.quantity),
-        'price': new FormControl(billItem.price)
+        'price': new FormControl(billItem.pricePerUnit)
       }
     ));
     this.calculateBillTotal();

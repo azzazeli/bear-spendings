@@ -13,9 +13,9 @@ import {ProductsService} from '../core/service/products.service';
 import {BillService} from '../core/service/bill.service';
 import {Bill} from '../core/model/bill.model';
 import * as moment from 'moment';
-import {ToastModule} from "primeng/toast";
-import {StoreProduct} from "../core/model/store-product.model";
-import {Product} from "../core/model/product.model";
+import {ToastModule} from 'primeng/toast';
+import {StoreProduct} from '../core/model/store-product.model';
+import {Product} from '../core/model/product.model';
 
 describe('AddBillComponent', () => {
   let component: AddBillComponent;
@@ -101,7 +101,7 @@ describe('AddBillComponent', () => {
      expect(component.newBillItemComponent.billItem.productId).toEqual(expectedStoreProduct.productId);
      expect(component.newBillItemComponent.billItem.productName).toEqual(samplesDataService.sampleProducts()[1].name);
      expect(component.newBillItemComponent.billItem.quantity).toEqual(expectedStoreProduct.quantity);
-     expect(component.newBillItemComponent.billItem.price).toEqual(expectedStoreProduct.price);
+     expect(component.newBillItemComponent.billItem.pricePerUnit).toEqual(expectedStoreProduct.price);
 
      expect(addToBillBtn.disabled).toBe(false);
   });

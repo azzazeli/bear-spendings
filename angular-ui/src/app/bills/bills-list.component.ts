@@ -9,7 +9,7 @@ import {Product} from '../core/model/product.model';
 import {ProductsService} from '../core/service/products.service';
 import {environment} from '../../environments/environment';
 import * as moment from 'moment';
-import {LazyLoadEvent} from "primeng/api";
+import {LazyLoadEvent} from 'primeng/api';
 
 @Component({
   selector: 'app-bills-list',
@@ -18,8 +18,8 @@ import {LazyLoadEvent} from "primeng/api";
 })
 export class BillsListComponent implements OnInit {
   bills: Bill[];
-  totalRecords: number = 0;
-  loading: boolean = false;
+  totalRecords = 0;
+  loading = false;
   readonly PAGE_SIZE = 10;
 
   constructor(private logger: NGXLogger,
@@ -56,7 +56,7 @@ export class BillsListComponent implements OnInit {
     return this.productService.getObservableById(productId);
   }
 
-  //TODO: maybe part of common utils service
+  // TODO: maybe part of common utils service
   formatMoment(date: string): string {
     return moment(date).format(environment.dateFormat);
   }

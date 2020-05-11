@@ -5,12 +5,12 @@ import {ReactiveFormsModule} from '@angular/forms';
 import {BillItem} from '../../core/model/bill-item.model';
 import {SamplesDataService} from '../../core/service/samplesDataService';
 import {LoggerModule, NGXLogger, NgxLoggerLevel} from 'ngx-logger';
-import {By} from "@angular/platform-browser";
-import {DebugElement} from "@angular/core";
-import {AutoCompleteModule} from "primeng/autocomplete";
-import {Product} from "../../core/model/product.model";
-import {ProductsService} from "../../core/service/products.service";
-import {of} from "rxjs";
+import {By} from '@angular/platform-browser';
+import {DebugElement} from '@angular/core';
+import {AutoCompleteModule} from 'primeng/autocomplete';
+import {Product} from '../../core/model/product.model';
+import {ProductsService} from '../../core/service/products.service';
+import {of} from 'rxjs';
 
 describe('NewBillItemComponent', () => {
   let component: NewBillItemComponent;
@@ -26,8 +26,7 @@ describe('NewBillItemComponent', () => {
       providers: [
         SamplesDataService,
         NGXLogger,
-        { provide: ProductsService, useValue: jasmine.createSpyObj('ProductService',
-          ['searchProductsBy'])}
+        { provide: ProductsService, useValue: jasmine.createSpyObj('ProductService', ['searchProductsBy'])}
       ],
       declarations: [ NewBillItemComponent ]
     })
@@ -46,82 +45,97 @@ describe('NewBillItemComponent', () => {
     );
   });
 
+  fit('#on select product from suggestion - clear price per unit and quantity', () => {
+    const productInput: DebugElement = fixture.debugElement.query(By.css('#bill-item-product'));
+    component.newBillItemForm.get('price-per-unit').setValue(23.2);
+    component.newBillItemForm.get('quantity').setValue(2);
+
+    productInput.triggerEventHandler('completeMethod', {'query': 'car'});
+    productInput.triggerEventHandler('onSelect', {'id': 122, 'name': 'Carne'});
+    expect(component.newBillItemForm.get('quantity').value).toBeNull();
+    expect(component.newBillItemForm.get('price-per-unit').value).toBeNull();
+    expect(component.totalPrice).toBeUndefined();
+  });
+
   it('#should create', () => {
     expect(component).toBeTruthy();
-    expect(component.newBillItemForm).toBeDefined();
-    expect(component.newBillItemForm.get('product-id')).toBeDefined();
-    expect(component.newBillItemForm.get('product')).toBeDefined();
-    expect(component.newBillItemForm.get('quantity')).toBeDefined();
-    expect(component.newBillItemForm.get('price')).toBeDefined();
+    expect(component.newBillItemForm).not.toBeNull();
+    expect(component.newBillItemForm.get('product')).not.toBeNull();
+    expect(component.newBillItemForm.get('price-per-unit')).not.toBeNull();
+    expect(component.newBillItemForm.get('quantity')).not.toBeNull();
   });
 
   it('#validation checks', () => {
     expect(component.newBillItemForm.valid).toBe(false);
     component.newBillItemForm.get('product').setValue('Chefir JLC 1.5%');
     expect(component.newBillItemForm.valid).toBe(false);
-    component.newBillItemForm.get('price').setValue(7.88);
+    component.newBillItemForm.get('price-per-unit').setValue(7.88);
+    expect(component.newBillItemForm.valid).toBe(false);
     expect(component.newBillItemForm.valid).toBe(false);
     component.newBillItemForm.get('quantity').setValue(2);
     expect(component.newBillItemForm.valid).toBe(true);
   });
 
   it('#on add new bill new product name' , () => {
-    //given
+    // given
     const expected = {
       'product': 'Chefir JLC 2.5%',
-      'price': 9.55,
+      'price-per-unit': 9.55,
       'quantity': 2
     };
     component.newBillItemForm.setValue(expected);
     spyOn(component.addBillItemEvent, 'emit').and.callThrough();
 
-    //then
+    // then
     component.addBillItemEvent.subscribe((newBillItem: BillItem) => {
-      expect(newBillItem.price).toBe(expected.price);
       expect(newBillItem.productId).toBeUndefined();
       expect(newBillItem.productName).toEqual(expected['product']);
+      expect(newBillItem.pricePerUnit).toBe(expected['price-per-unit']);
       expect(newBillItem.quantity).toBe(expected.quantity);
+      expect(newBillItem.totalPrice).toBe(19.10);
     });
-    //when
+    // when
     component.onAddBillItem();
   });
 
   it('#on add new bill fire event' , () => {
-    //given
+    // given
     const expected = {
-      'product': new Product(1,'Chefir JLC 2.5%'),
-      'price': 9.55,
+      'product': new Product(1, 'Chefir JLC 2.5%'),
+      'price-per-unit': 9.55,
       'quantity': 2
     };
     component.newBillItemForm.setValue(expected);
     spyOn(component.addBillItemEvent, 'emit').and.callThrough();
 
-    //then
+    // then
     component.addBillItemEvent.subscribe((newBillItem: BillItem) => {
-      expect(newBillItem.price).toBe(expected.price);
       expect(newBillItem.productId).toEqual(expected['product'].id);
       expect(newBillItem.productName).toEqual(expected['product'].name);
+      expect(newBillItem.pricePerUnit).toBe(expected['price-per-unit']);
       expect(newBillItem.quantity).toBe(expected.quantity);
+      expect(newBillItem.totalPrice).toBe(19.10);
     });
-    //when
+
+    // when
     component.onAddBillItem();
     expect(component.addBillItemEvent.emit).toHaveBeenCalled();
   });
 
-  it('#on set bill item - populate form with data and calculate price per unit', () => {
-    //when
+  it('#on set bill item - populate form with data and calculate total price', () => {
+    // when
     const billItem = samplesDataService.sampleBillItem(1);
     component.setBillItem(billItem);
     fixture.detectChanges();
-    //then
+    // then
     expect(component.newBillItemForm.get('product').value).toEqual(new Product(billItem.productId, billItem.productName));
-    expect(component.newBillItemForm.get('price').value).toBe(billItem.price);
+    expect(component.newBillItemForm.get('price-per-unit').value).toBe(billItem.pricePerUnit);
     expect(component.newBillItemForm.get('quantity').value).toBe(billItem.quantity);
-    expect(component.pricePerUnit).toBe(10.15);
+    expect(component.totalPrice).toBe(40.62);
   });
 
   it('#on add bill item - disable add button', () => {
-    let addToBillBtn = fixture.nativeElement.querySelector('#add-to-bill-btn');
+    const addToBillBtn = fixture.nativeElement.querySelector('#add-to-bill-btn');
     fixture.detectChanges();
     expect(addToBillBtn.disabled).toBe(true);
     const billItem = samplesDataService.sampleBillItem(1);
@@ -134,25 +148,25 @@ describe('NewBillItemComponent', () => {
   });
 
   it('#on clear bill item - empty all inputs', () => {
-    //given
+    // given
     component.setBillItem(samplesDataService.sampleBillItem(1));
-    //when
+    // when
     component.onClearBillItem();
-    //then
+    // then
     expect(component.newBillItemForm.get('product').value).toBeNull();
-    expect(component.newBillItemForm.get('price').value).toBeNull();
     expect(component.newBillItemForm.get('quantity').value).toBeNull();
+    expect(component.newBillItemForm.get('price-per-unit').value).toBeNull();
     expect(component.pricePerUnit).toBeUndefined();
   });
 
   it('#validate negative price', () => {
     const billItem = samplesDataService.sampleBillItem(1);
-    billItem.price = -2;
+    billItem.pricePerUnit = -2;
     component.setBillItem(billItem);
     expect(component.newBillItemForm.valid).toBe(false);
-    expect(component.newBillItemForm.controls['price'].invalid).toBe(true);
+    expect(component.newBillItemForm.controls['price-per-unit'].invalid).toBe(true);
 
-    billItem.price = 2;
+    billItem.pricePerUnit = 2;
     component.setBillItem(billItem);
     expect(component.newBillItemForm.valid).toBe(true);
   });
@@ -169,35 +183,35 @@ describe('NewBillItemComponent', () => {
     expect(component.newBillItemForm.valid).toBe(true);
   });
 
-  it('#on change price, quantity - recalculate price per unit', () => {
+  it('#on change price, quantity - recalculate total price', () => {
     const billItem = samplesDataService.sampleBillItem(1);
     component.setBillItem(billItem);
-    let priceField: DebugElement = fixture.debugElement.query(By.css('#bill-item-price'));
-    priceField.nativeElement.value = '10.00';
-    priceField.nativeElement.dispatchEvent(new Event('change'));
-    expect(component.pricePerUnit).toBe(5.00);
-    let quantityField: DebugElement = fixture.debugElement.query(By.css('#bill-item-quantity'));
+    const pricePerUnitField: DebugElement = fixture.debugElement.query(By.css('#bill-item-price-per-unit'));
+    pricePerUnitField.nativeElement.value = '10.00';
+    pricePerUnitField.nativeElement.dispatchEvent(new Event('change'));
+    expect(component.totalPrice).toBe(20.00);
+    const quantityField: DebugElement = fixture.debugElement.query(By.css('#bill-item-quantity'));
     quantityField.nativeElement.value = '3';
     quantityField.nativeElement.dispatchEvent(new Event('change'));
-    expect(component.pricePerUnit).toBe(3.33);
+    expect(component.totalPrice).toBe(30.00);
   });
 
-  it('#on price or quantity = 0,price per unit must be undefined', () => {
+  it('#on price per unit or quantity = 0,total price per must be undefined or zero', () => {
     const billItem = samplesDataService.sampleBillItem(1);
     component.setBillItem(billItem);
-    let priceField: DebugElement = fixture.debugElement.query(By.css('#bill-item-price'));
-    priceField.nativeElement.value = '0';
-    priceField.nativeElement.dispatchEvent(new Event('change'));
-    expect(component.pricePerUnit).toBeUndefined();
+    const pricePerUnitField: DebugElement = fixture.debugElement.query(By.css('#bill-item-price-per-unit'));
+    pricePerUnitField.nativeElement.value = '0';
+    pricePerUnitField.nativeElement.dispatchEvent(new Event('change'));
+    expect(component.totalPrice).toEqual(0);
 
-    let quantityField: DebugElement = fixture.debugElement.query(By.css('#bill-item-quantity'));
+    const quantityField: DebugElement = fixture.debugElement.query(By.css('#bill-item-quantity'));
     quantityField.nativeElement.value = '0';
     quantityField.nativeElement.dispatchEvent(new Event('change'));
-    expect(component.pricePerUnit).toBeUndefined();
+    expect(component.totalPrice).toEqual(0);
   });
 
   it('#search products ', () => {
-    let productInput: DebugElement = fixture.debugElement.query(By.css('#bill-item-product'));
+    const productInput: DebugElement = fixture.debugElement.query(By.css('#bill-item-product'));
     productInput.triggerEventHandler('completeMethod', {'query': 'car'});
     expect(component.productSuggestions).toEqual([
       new Product(122, 'Carne'),

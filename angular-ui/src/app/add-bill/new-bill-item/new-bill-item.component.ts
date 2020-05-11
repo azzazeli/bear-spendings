@@ -2,8 +2,8 @@ import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {BillItem} from '../../core/model/bill-item.model';
 import {NGXLogger} from 'ngx-logger';
-import {Product} from "../../core/model/product.model";
-import {ProductsService} from "../../core/service/products.service";
+import {Product} from '../../core/model/product.model';
+import {ProductsService} from '../../core/service/products.service';
 
 @Component({
   selector: 'app-new-bill-item',
@@ -11,21 +11,25 @@ import {ProductsService} from "../../core/service/products.service";
   styleUrls: ['./new-bill-item.component.css']
 })
 export class NewBillItemComponent implements OnInit {
+  constructor(private logger: NGXLogger,
+              private productService: ProductsService) { }
   newBillItemForm: FormGroup;
 
   @Output('add-bill-item')
   addBillItemEvent: EventEmitter<BillItem> = new EventEmitter();
   billItem: BillItem;
-  pricePerUnit : number;
+  pricePerUnit: number;
+  totalPrice: number;
   productSuggestions: Product[];
 
-  constructor(private logger: NGXLogger,
-              private productService: ProductsService) { }
+  static validateNegative(formControl: FormControl): {[s: string]: boolean} {
+    return +formControl.value <= 0 ? {'negativeNumber' : true } : null;
+  }
 
   ngOnInit() {
     this.newBillItemForm = new FormGroup({
       'product': new FormControl(null, Validators.required),
-      'price': new FormControl(null, [Validators.required, NewBillItemComponent.validateNegative]),
+      'price-per-unit': new FormControl(null, [Validators.required, NewBillItemComponent.validateNegative]),
       'quantity': new FormControl(null, [Validators.required, NewBillItemComponent.validateNegative])
     });
   }
@@ -34,14 +38,14 @@ export class NewBillItemComponent implements OnInit {
     this.logger.debug('NewBillItemComponent: Set bill item:' + JSON.stringify(billItem));
     this.billItem = billItem;
     this.newBillItemForm.get('product').setValue(new Product(billItem.productId, billItem.productName));
-    this.newBillItemForm.get('price').setValue(billItem.price);
+    this.newBillItemForm.get('price-per-unit').setValue(billItem.pricePerUnit);
     this.newBillItemForm.get('quantity').setValue(billItem.quantity);
-    this.calculatePricePerUnit(billItem.price, billItem.quantity);
+    this.calculateTotalPrice(billItem.pricePerUnit, billItem.quantity);
   }
 
   reset(): void {
     this.newBillItemForm.reset();
-    this.pricePerUnit = undefined;
+    this.totalPrice = undefined;
   }
 
   searchProduct(event): void {
@@ -57,11 +61,13 @@ export class NewBillItemComponent implements OnInit {
     const productName = (productControlValue instanceof Product)
       ? productControlValue.name
       : productControlValue;
+    this.recalculateTotalPrice();
     this.billItem = new BillItem(
       productControlValue.id,
       productName,
       this.newBillItemForm.get('quantity').value,
-      this.newBillItemForm.get('price').value,
+      this.newBillItemForm.get('price-per-unit').value,
+      this.totalPrice
     );
     this.newBillItemForm.reset();
     this.addBillItemEvent.emit(this.billItem);
@@ -71,25 +77,24 @@ export class NewBillItemComponent implements OnInit {
     this.reset();
   }
 
-  recalculatePricePerUnit() {
-    this.calculatePricePerUnit(this.newBillItemForm.get('price').value,
-      this.newBillItemForm.get('quantity').value);
+  recalculateTotalPrice() {
+    this.logger.debug('recalculating total price ...');
+    const pricePerUnit = this.newBillItemForm.get('price-per-unit').value;
+    const quantity = this.newBillItemForm.get('quantity').value;
+    this.calculateTotalPrice(pricePerUnit, quantity);
   }
 
-  private calculatePricePerUnit(price: number, quantity: number): void {
-    if (price <=0 || quantity <= 0){
-      this.pricePerUnit = undefined;
-      return;
-    }
-    this.pricePerUnit = +(price / quantity).toFixed(2);
-    this.logger.debug('recalculating price per unit ...');
-    this.logger.debug('price:' + price);
-    this.logger.debug('quantity:' + quantity);
-    this.logger.debug('pricePerUnit:' + this.pricePerUnit);
+  calculateTotalPrice(pricePerUnit: number, quantity: number) {
+    this.logger.debug('calculating price per unit ...');
+    this.totalPrice = +(pricePerUnit * quantity).toFixed(2);
+    this.logger.debug(`total item price:${this.totalPrice}`);
   }
 
-
-  static validateNegative(formControl: FormControl): {[s:string]: boolean} {
-    return +formControl.value <= 0 ? {'negativeNumber' : true } : null;
+  productSelected(value) {
+    this.logger.debug(`selected product:${JSON.stringify(value)} from suggestion. clean quantity and price-per-unit
+     fields and total price`);
+    this.totalPrice = undefined;
+    this.newBillItemForm.get('price-per-unit').reset();
+    this.newBillItemForm.get('quantity').reset();
   }
 }

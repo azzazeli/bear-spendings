@@ -2,8 +2,8 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Bill} from '../model/bill.model';
 import {Observable} from 'rxjs';
-import {environment} from "../../../environments/environment";
-import {NGXLogger} from "ngx-logger";
+import {environment} from '../../../environments/environment';
+import {NGXLogger} from 'ngx-logger';
 
 @Injectable()
 export class BillService {
@@ -12,7 +12,7 @@ export class BillService {
   ALL_BILLS_COUNT_URL = `${environment.apiUrl}${environment.BILLS_URL}/count`;
 
   constructor(private http: HttpClient, private logger: NGXLogger) {
-    this.logger.debug("environment.apiUrl:", environment.apiUrl);
+    this.logger.debug('environment.apiUrl:', environment.apiUrl);
   }
 
   public addBill(bill: Bill): Observable<Bill> {
