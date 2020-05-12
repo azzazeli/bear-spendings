@@ -45,7 +45,7 @@ describe('NewBillItemComponent', () => {
     );
   });
 
-  fit('#on select product from suggestion - clear price per unit and quantity', () => {
+  it('#on select product from suggestion - clear price per unit and quantity', () => {
     const productInput: DebugElement = fixture.debugElement.query(By.css('#bill-item-product'));
     component.newBillItemForm.get('price-per-unit').setValue(23.2);
     component.newBillItemForm.get('quantity').setValue(2);

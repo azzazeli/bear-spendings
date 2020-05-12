@@ -58,15 +58,15 @@ export class NewBillItemComponent implements OnInit {
   onAddBillItem(): void {
     this.logger.debug('NewBillItemComponent: On add bill item');
     const productControlValue = this.newBillItemForm.get('product').value;
-    const productName = (productControlValue instanceof Product)
+    const productName = (productControlValue.name)
       ? productControlValue.name
       : productControlValue;
     this.recalculateTotalPrice();
     this.billItem = new BillItem(
       productControlValue.id,
       productName,
-      this.newBillItemForm.get('quantity').value,
       this.newBillItemForm.get('price-per-unit').value,
+      this.newBillItemForm.get('quantity').value,
       this.totalPrice
     );
     this.newBillItemForm.reset();

@@ -40,7 +40,6 @@ public class BillCmd2BilFunction implements Function<BillCommand, Bill> {
                                 .quantity(uiBillItem.getQuantity())
                                 .build()).collect(Collectors.toSet())
                 )
-                .total(billCommand.getTotal())
                 .build();
     }
 

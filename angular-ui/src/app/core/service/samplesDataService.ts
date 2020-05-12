@@ -3,13 +3,13 @@ import {Store} from '../model/store.model';
 import {Product} from '../model/product.model';
 import {Bill} from '../model/bill.model';
 import * as moment from 'moment';
-import {StoreProduct} from "../model/store-product.model";
+import {StoreProduct} from '../model/store-product.model';
 
 export class SamplesDataService {
 
   sampleBillItem(id: number): BillItem {
     return new BillItem(
-      id, 'Chefir JLC 2.5%', 2, 20.31
+      id, 'Chefir JLC 2.5%', 20.31, 2.0, 40.62
     );
   }
 
@@ -48,7 +48,7 @@ export class SamplesDataService {
     return [
       new StoreProduct(1, 2, 12),
       new StoreProduct(2, 3, 8.55)
-    ]
+    ];
   }
 
   sampleBill(): Bill {

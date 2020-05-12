@@ -7,13 +7,13 @@ export class BillItem {
   public pricePerUnit: number;
   public totalPrice: number;
   constructor(productId: number, productName: string,
-              quantity: number,
               pricePerUnit: number,
+              quantity: number,
               totalPrice?: number) {
     this.productId = productId;
     this.productName = productName;
-    this.quantity = quantity;
     this.pricePerUnit = pricePerUnit;
+    this.quantity = quantity;
     this.totalPrice = totalPrice;
   }
 }

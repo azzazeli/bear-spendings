@@ -53,7 +53,7 @@ describe('AddBillComponent', () => {
     productsServiceSpy.topStoreProducts.and.returnValue(of(samplesDataService.sampleStoreProducts()));
     productsServiceSpy.getObservableById.and.callFake(function (productId) {
       const products: Product[] = samplesDataService.sampleProducts();
-      return of(products.find(product => product.id == productId));
+      return of(products.find(product => product.id === productId));
     });
   });
 
@@ -69,10 +69,10 @@ describe('AddBillComponent', () => {
     expect(component.addBillForm).toBeDefined();
     expect(component.addBillForm.contains('store-id')).toEqual(true);
 
-    //when
+    // when
     component.addBillForm.get('store-id').setValue(1);
     component.onStoreSelected();
-    //then
+    // then
     expect(productsServiceSpy.topStoreProducts).toHaveBeenCalledWith(1);
   });
 
@@ -85,19 +85,19 @@ describe('AddBillComponent', () => {
   });
 
   it('#on top product select - populate bill item form', () => {
-    //given
-    let addToBillBtn = fixture.nativeElement.querySelector('#add-to-bill-btn');
+    // given
+    const addToBillBtn = fixture.nativeElement.querySelector('#add-to-bill-btn');
     fixture.detectChanges();
     expect(addToBillBtn.disabled).toBe(true);
     component.addBillForm.get('store-id').setValue(1);
     component.onStoreSelected();
 
-    //when
+    // when
     component.onTopProductSelected(2);
     fixture.detectChanges();
 
-    //then
-     const expectedStoreProduct:StoreProduct = samplesDataService.sampleStoreProducts()[1];
+    // then
+     const expectedStoreProduct: StoreProduct = samplesDataService.sampleStoreProducts()[1];
      expect(component.newBillItemComponent.billItem.productId).toEqual(expectedStoreProduct.productId);
      expect(component.newBillItemComponent.billItem.productName).toEqual(samplesDataService.sampleProducts()[1].name);
      expect(component.newBillItemComponent.billItem.quantity).toEqual(expectedStoreProduct.quantity);
@@ -107,27 +107,28 @@ describe('AddBillComponent', () => {
   });
 
   it('#on add bill item from top store products', () => {
-    //given
+    // given
     fixture.detectChanges();
     expect((<FormArray>component.addBillForm.get('bill-items')).length).toBe(0);
-    //when
+    // when
     component.onAddBillItem(samplesDataService.sampleBillItem(1));
-    //then
+    // then
     expect((<FormArray>component.addBillForm.get('bill-items')).length).toBe(1);
     expect((<FormArray>component.addBillForm.get('bill-items')).at(0).get('product-id').value).toBe(1);
     expect((<FormArray>component.addBillForm.get('bill-items')).at(0).get('quantity').value).toBe(2);
     expect((<FormArray>component.addBillForm.get('bill-items')).at(0).get('product-name').value).toBe('Chefir JLC 2.5%');
-    expect((<FormArray>component.addBillForm.get('bill-items')).at(0).get('price').value).toBe(20.31);
-    expect(component.billTotal).toEqual(20.31);
-
-    //when
-    component.onAddBillItem(samplesDataService.sampleBillItem(2));
-    //then
-    expect((<FormArray>component.addBillForm.get('bill-items')).at(1).get('product-id').value).toBe(2);
+    expect((<FormArray>component.addBillForm.get('bill-items')).at(0).get('price-per-unit').value).toBe(20.31);
+    expect((<FormArray>component.addBillForm.get('bill-items')).at(0).get('total-price').value).toBe(40.62);
     expect(component.billTotal).toEqual(2 * 20.31);
+
+    // when
+    component.onAddBillItem(samplesDataService.sampleBillItem(2));
+    // then
+    expect((<FormArray>component.addBillForm.get('bill-items')).at(1).get('product-id').value).toBe(2);
+    expect(component.billTotal).toEqual(4 * 20.31);
   });
 
-  it('#on delete bill item - remove item from array form', ()=> {
+  it('#on delete bill item - remove item from array form', () => {
     // given
     fixture.detectChanges();
     component.onAddBillItem(samplesDataService.sampleBillItem(1));
@@ -137,33 +138,32 @@ describe('AddBillComponent', () => {
     // then
     expect((<FormArray>component.addBillForm.get('bill-items')).length).toBe(1);
     expect((<FormArray>component.addBillForm.get('bill-items')).at(0).get('product-id').value).toBe(2);
-    expect(component.billTotal).toEqual(20.31);
+    expect(component.billTotal).toEqual(2 * 20.31);
   });
 
-
-  it('#on add bill item - top store product has no selected item', ()=> {
-    //given
-    let addToBillBtn = fixture.nativeElement.querySelector('#add-to-bill-btn');
+  it('#on add bill item - top store product has no selected item', () => {
+    // given
+    const addToBillBtn = fixture.nativeElement.querySelector('#add-to-bill-btn');
     fixture.detectChanges();
     component.addBillForm.get('bill-date').setValue('04/11/2019');
     component.addBillForm.get('store-id').setValue(1);
     component.onStoreSelected();
-    //when
+    // when
     component.onAddBillItem(samplesDataService.sampleBillItem(1));
     fixture.detectChanges();
-    //then
+    // then
     expect(component.addBillForm.valid).toBe(true);
     expect(component.selectedProductId).toBe(null);
     expect(addToBillBtn.disabled).toBe(true);
   });
 
   it('#on store select reset bill - item form and selected top product', () => {
-    //given
-    let addToBillBtn = fixture.nativeElement.querySelector('#add-to-bill-btn');
+    // given
+    const addToBillBtn = fixture.nativeElement.querySelector('#add-to-bill-btn');
     fixture.detectChanges();
-    //when
+    // when
     component.onStoreSelected();
-    //then
+    // then
     expect(component.selectedProductId).toBe(null);
     expect(addToBillBtn.disabled).toBe(true);
   });
@@ -172,22 +172,22 @@ describe('AddBillComponent', () => {
     '1. there at least on bill item ' +
     '2. store is selected ' +
     '3. date is selected', () => {
-    //given
+    // given
     fixture.detectChanges();
-    let addBillBtn = fixture.nativeElement.querySelector('#add-bill-btn');
+    const addBillBtn = fixture.nativeElement.querySelector('#add-bill-btn');
     expect(addBillBtn.disabled).toBe(true);
     expect(component.addBillForm.valid).toBe(false);
-    //when
+    // when
     component.addBillForm.get('bill-date').setValue('04/11/2019');
     component.addBillForm.get('store-id').setValue('1');
     component.onAddBillItem(samplesDataService.sampleBillItem(1));
-    //then
-    expect(component.addBillForm.valid).toBe(true)
+    // then
+    expect(component.addBillForm.valid).toBe(true);
   });
 
   it('#on add bill - call BillService.addBill, reset new bill form', () => {
-    //given
-    let addedBill = new Bill(moment(new Date('2019-09-19T00:00:00')), 1);
+    // given
+    const addedBill = new Bill(moment(new Date('2019-09-19T00:00:00')), 1);
     addedBill.id = 1224;
     billServiceSpy.addBill.and.returnValue(of(addedBill));
     fixture.detectChanges();
@@ -196,16 +196,24 @@ describe('AddBillComponent', () => {
     component.onStoreSelected();
     component.onAddBillItem(samplesDataService.sampleBillItem(1));
 
-    //when
+    // when
     component.onAddBill();
     const expectedBill: Bill = new Bill(moment(component.normalizedDate(new Date('2019-09-19T00:00:00'))), 1);
     expectedBill.items.push(samplesDataService.sampleBillItem(1));
-    expectedBill.total = (20.31);
-    //then
+    expectedBill.total = (2 * 20.31);
+
+    // then
     expect(billServiceSpy.addBill).toHaveBeenCalledWith(expectedBill);
     expectFormReset();
   });
 
+  it('#on add bill item - calculate total bill', () => {
+    fixture.detectChanges();
+    component.onAddBillItem(samplesDataService.sampleBillItem(1));
+    component.onAddBillItem(samplesDataService.sampleBillItem(2));
+    component.onAddBillItem(samplesDataService.sampleBillItem(3));
+    expect(component.billTotal).toEqual(121.86);
+  });
 
   it('#on clear form click - expect form reset ', () => {
     fixture.detectChanges();

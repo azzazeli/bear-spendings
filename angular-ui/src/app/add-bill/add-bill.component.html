@@ -41,8 +41,9 @@
           <tr>
             <th>#</th>
             <th>Product Name</th>
-            <th>Price</th>
+            <th>Price Per Unit</th>
             <th>Quantity</th>
+            <th>Total Price</th>
             <th></th>
           </tr>
           </thead>
@@ -50,8 +51,9 @@
             <tr *ngFor="let bill-item of billItemsControls; let i = index">
               <td>{{i+1}}</td>
               <td>{{billItemsControls[i].get('product-name').value}}</td>
-              <td>{{billItemsControls[i].get('price').value}}</td>
+              <td>{{billItemsControls[i].get('price-per-unit').value}}</td>
               <td>{{billItemsControls[i].get('quantity').value}}</td>
+              <td>{{billItemsControls[i].get('total-price').value}}</td>
               <td style="width: 20px">
                 <button class="btn btn-default btn-danger btn-xs" type="button"
                         (click)="onDeleteBillItem(i)">

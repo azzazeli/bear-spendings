@@ -25,7 +25,7 @@ export class AddBillComponent implements OnInit {
   addBillForm: FormGroup;
   topStoreProducts: StoreProduct[];
   selectedProductId: number;
-  billTotal: number = 0.0;
+  billTotal = 0.0;
 
   @ViewChild(NewBillItemComponent)
   newBillItemComponent: NewBillItemComponent;
@@ -56,7 +56,7 @@ export class AddBillComponent implements OnInit {
   onStoreSelected() {
     const storeId: number = this.addBillForm.get('store-id').value;
     this.logger.debug('AddBillComponent: On store selected. store id:', storeId);
-    //todo: need to unsubscribe ??
+    // todo: need to unsubscribe ??
     this.productsService.topStoreProducts(storeId).subscribe((products) => {
       this.topStoreProducts = products;
     });
@@ -66,10 +66,10 @@ export class AddBillComponent implements OnInit {
   onTopProductSelected(productId: number) {
     this.selectedProductId = productId;
     this.logger.debug('AddBillComponent: On top store product selected. ProductId:', productId );
-    const selectedProduct: StoreProduct = this.topStoreProducts.find(p => p.productId == productId);
+    const selectedProduct: StoreProduct = this.topStoreProducts.find(p => p.productId === productId);
     this.productsService.getObservableById(selectedProduct.productId).subscribe((product: Product) => {
       this.newBillItemComponent.setBillItem(new BillItem(selectedProduct.productId,
-        product.name, selectedProduct.quantity, selectedProduct.price));
+        product.name, selectedProduct.price, selectedProduct.quantity));
     });
   }
 
@@ -79,8 +79,9 @@ export class AddBillComponent implements OnInit {
       {
         'product-id': new FormControl(billItem.productId),
         'product-name': new FormControl(billItem.productName),
+        'price-per-unit': new FormControl(billItem.pricePerUnit),
         'quantity': new FormControl(billItem.quantity),
-        'price': new FormControl(billItem.pricePerUnit)
+        'total-price': new FormControl(billItem.totalPrice)
       }
     ));
     this.calculateBillTotal();
@@ -94,14 +95,16 @@ export class AddBillComponent implements OnInit {
   }
 
   onAddBill() {
-    this.logger.debug("AddBillComponent: On add bill. addBillForm:", this.addBillForm );
-    const bill: Bill = new Bill(moment(this.normalizedDate(this.addBillForm.get('bill-date').value)), this.addBillForm.get('store-id').value);
-    for( let billItemFG of this.billItems().controls) {
+    this.logger.debug(`AddBillComponent: On add bill. addBillForm: ${this.addBillForm}`);
+    const bill: Bill = new Bill(moment(this.normalizedDate(this.addBillForm.get('bill-date').value))
+      , this.addBillForm.get('store-id').value);
+    for (const billItemFG of this.billItems().controls) {
       bill.items.push(new BillItem(
         billItemFG.get('product-id').value,
         billItemFG.get('product-name').value,
+        billItemFG.get('price-per-unit').value,
         billItemFG.get('quantity').value,
-        billItemFG.get('price').value)
+        billItemFG.get('total-price').value)
       );
     }
     bill.total = this.billTotal;
@@ -120,7 +123,6 @@ export class AddBillComponent implements OnInit {
   /**
    * JSON.stringify() return utc date; this method create a utc date based on passed param.
    * this is a hack. need to find more elegant solution
-   * @param date
    */
   normalizedDate(date: Date): Date {
     return new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours(), date.getMinutes()))
@@ -141,21 +143,21 @@ export class AddBillComponent implements OnInit {
     this.addBillForm.markAsUntouched();
     this.addBillForm.markAsPristine();
     this.billTotal = 0.0;
-    this.logger.debug("resetting done.")
+    this.logger.debug('resetting done.');
   }
 
   private resetNewBillItem() {
     this.logger.debug('resetting new bill item form ...');
     this.newBillItemComponent.reset();
     this.selectedProductId = null;
-    this.logger.debug("resetting done.");
+    this.logger.debug('resetting done.');
   }
 
   private calculateBillTotal() {
     this.logger.debug('Calculating bill total ...');
     this.billTotal = 0;
-    for( let billItemFG of this.billItems().controls) {
-        this.billTotal += billItemFG.get('price').value;
+    for (const billItemFG of this.billItems().controls) {
+        this.billTotal += billItemFG.get('total-price').value;
     }
     this.billTotal = +this.billTotal.toFixed(2);
     this.logger.debug('Bill total is:', this.billTotal);
