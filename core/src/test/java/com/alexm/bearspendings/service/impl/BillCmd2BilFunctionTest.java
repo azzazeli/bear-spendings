@@ -59,7 +59,6 @@ class BillCmd2BilFunctionTest {
             Assertions.assertTrue(ImmutableList.of(lapte, piine).contains(billItem.getProduct().getName()));
             assertThat(bill.getItems()).extracting("product.id").doesNotContainNull();
         }
-        assertEquals(total, bill.getTotal());
     }
 
 }
