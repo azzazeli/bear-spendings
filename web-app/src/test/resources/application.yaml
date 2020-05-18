@@ -1,33 +1,5 @@
-#server:
-#  port: 8399
-#todo: to be removed - not needed anymore here
 spring:
-  datasource:
-    url: "jdbc:h2:mem:bear-spendings-test-data"
-    username: sa
-    password: manager
-    driverClassName: org.h2.Driver
-  jpa:
-    show_sql: true
   security:
     user:
       name: admin
       password: manager
-#  h2:
-#    console:
-#      enabled: true
-
-com:
-  alexm:
-    bearspendings:
-      initTestData: false
-
-logging:
-  level:
-    com:
-      alexm:
-        bearspendings: debug
-    org:
-      springframework: info
-      hibernate:
-        type: info #trace - to see sql bind values

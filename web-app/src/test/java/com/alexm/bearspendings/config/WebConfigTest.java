@@ -1,9 +1,16 @@
 package com.alexm.bearspendings.config;
 
+import com.alexm.bearspendings.repository.ProductRepository;
+import com.alexm.bearspendings.repository.StoreRepository;
+import com.alexm.bearspendings.service.BillService;
+import com.alexm.bearspendings.service.ProductService;
+import com.alexm.bearspendings.service.StoreService;
+import com.alexm.bearspendings.service.UnitOfMeasureService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.ResponseEntity;
@@ -22,8 +29,22 @@ import static org.springframework.http.HttpStatus.OK;
  * Date: 4/15/20
  **/
 @ExtendWith(SpringExtension.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
+        properties = "spring.autoconfigure.exclude=[" +
+                "org.springframework.boot.autoconfigure.data.jpa.JpaRepositoriesAutoConfiguration]")
 class WebConfigTest {
+    @MockBean
+    UnitOfMeasureService unitOfMeasureService;
+    @MockBean
+    BillService billService;
+    @MockBean
+    ProductService productService;
+    @MockBean
+    StoreService storeService;
+    @MockBean
+    ProductRepository productRepository;
+    @MockBean
+    StoreRepository storeRepository;
 
     TestRestTemplate restTemplate;
     URL url;
