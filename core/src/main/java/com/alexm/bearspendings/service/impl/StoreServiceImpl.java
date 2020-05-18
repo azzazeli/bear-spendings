@@ -22,12 +22,20 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 public class StoreServiceImpl implements StoreService {
+    public static final String DEFAULT_STORE_NAME = "DEFAULT";
+
     private final StoreRepository storeRepository;
     private final BillItemRepository billItemRepository;
 
     public StoreServiceImpl(StoreRepository storeRepository, BillItemRepository billItemRepository) {
         this.storeRepository = storeRepository;
         this.billItemRepository = billItemRepository;
+    }
+
+    @Override
+    public Store defaultStore() {
+        return storeRepository.findByName(DEFAULT_STORE_NAME)
+                .orElseGet(() -> storeRepository.save(Store.builder().name(DEFAULT_STORE_NAME).build()));
     }
 
     @Override
@@ -49,7 +57,6 @@ public class StoreServiceImpl implements StoreService {
      * Return last 10 products from bills
      * @param storeId identifier  of {@link Store}
      * @param size number of returned products
-     * @return
      */
     @Override
     public Set<TopProductCommand> topProducts(Long storeId, int size) {

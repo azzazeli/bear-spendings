@@ -12,6 +12,7 @@ import javax.transaction.Transactional;
 import java.util.NoSuchElementException;
 import java.util.Set;
 
+import static com.alexm.bearspendings.service.impl.StoreServiceImpl.DEFAULT_STORE_NAME;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -33,7 +34,7 @@ class StoreServiceImplTest {
     @DisplayName("all stores test")
     @Test
     void allStores() {
-        assertThat(storeService.allStores(), containsInAnyOrder(Store.builder().id(1L).name("Nr.1").build()));
+        assertThat(storeService.allStores(), containsInAnyOrder(Store.builder().id(1L).name(DEFAULT_STORE_NAME).build()));
     }
 
     @DisplayName("get store by id")
@@ -42,7 +43,7 @@ class StoreServiceImplTest {
         Store store = storeService.findStore(1L);
         assertAll("store properties",
                 () -> assertEquals(1L, store.getId().longValue()),
-                () -> assertEquals("Nr.1", store.getName())
+                () -> assertEquals(DEFAULT_STORE_NAME, store.getName())
         );
     }
 
@@ -55,10 +56,10 @@ class StoreServiceImplTest {
     @DisplayName("test getting of top store products")
     @Test
     void testTopProducts() {
-        //given
-        //when
+        // given
+        // when
         Set<TopProductCommand> products = storeService.topProducts(1L, 3);
-        //then
+        // then
         assertAll(
                 () -> { assertEquals(3, products.size());}
         );
@@ -92,5 +93,11 @@ class StoreServiceImplTest {
         final Store third = storeService.getOrInsert(pegas);
         assertEquals(saved.getId(), second.getId());
         assertEquals(saved.getId(), third.getId());
+    }
+
+    @Test
+    void defaultStore() {
+        final Store store = storeService.defaultStore();
+        assertThat(store, allOf(notNullValue(), hasProperty("name", equalTo(DEFAULT_STORE_NAME))));
     }
 }

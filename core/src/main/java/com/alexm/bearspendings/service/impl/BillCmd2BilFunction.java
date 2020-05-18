@@ -7,6 +7,7 @@ import com.alexm.bearspendings.entity.BillItem;
 import com.alexm.bearspendings.entity.Product;
 import com.alexm.bearspendings.repository.ProductRepository;
 import com.alexm.bearspendings.repository.StoreRepository;
+import com.alexm.bearspendings.service.UnitOfMeasureService;
 import org.springframework.stereotype.Component;
 
 import java.util.Objects;
@@ -20,12 +21,15 @@ import java.util.stream.Collectors;
 @Component
 public class BillCmd2BilFunction implements Function<BillCommand, Bill> {
 
+    //todo: must work with services
     private final ProductRepository productRepository;
     private final StoreRepository storeRepository;
+    private final UnitOfMeasureService unitOfMeasureService;
 
-    public BillCmd2BilFunction(ProductRepository productRepository, StoreRepository storeRepository) {
+    public BillCmd2BilFunction(ProductRepository productRepository, StoreRepository storeRepository, UnitOfMeasureService unitOfMeasureService) {
         this.productRepository = productRepository;
         this.storeRepository = storeRepository;
+        this.unitOfMeasureService = unitOfMeasureService;
     }
 
     @Override
@@ -45,7 +49,11 @@ public class BillCmd2BilFunction implements Function<BillCommand, Bill> {
 
     private Product newOrExistingProduct(BillItemCommand billItemCommand) {
         if (Objects.isNull(billItemCommand.getProductId())) {
-            return productRepository.save(Product.builder().name(billItemCommand.getProductName()).build());
+            final Product newProduct = Product.builder()
+                    .name(billItemCommand.getProductName())
+                    .unit(unitOfMeasureService.defaultUnit())
+                    .build();
+            return productRepository.save(newProduct);
         }
         return productRepository.getOne(billItemCommand.getProductId());
     }

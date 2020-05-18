@@ -3,17 +3,17 @@ package com.alexm.bearspendings.service.impl;
 import com.alexm.bearspendings.dto.ProductCommand;
 import com.alexm.bearspendings.entity.Product;
 import com.alexm.bearspendings.repository.ProductRepository;
-import com.alexm.bearspendings.service.ProductService;
+import com.alexm.bearspendings.service.UnitOfMeasureService;
 import com.alexm.bearspendings.test.SAMPLE_PRODUCTS;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.util.Lists;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -31,16 +31,14 @@ import static org.mockito.Mockito.*;
 class ProductServiceImplTest {
     @Mock
     ProductRepository productRepository;
-    ProductService productService;
-
-    @BeforeEach
-    void setUp() {
-        productService = new ProductServiceImpl(productRepository);
-    }
+    @Mock
+    UnitOfMeasureService unitOfMeasureService;
+    @InjectMocks
+    ProductServiceImpl productService;
 
     @Test
     void products() {
-        when(productRepository.findAll()).thenReturn(Arrays.asList(
+        when(productRepository.findAll()).thenReturn(Collections.singletonList(
                 Product.builder().name("Lapte").build()
         ));
         assertThat(productService.products(), containsInAnyOrder(Product.builder().name("Lapte").build()));

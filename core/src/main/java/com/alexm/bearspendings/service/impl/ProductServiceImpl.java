@@ -4,6 +4,7 @@ import com.alexm.bearspendings.dto.ProductCommand;
 import com.alexm.bearspendings.entity.Product;
 import com.alexm.bearspendings.repository.ProductRepository;
 import com.alexm.bearspendings.service.ProductService;
+import com.alexm.bearspendings.service.UnitOfMeasureService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -19,9 +20,11 @@ import java.util.stream.Collectors;
 public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository repository;
+    private final UnitOfMeasureService unitOfMeasureService;
 
-    public ProductServiceImpl(ProductRepository repository) {
+    public ProductServiceImpl(ProductRepository repository, UnitOfMeasureService unitOfMeasureService) {
         this.repository = repository;
+        this.unitOfMeasureService = unitOfMeasureService;
     }
 
     @Override
@@ -48,6 +51,9 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Product getOrInsert(String productName) {
        return this.repository.findByName(productName)
-               .orElseGet(() -> repository.save(Product.builder().name(productName).build()));
+               .orElseGet(() -> repository.save(Product.builder()
+                       .name(productName)
+                       .unit(unitOfMeasureService.defaultUnit())
+                       .build()));
     }
 }

@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Import;
 
 import java.util.Optional;
 
+import static com.alexm.bearspendings.service.impl.StoreServiceImpl.DEFAULT_STORE_NAME;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
@@ -32,7 +33,7 @@ public class StoreRepositoryTest {
 
     @Test
     void findByName() {
-        final Optional<Store> byName = storeRepository.findByName("Nr.1");
+        final Optional<Store> byName = storeRepository.findByName(DEFAULT_STORE_NAME);
         assertNotNull(byName.orElseThrow());
         assertEquals(1L, byName.orElseThrow().getId().longValue());
         assertFalse(storeRepository.findByName("Nr.2").isPresent());
