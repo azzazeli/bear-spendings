@@ -34,7 +34,10 @@ angular-ui/node_modules/
 
 
 ### Sring App ###
-spring-app/build/
-spring-app/.gradle/
-spring-app/out/
+web-app/build/
+web-app/.gradle/
+web-app/out/
 !.idea/runConfigurations
+
+core/build
+import-export/build
