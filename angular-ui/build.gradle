@@ -18,6 +18,7 @@ private dependsOnTasks () {
   if (!Boolean.valueOf(System.getProperty('skip.ui.test'))) {
     dependsOnTasks.add('npm_run_test-build')
   }
+  dependsOnTasks.add('npm_run_build')
   dependsOnTasks
 }
 
