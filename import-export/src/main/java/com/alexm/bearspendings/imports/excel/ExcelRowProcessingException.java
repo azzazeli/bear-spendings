@@ -7,7 +7,7 @@ import org.apache.poi.ss.usermodel.Row;
  * @author AlexM
  * Date: 4/23/20
  **/
-public class ExcelRowProcessingException extends Exception {
+public class ExcelRowProcessingException extends RuntimeException {
     private final transient Row row;
     private final CELL_COLUMN cellIndex;
     private final ERROR_CODE errorCode;

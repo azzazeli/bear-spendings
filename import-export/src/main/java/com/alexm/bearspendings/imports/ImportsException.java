@@ -4,7 +4,7 @@ package com.alexm.bearspendings.imports;
  * @author AlexM
  * Date: 4/22/20
  **/
-public class ImportsException extends Exception {
+public class ImportsException extends RuntimeException {
     public ImportsException(String message) {
         super(message);
     }

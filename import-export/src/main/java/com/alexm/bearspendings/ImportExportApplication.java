@@ -2,7 +2,7 @@ package com.alexm.bearspendings;
 
 import com.alexm.bearspendings.imports.BillImporter;
 import com.alexm.bearspendings.imports.ImportsConfig;
-import com.alexm.bearspendings.imports.ImportsException;
+import com.alexm.bearspendings.imports.ImportsService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -47,7 +47,7 @@ public class ImportExportApplication {
     }
 
     @Bean
-    Runnable watchFile(WatchService watchService, BillImporter importer, Path importPath) {
+    Runnable watchFile(WatchService watchService, ImportsService importsService, BillImporter importer, Path importPath) {
         return () -> {
             try (watchService) {
                 WatchKey key;
@@ -55,7 +55,7 @@ public class ImportExportApplication {
                 while ((key = watchService.take()) != null) {
                     for (WatchEvent<?> event : key.pollEvents()) {
                         log.info("Event kind:{}. File affected:{} ",event.kind(), event.context());
-                        processInputFile(importer, resolveImportPath(event, importPath));
+                        importsService.importsBills(event.context().toString());
                     }
                     key.reset();
                 }
@@ -70,17 +70,6 @@ public class ImportExportApplication {
         };
     }
 
-    private Path resolveImportPath(WatchEvent<?> event, Path importPath) {
-        return importPath.resolve(event.context().toString());
-    }
-
-    private void processInputFile(BillImporter importer,Path path)  {
-        try {
-            importer.imports(path);
-        } catch (ImportsException e) {
-            log.error("Exception occurred during import of file with bills.", e);
-        }
-    }
 
 }
 
