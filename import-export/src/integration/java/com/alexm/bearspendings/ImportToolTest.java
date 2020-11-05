@@ -8,8 +8,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.event.ContextStartedEvent;
+import org.springframework.context.event.EventListener;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.util.ResourceUtils;
 
@@ -35,10 +39,11 @@ import static org.mockito.Mockito.verify;
  **/
 @Slf4j
 @SpringBootTest()
-public class ImportToolTest {
+class ImportToolTest {
     //todo: run this test without h2
     Path out1;
     Path out2;
+    Path out3;
     @Autowired
     Runnable watchFile;
     @Autowired
@@ -48,29 +53,57 @@ public class ImportToolTest {
     @MockBean
     BillImporter mockImporter;
     final ExecutorService executorService = Executors.newFixedThreadPool(1);
+    static final String PROCESSED_FOLDER = "processed";
+
+    @Bean
+    ApplicationRunner createFolder(Path importPath) {
+        return args -> {
+            System.out.println("here");
+        };
+    }
+
+    @EventListener
+    public void handleContextRefreshEvent(ContextStartedEvent ctxStartEvt) {
+        System.out.println("Context Start Event received.");
+    }
 
     @BeforeEach
     void setup() throws IOException {
         out1 = Paths.get(importPath.toString(), "test.xlsm");
         out2 = Paths.get(importPath.toString(), "test2.xlsm");
+        out3 = Paths.get(importPath.toString(), "test3.xlsm");
         Files.deleteIfExists(out1);
         Files.deleteIfExists(out2);
+        Files.deleteIfExists(out3);
+        final Path processed = Paths.get(out1.getParent().toString(), PROCESSED_FOLDER);
+        if (Files.notExists(processed)) {
+            Files.createDirectory(processed);
+        }
         executorService.submit(watchFile);
     }
 
     @AfterEach
-    void cleanUp() {
+    void cleanUp() throws IOException {
         executorService.shutdown();
+//        FileSystemUtils.deleteRecursively(Paths.get(importPath.toString(), PROCESSED_FOLDER));
     }
 
     @Test
-    void watchImportPathFolder() throws ImportsException, InterruptedException {
+    void watchImportPathFolder() throws ImportsException, InterruptedException, IOException {
+        final long existingProcessedFiles = getProcessedFilesNumber();
         copyTestFile(out1.toFile(), 1);
         Thread.sleep(2000L);
 
         ArgumentCaptor<Path> pathCaptor = ArgumentCaptor.forClass(Path.class);
         verify(mockImporter).imports(pathCaptor.capture());
-        assertThat(pathCaptor.getValue()).endsWith(out1);
+        assertThat(pathCaptor.getValue().toString().equals(out1.toString()));
+        assertThat(Files.notExists(out1));
+        assertThat(getProcessedFilesNumber()).isGreaterThan(existingProcessedFiles);
+    }
+
+    private long getProcessedFilesNumber() throws IOException {
+        final Path processed = Paths.get(importPath.toString(), PROCESSED_FOLDER);
+        return Files.notExists(processed) ? 0 : Files.list(processed).count();
     }
 
     private void copyTestFile(File out, int afterSec) {
@@ -98,10 +131,10 @@ public class ImportToolTest {
             }
             return null;
         }).when(mockImporter).imports(any(Path.class));
-        copyTestFile(out1.toFile(), 1);
-        copyTestFile(out2.toFile(), 2);
+        copyTestFile(out2.toFile(), 1);
+        copyTestFile(out3.toFile(), 2);
         Thread.sleep(3000L);
-        verify(mockImporter).imports(out2);
+        verify(mockImporter).imports(out3);
     }
 
 }

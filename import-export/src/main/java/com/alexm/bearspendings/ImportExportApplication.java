@@ -1,6 +1,5 @@
 package com.alexm.bearspendings;
 
-import com.alexm.bearspendings.imports.BillImporter;
 import com.alexm.bearspendings.imports.ImportsConfig;
 import com.alexm.bearspendings.imports.ImportsService;
 import lombok.extern.slf4j.Slf4j;
@@ -12,6 +11,10 @@ import org.springframework.context.annotation.Bean;
 
 import java.io.IOException;
 import java.nio.file.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
+import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 
 /**
  * @author AlexM
@@ -47,7 +50,7 @@ public class ImportExportApplication {
     }
 
     @Bean
-    Runnable watchFile(WatchService watchService, ImportsService importsService, BillImporter importer, Path importPath) {
+    Runnable watchFile(WatchService watchService, ImportsService importsService, Path importPath) {
         return () -> {
             try (watchService) {
                 WatchKey key;
@@ -55,7 +58,11 @@ public class ImportExportApplication {
                 while ((key = watchService.take()) != null) {
                     for (WatchEvent<?> event : key.pollEvents()) {
                         log.info("Event kind:{}. File affected:{} ",event.kind(), event.context());
-                        importsService.importsBills(event.context().toString());
+                        final String fileName = event.context().toString();
+                        if (!Files.isDirectory(importPath.resolve(fileName))) {
+                            importsService.importsBills(fileName);
+                            moveProcessedFile(importPath, fileName);
+                        }
                     }
                     key.reset();
                 }
@@ -70,6 +77,17 @@ public class ImportExportApplication {
         };
     }
 
+    private void moveProcessedFile(Path importPath, String fileName) throws IOException {
+        final Path source = importPath.resolve(fileName);
+        final Path targetFolder = importPath.resolve("processed");
+        if (!Files.exists(targetFolder)) {
+            Files.createDirectory(targetFolder);
+        }
+        DateTimeFormatter dtf =DateTimeFormatter.ofPattern("yyyy_MM_dd_HH_mm_ss");
+        final Path target = targetFolder.resolve(String.format("processed_%s_%s", dtf.format(LocalDateTime.now()), fileName));
+        log.info("Moving processed file {} to {}", source, target);
+        Files.move(source, target, REPLACE_EXISTING);
+    }
 
 }
 

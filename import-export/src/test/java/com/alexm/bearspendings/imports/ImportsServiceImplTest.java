@@ -42,4 +42,10 @@ class ImportsServiceImplTest {
         verify(importer, times(1)).imports(importPathCaptor.capture());
         assertEquals(importPath + File.separator + fileName, importPathCaptor.getValue().toString());
     }
+
+    @Test
+    void test() {
+        String filename = "aaa.xml";
+        System.out.println(filename.replaceAll("^(\\w+)([\\.])", "$1_processed$2"));
+    }
 }

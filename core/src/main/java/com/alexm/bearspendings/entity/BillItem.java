@@ -17,7 +17,7 @@ import javax.validation.constraints.NotNull;
 public class BillItem extends BaseEntity {
 
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
     private Product product;
     @NotNull
