@@ -20,7 +20,7 @@ describe('BillsListComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports:[
+      imports: [
         TableModule,
         LoggerModule.forRoot({level: NgxLoggerLevel.DEBUG})
       ],
@@ -61,10 +61,10 @@ describe('BillsListComponent', () => {
   it('#should init bills []', () => {
     fixture.whenStable().then(() => {
       fixture.detectChanges();
-      const component = fixture.componentInstance;
-      expect(component.bills).toBeDefined();
-      expect(component.loading).toEqual(false);
-      expect(billServiceSpy.allBills).toHaveBeenCalledWith(0, component.PAGE_SIZE);
+      const componentIns = fixture.componentInstance;
+      expect(componentIns.bills).toBeDefined();
+      expect(componentIns.loading).toEqual(false);
+      expect(billServiceSpy.allBills).toHaveBeenCalledWith(0, componentIns.PAGE_SIZE);
     });
   });
 
@@ -72,7 +72,7 @@ describe('BillsListComponent', () => {
     fixture.detectChanges();
     fixture.whenStable().then( () => {
       expect(billServiceSpy.allBills).toHaveBeenCalledWith(0, 10);
-      component.loadBills({first: 10, rows:10});
+      component.loadBills({first: 10, rows: 10});
       setTimeout(() => {
         expect(billServiceSpy.allBills).toHaveBeenCalledWith(1, 10);
       }, 100);

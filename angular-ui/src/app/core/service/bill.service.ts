@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Bill} from '../model/bill.model';
 import {Observable} from 'rxjs';
 import {environment} from '../../../environments/environment';
@@ -31,5 +31,10 @@ export class BillService {
         'size': size.toString()
       }
     });
+  }
+
+  public exportAll(): Observable<any> {
+    this.logger.debug('exporting all bills ...');
+    return this.http.get('export-all', {responseType: 'blob'});
   }
 }

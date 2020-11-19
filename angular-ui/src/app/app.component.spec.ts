@@ -2,12 +2,14 @@ import { async, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
+import {LoggerModule, NgxLoggerLevel} from 'ngx-logger';
 
 describe('AppComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        RouterTestingModule
+        RouterTestingModule,
+        LoggerModule.forRoot({level: NgxLoggerLevel.DEBUG})
       ],
       declarations: [
         AppComponent,

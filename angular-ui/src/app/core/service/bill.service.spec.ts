@@ -31,21 +31,21 @@ describe('BillServiceTest',()  => {
   });
 
   it('#on add bill - sent post http request', () => {
-    //when
+    // when
     billService.addBill(samplesDataService.sampleBill()).subscribe(() => {});
-    //then
+    // then
     const req = httpTestingController.expectOne(billService.BILLS_URL, 'call to add bill url');
     expect(req.request.method).toEqual('POST');
     expect(req.request.body).toEqual(samplesDataService.sampleBill());
   });
 
   it('#on bills - sent http get request', () => {
-    //when
+    // when
     billService.allBills(0, 10).subscribe((bills: Bill[]) => {
       expect(bills.length).toEqual(1);
       expect(bills[0].storeId).toBe(samplesDataService.sampleStores()[0].id);
     });
-    //then
+    // then
     const testRequest: TestRequest = httpTestingController.expectOne(`${billService.BILLS_URL}?page=0&size=10`);
     testRequest.flush([samplesDataService.sampleBill()]);
     expect(testRequest.request.method).toEqual('GET');
@@ -54,13 +54,20 @@ describe('BillServiceTest',()  => {
   });
 
   it('#on allBillsCount - sent a http get request', () => {
-    //given
+    // given
     const totalRecords = 12;
-    //when
+    // when
     billService.allBillsCount().subscribe(value => expect(value).toEqual(totalRecords));
-    //then
+    // then
     const req: TestRequest = httpTestingController.expectOne(billService.ALL_BILLS_COUNT_URL, 'call to all bill count url');
     req.flush(totalRecords);
+  });
+
+  it('#on exportAll - sent a http get request', () => {
+    billService.exportAll().subscribe( val => {});
+    const req: TestRequest = httpTestingController.expectOne('export-all', 'call to export all bills  url');
+    expect(req.request.method).toEqual('GET');
+    expect(req.request.responseType).toEqual('blob');
   });
 
 });
