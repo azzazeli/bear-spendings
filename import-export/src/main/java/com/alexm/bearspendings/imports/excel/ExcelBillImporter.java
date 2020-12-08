@@ -57,7 +57,12 @@ public class ExcelBillImporter implements BillImporter {
         Sheet sheet = workbook.getSheetAt(0);
         log.debug("Sheet contains {} rows.", sheet.getLastRowNum());
         for (Row row : sheet) {
-            successProcessingRows = successProcessingRows && processRow(row);
+          try {
+              processRow(row);
+          } catch (ExcelRowProcessingException e) {
+              log.error("Exception occurred during processing o row:" + row.getRowNum()+ " from excel file.", e);
+              successProcessingRows = false;
+          }
         }
         saveLastBillsBatch();
         return successProcessingRows;
@@ -75,30 +80,23 @@ public class ExcelBillImporter implements BillImporter {
         }
     }
 
-    private boolean processRow(Row row) {
-        boolean withSuccess = true;
+    private void processRow(Row row) {
         log.debug("Processing row:" + row.getRowNum());
         if (0 == row.getRowNum()) {
             log.debug("Skip processing sheet header row.");
-            return true;
+            return;
         }
         rowProcessor.logRowInDebug(row);
-        try {
-            final ImportBill importBill = rowProcessor.processBill(row);
-            if (billsToImport.get(importBill) == null) {
-                saveBillsInBatch();
-                billsToImport.put(importBill, Bill
-                        .builder()
-                        .store(importBill.getStore())
-                        .orderDate(importBill.getOrderDate().atStartOfDay())
-                        .build());
-            }
-            billsToImport.get(importBill).addItem(rowProcessor.processBillItem(row));
-        } catch (ExcelRowProcessingException e) {
-            log.error("Exception occurred during processing o row:" + row.getRowNum()+ " from excel file.", e);
-            withSuccess = false;
+        final ImportBill importBill = rowProcessor.processBill(row);
+        if (billsToImport.get(importBill) == null) {
+            saveBillsInBatch();
+            billsToImport.put(importBill, Bill
+                    .builder()
+                    .store(importBill.getStore())
+                    .orderDate(importBill.getOrderDate().atStartOfDay())
+                    .build());
         }
-        return withSuccess;
+        billsToImport.get(importBill).addItem(rowProcessor.processBillItem(row));
     }
 
     private void saveBillsInBatch() {
