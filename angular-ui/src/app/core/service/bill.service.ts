@@ -34,7 +34,7 @@ export class BillService {
   }
 
   public exportAll(): Observable<any> {
-    this.logger.debug('exporting all bills ...');
-    return this.http.get('export-all', {responseType: 'blob'});
+    this.logger.debug('Exporting all bills ...');
+    return this.http.get('assets/bills/export-all/export.xlsm', {responseType: 'blob'});
   }
 }
