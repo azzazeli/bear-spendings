@@ -17,9 +17,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author AlexM
@@ -56,25 +54,38 @@ public class ExcelBillImporter implements BillImporter {
     private boolean processWorkBook(Workbook workbook) {
         Sheet sheet = workbook.getSheetAt(FIRST_SHEET);
         log.debug("Sheet contains {} rows.", sheet.getLastRowNum());
-        return  processSheet(sheet);
+        return processSheet(sheet);
     }
 
     private boolean processSheet(Sheet sheet) {
         boolean successProcessingRows = true;
         final Map<ImportBill, Bill> billsToImport = new LinkedHashMap<>();
         for (Row row : sheet) {
-          try {
-              processRow(row, billsToImport);
-          } catch (ExcelRowProcessingException e) {
-              log.error("Exception occurred during processing o row:" + row.getRowNum()+ " from excel file.", e);
-              successProcessingRows = false;
-          }
+            try {
+                final Optional<AbstractMap.SimpleEntry<ImportBill, BillItem>> optionalEntry = processRow(row);
+                if (optionalEntry.isEmpty()) {
+                    continue;
+                }
+                final AbstractMap.SimpleEntry<ImportBill, BillItem> entry = optionalEntry.get();
+                if (isBatchFull(billsToImport, entry)) {
+                    saveBillsInBatch(billsToImport);
+                    billsToImport.clear();
+                }
+                billsToImport.computeIfAbsent(entry.getKey(), ImportBill::toBill).addItem(entry.getValue());
+            } catch (ExcelRowProcessingException e) {
+                log.error("Exception occurred during processing o row:" + row.getRowNum() + " from excel file.", e);
+                successProcessingRows = false;
+            }
         }
-        saveLastBillsBatch(billsToImport);
+        saveBillsInBatch(billsToImport);
         return successProcessingRows;
     }
 
-    private void saveLastBillsBatch(Map<ImportBill, Bill> billsToImport) {
+    private boolean isBatchFull(Map<ImportBill, Bill> billsToImport, AbstractMap.SimpleEntry<ImportBill, BillItem> entry) {
+        return !billsToImport.containsKey(entry.getKey()) &&  billsToImport.size() == importsConfig.getBillsBatchSize();
+    }
+
+    private void saveBillsInBatch(Map<ImportBill, Bill> billsToImport) {
         billService.saveAll(new LinkedList<>(billsToImport.values()));
     }
 
@@ -86,26 +97,15 @@ public class ExcelBillImporter implements BillImporter {
         }
     }
 
-    private void processRow(Row row, Map<ImportBill, Bill> billsToImport) {
+    private Optional<AbstractMap.SimpleEntry<ImportBill, BillItem>> processRow(Row row) {
         log.debug("Processing row:" + row.getRowNum());
         if (HEADER_ROW == row.getRowNum()) {
             log.debug("Skip processing sheet header row.");
-            return;
+            return Optional.empty();
         }
         rowProcessor.logRowInDebug(row);
         final ImportBill importBill = rowProcessor.processBill(row);
         final BillItem billItem = rowProcessor.processBillItem(row);
-        if (billsToImport.get(importBill) == null) {
-            saveBillsInBatch(billsToImport);
-            billsToImport.put(importBill, importBill.toBill());
-        }
-        billsToImport.get(importBill).addItem(billItem);
-    }
-
-    private void saveBillsInBatch(Map<ImportBill, Bill> billsToImport) {
-        if (billsToImport.size() == importsConfig.getBillsBatchSize()) {
-            billService.saveAll(new LinkedList<>(billsToImport.values()));
-            billsToImport.clear();
-        }
+        return Optional.of(new AbstractMap.SimpleEntry<>(importBill, billItem));
     }
 }
