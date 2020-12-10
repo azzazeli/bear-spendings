@@ -55,7 +55,6 @@ public class BillItem extends BaseEntity {
                 ", productId=" + ((product == null) ? null : product.getId()) +
                 ", quantity=" + quantity +
                 ", price=" + pricePerUnit +
-                ", billId=" + bill.getId() +
                 '}';
     }
 }
