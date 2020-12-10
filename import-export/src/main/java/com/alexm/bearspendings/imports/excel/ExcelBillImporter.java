@@ -1,6 +1,7 @@
 package com.alexm.bearspendings.imports.excel;
 
 import com.alexm.bearspendings.entity.Bill;
+import com.alexm.bearspendings.entity.BillItem;
 import com.alexm.bearspendings.imports.BillImporter;
 import com.alexm.bearspendings.imports.ImportsConfig;
 import com.alexm.bearspendings.imports.ImportsException;
@@ -29,16 +30,14 @@ import java.util.Map;
 public class ExcelBillImporter implements BillImporter {
     private final BillService billService;
     private final ExcelRowProcessor rowProcessor;
-
-    private final Map<ImportBill, Bill> billsToImport = new LinkedHashMap<>();
+    private final ImportsConfig importsConfig;
+    private final int FIRST_SHEET = 0;
 
     public ExcelBillImporter(BillService billService, ExcelRowProcessor rowProcessor, ImportsConfig importsConfig) {
         this.billService = billService;
         this.rowProcessor = rowProcessor;
         this.importsConfig = importsConfig;
     }
-
-    private final ImportsConfig importsConfig;
 
     @Override
     public void imports(Path source) throws ImportsException {
@@ -53,22 +52,27 @@ public class ExcelBillImporter implements BillImporter {
     }
 
     private boolean processWorkBook(Workbook workbook) {
-        boolean successProcessingRows = true;
-        Sheet sheet = workbook.getSheetAt(0);
+        Sheet sheet = workbook.getSheetAt(FIRST_SHEET);
         log.debug("Sheet contains {} rows.", sheet.getLastRowNum());
+        return  processSheet(sheet);
+    }
+
+    private boolean processSheet(Sheet sheet) {
+        boolean successProcessingRows = true;
+        final Map<ImportBill, Bill> billsToImport = new LinkedHashMap<>();
         for (Row row : sheet) {
           try {
-              processRow(row);
+              processRow(row, billsToImport);
           } catch (ExcelRowProcessingException e) {
               log.error("Exception occurred during processing o row:" + row.getRowNum()+ " from excel file.", e);
               successProcessingRows = false;
           }
         }
-        saveLastBillsBatch();
+        saveLastBillsBatch(billsToImport);
         return successProcessingRows;
     }
 
-    private void saveLastBillsBatch() {
+    private void saveLastBillsBatch(Map<ImportBill, Bill> billsToImport) {
         billService.saveAll(new LinkedList<>(billsToImport.values()));
     }
 
@@ -80,7 +84,7 @@ public class ExcelBillImporter implements BillImporter {
         }
     }
 
-    private void processRow(Row row) {
+    private void processRow(Row row, Map<ImportBill, Bill> billsToImport) {
         log.debug("Processing row:" + row.getRowNum());
         if (0 == row.getRowNum()) {
             log.debug("Skip processing sheet header row.");
@@ -88,19 +92,16 @@ public class ExcelBillImporter implements BillImporter {
         }
         rowProcessor.logRowInDebug(row);
         final ImportBill importBill = rowProcessor.processBill(row);
+        final BillItem billItem = rowProcessor.processBillItem(row);
         if (billsToImport.get(importBill) == null) {
-            saveBillsInBatch();
-            billsToImport.put(importBill, Bill
-                    .builder()
-                    .store(importBill.getStore())
-                    .orderDate(importBill.getOrderDate().atStartOfDay())
-                    .build());
+            saveBillsInBatch(billsToImport);
+            billsToImport.put(importBill, importBill.toBill());
         }
-        billsToImport.get(importBill).addItem(rowProcessor.processBillItem(row));
+        billsToImport.get(importBill).addItem(billItem);
     }
 
-    private void saveBillsInBatch() {
-        if (this.billsToImport.size() == importsConfig.getBillsBatchSize()) {
+    private void saveBillsInBatch(Map<ImportBill, Bill> billsToImport) {
+        if (billsToImport.size() == importsConfig.getBillsBatchSize()) {
             billService.saveAll(new LinkedList<>(billsToImport.values()));
             billsToImport.clear();
         }
