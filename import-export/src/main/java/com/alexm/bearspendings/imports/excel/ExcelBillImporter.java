@@ -31,7 +31,9 @@ public class ExcelBillImporter implements BillImporter {
     private final BillService billService;
     private final ExcelRowProcessor rowProcessor;
     private final ImportsConfig importsConfig;
-    private final int FIRST_SHEET = 0;
+
+    private static final int FIRST_SHEET = 0;
+    private static final int HEADER_ROW = 0;
 
     public ExcelBillImporter(BillService billService, ExcelRowProcessor rowProcessor, ImportsConfig importsConfig) {
         this.billService = billService;
@@ -86,7 +88,7 @@ public class ExcelBillImporter implements BillImporter {
 
     private void processRow(Row row, Map<ImportBill, Bill> billsToImport) {
         log.debug("Processing row:" + row.getRowNum());
-        if (0 == row.getRowNum()) {
+        if (HEADER_ROW == row.getRowNum()) {
             log.debug("Skip processing sheet header row.");
             return;
         }
