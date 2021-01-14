@@ -6,6 +6,7 @@ import com.alexm.bearspendings.repository.BillItemRepository;
 import com.alexm.bearspendings.repository.StoreRepository;
 import com.alexm.bearspendings.service.StoreService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
@@ -46,6 +47,7 @@ public class StoreServiceImpl implements StoreService {
         return stores;
     }
 
+    @Cacheable("stores")
     @Override
     public Store findStore(Long id) {
         log.debug("Getting store for id: {}", id);

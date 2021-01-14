@@ -3,6 +3,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
 import {LoggerModule, NgxLoggerLevel} from 'ngx-logger';
+import {BillService} from './core/service/bill.service';
 
 describe('AppComponent', () => {
   beforeEach(async(() => {
@@ -15,6 +16,7 @@ describe('AppComponent', () => {
         AppComponent,
         HeaderComponent,
       ],
+      providers: [BillService]
     }).compileComponents();
   }));
 

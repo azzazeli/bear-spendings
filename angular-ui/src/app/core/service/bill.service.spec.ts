@@ -4,9 +4,9 @@ import {HttpClientTestingModule, HttpTestingController, TestRequest} from '@angu
 import {SamplesDataService} from './samplesDataService';
 import {HttpClient} from '@angular/common/http';
 import {Bill} from '../model/bill.model';
-import {LoggerModule, NgxLoggerLevel} from "ngx-logger";
+import {LoggerModule, NgxLoggerLevel} from 'ngx-logger';
 
-describe('BillServiceTest',()  => {
+describe('BillServiceTest', ()  => {
   let billService: BillService;
   let samplesDataService: SamplesDataService;
   let httpTestingController: HttpTestingController;
@@ -64,8 +64,8 @@ describe('BillServiceTest',()  => {
   });
 
   it('#on exportAll - sent a http get request', () => {
-    billService.exportAll().subscribe( val => {});
-    const req: TestRequest = httpTestingController.expectOne('export-all', 'call to export all bills  url');
+    billService.exportAll().subscribe( () => {});
+    const req: TestRequest = httpTestingController.expectOne('assets/bills/export-all/export.xlsm', 'call to export all bills  url');
     expect(req.request.method).toEqual('GET');
     expect(req.request.responseType).toEqual('blob');
   });

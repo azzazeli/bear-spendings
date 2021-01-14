@@ -1,7 +1,10 @@
 package com.alexm.bearspendings.exports.excel;
 
+import com.alexm.bearspendings.dto.BillCommand;
+import com.alexm.bearspendings.dto.BillItemCommand;
 import com.alexm.bearspendings.exports.BillExporter;
 import com.alexm.bearspendings.service.BillService;
+import com.alexm.bearspendings.service.StoreService;
 import lombok.SneakyThrows;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -21,9 +24,11 @@ import java.time.format.DateTimeFormatter;
 public class ExcelBillExporter implements BillExporter {
 
     private final BillService billService;
+    private final StoreService storeService;
 
-    public ExcelBillExporter(BillService billService) {
+    public ExcelBillExporter(BillService billService, StoreService storeService) {
         this.billService = billService;
+        this.storeService = storeService;
     }
 
     @SneakyThrows
@@ -45,12 +50,24 @@ public class ExcelBillExporter implements BillExporter {
 
     private void generateRows(Sheet sheet) {
         billService.allBills(0, 10).forEach(
-                billCommand -> {
-                    billCommand.getItems().forEach(billItemCommand -> {
-                        final Row row = sheet.createRow(sheet.getLastRowNum() + 1);
-                        row.createCell(1).setCellValue(DateTimeFormatter.ofPattern("yyyy/dd/MM").format(billCommand.getOrderDate()));
-                    });
-                }
+                billCommand -> billCommand.getItems().forEach(billItemCommand -> createRow(sheet, billCommand, billItemCommand))
         );
     }
+
+    private void createRow(Sheet sheet, BillCommand billCommand, BillItemCommand billItemCommand) {
+        final Row row = sheet.createRow(sheet.getLastRowNum() + 1);
+        int column = 1;
+        row.createCell(column++).setCellValue(DateTimeFormatter.ofPattern("yyyy/dd/MM").format(billCommand.getOrderDate()));
+        row.createCell(column++).setCellValue(billCommand.getOrderDate().getDayOfMonth());
+        row.createCell(column++).setCellValue(billCommand.getOrderDate().getMonthValue());
+        row.createCell(column++).setCellValue(billCommand.getOrderDate().getYear());
+        row.createCell(column++).setCellValue(billItemCommand.getProductName());
+        column+=4; // skip product type, subcategory, category
+        row.createCell(column++).setCellValue(billItemCommand.getQuantity());
+        row.createCell(column++).setCellValue(billItemCommand.getPricePerUnit());
+        row.createCell(column++).setCellValue(billItemCommand.getTotalPrice());
+        column++; //skip Total, EUR column
+        row.createCell(column).setCellValue(storeService.findStore(billCommand.getStoreId()).getName());
+    }
+
 }

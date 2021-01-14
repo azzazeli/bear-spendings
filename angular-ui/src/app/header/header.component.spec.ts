@@ -4,6 +4,7 @@ import {HeaderComponent} from './header.component';
 import {LoggerModule, NgxLoggerLevel} from 'ngx-logger';
 import {BillService} from '../core/service/bill.service';
 import createSpyObj = jasmine.createSpyObj;
+import {of} from 'rxjs/internal/observable/of';
 
 describe('HeaderComponent', () => {
   let component: HeaderComponent;
@@ -25,6 +26,7 @@ describe('HeaderComponent', () => {
     fixture = TestBed.createComponent(HeaderComponent);
     component = fixture.componentInstance;
     billServiceSpy = TestBed.get(BillService);
+    billServiceSpy.exportAll.and.returnValue(of());
     fixture.detectChanges();
   });
 
@@ -32,8 +34,8 @@ describe('HeaderComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  fit('#on export all', () => {
+  it('#on export all', () => {
     component.exportAll();
-    expect(this.billServiceSpy.exportAll).toHaveBeenCalled();
+    expect(billServiceSpy.exportAll).toHaveBeenCalled();
   });
 });

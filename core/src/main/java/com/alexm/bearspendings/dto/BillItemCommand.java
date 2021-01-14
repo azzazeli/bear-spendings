@@ -15,6 +15,7 @@ import javax.validation.constraints.PositiveOrZero;
 @JsonDeserialize(builder = BillItemCommand.BillItemCommandBuilder.class)
 @ValidBillItemCommand
 public class BillItemCommand {
+    //todo: store reference to parent BillCommand
     private Long id;
     private String productName;
     private Long productId;

@@ -2,14 +2,15 @@ package com.alexm.bearspendings.service.impl;
 
 import com.alexm.bearspendings.dto.TopProductCommand;
 import com.alexm.bearspendings.entity.Store;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.cache.CacheManager;
 
 import javax.transaction.Transactional;
 import java.util.NoSuchElementException;
+import java.util.Objects;
 import java.util.Set;
 
 import static com.alexm.bearspendings.service.impl.StoreServiceImpl.DEFAULT_STORE_NAME;
@@ -26,10 +27,8 @@ class StoreServiceImplTest {
 
     @Autowired
     StoreServiceImpl storeService;
-
-    @BeforeEach
-    void setup() {
-    }
+    @Autowired
+    CacheManager cacheManager;
 
     @DisplayName("all stores test")
     @Test
@@ -61,7 +60,7 @@ class StoreServiceImplTest {
         Set<TopProductCommand> products = storeService.topProducts(1L, 3);
         // then
         assertAll(
-                () -> { assertEquals(3, products.size());}
+                () -> assertEquals(3, products.size())
         );
 
         TopProductCommand inghetata = products.stream().filter(topProduct -> topProduct.getProductId().equals(3L)).findFirst()
@@ -99,5 +98,14 @@ class StoreServiceImplTest {
     void defaultStore() {
         final Store store = storeService.defaultStore();
         assertThat(store, allOf(notNullValue(), hasProperty("name", equalTo(DEFAULT_STORE_NAME))));
+    }
+
+    @Test
+    void findByIdCacheable() {
+        Objects.requireNonNull(cacheManager.getCache("stores")).clear();
+        storeService.findStore(1L);
+        assertEquals(1, cacheManager.getCacheNames().size());
+        storeService.findStore(1L);
+        assertEquals(1, cacheManager.getCacheNames().size());
     }
 }
