@@ -30,8 +30,7 @@ public class BillItemCommand {
 
     @NotNull(message = "Total price is mandatory")
     @PositiveOrZero(message = "Total price per unit must be a positive number or zero")
-    @Builder.Default
-    private Double totalPrice = 0.0;
+    private Double totalPrice;
 
     @JsonPOJOBuilder(withPrefix = "")
     public static class BillItemCommandBuilder {
