@@ -2,6 +2,7 @@ package com.alexm.bearspendings.controller;
 
 import com.alexm.bearspendings.dto.BillCommand;
 import com.alexm.bearspendings.dto.BillItemCommand;
+import com.alexm.bearspendings.exports.BillExporter;
 import com.alexm.bearspendings.service.BillService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
@@ -20,11 +21,13 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import java.io.ByteArrayInputStream;
 import java.time.LocalDateTime;
 import java.util.stream.Stream;
 
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -38,6 +41,9 @@ class BillControllerTest {
 
     @MockBean
     BillService billService;
+    @MockBean
+    BillExporter billExporter;
+
     private final ObjectMapper mapper = new ObjectMapper();
     private final ObjectWriter writer = mapper.writer().withDefaultPrettyPrinter();
     private final Long totalRecords = 120L;
@@ -52,7 +58,7 @@ class BillControllerTest {
 
     @Test
     void bills() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.get(BILLS_URL+"?page=0&size=20"))
+        mvc.perform(get(BILLS_URL+"?page=0&size=20"))
                 .andExpect(status().isOk());
         verify(billService).allBills(0, 20);
     }
@@ -133,10 +139,21 @@ class BillControllerTest {
     @Test
     void allBillCounts() throws Exception {
         //todo: return count as metadata in bills
-        mvc.perform(MockMvcRequestBuilders.get(BILLS_URL + "/count"))
+        mvc.perform(get(BILLS_URL + "/count"))
                 .andExpect(status().isOk())
                 .andExpect(content().string(totalRecords.toString())
                 );
+    }
+
+    @Test
+    void exportAll() throws Exception {
+        final byte[] bytes = {0, 1};
+        given(billExporter.exportAll()).willReturn(new ByteArrayInputStream(bytes));
+
+        mvc.perform(get(BILLS_URL + "/export_all"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/vnd.ms-excel.sheet.macroEnabled.12"))
+                .andExpect(content().bytes(bytes));
     }
 
 }

@@ -10,9 +10,11 @@ dependencies {
 	runtimeOnly project(':angular-ui')
 
 	implementation project(':core')
+	implementation project(':import-export')
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation "commons-io:commons-io:${project['commons.io']}"
 
 	testAnnotationProcessor 'org.projectlombok:lombok'
 	testCompileOnly 'org.projectlombok:lombok'

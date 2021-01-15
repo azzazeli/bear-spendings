@@ -8,6 +8,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Profile;
 
 import java.io.IOException;
 import java.nio.file.*;
@@ -20,6 +21,7 @@ import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
  * @author AlexM
  * Date: 4/20/20
  **/
+@Profile("import-export")
 @Slf4j
 @SpringBootApplication
 @EnableConfigurationProperties(ImportsConfig.class)

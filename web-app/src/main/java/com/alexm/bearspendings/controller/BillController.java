@@ -1,11 +1,14 @@
 package com.alexm.bearspendings.controller;
 
 import com.alexm.bearspendings.dto.BillCommand;
+import com.alexm.bearspendings.exports.BillExporter;
 import com.alexm.bearspendings.service.BillService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.IOUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.io.IOException;
 import java.util.List;
 
 import static com.alexm.bearspendings.BearSpendingsApplication.API_URL;
@@ -19,9 +22,11 @@ import static com.alexm.bearspendings.BearSpendingsApplication.API_URL;
 public class BillController {
 
     private final BillService billService;
+    private final BillExporter billExporter;
 
-    public BillController(BillService billService) {
+    public BillController(BillService billService, BillExporter billExporter) {
         this.billService = billService;
+        this.billExporter = billExporter;
     }
 
     @GetMapping()
@@ -40,6 +45,14 @@ public class BillController {
     @GetMapping("/count")
     public Long allBillsCount(){
         return billService.allBillsCount();
+    }
+
+    @GetMapping(
+            value = "/export_all",
+            produces = "application/vnd.ms-excel.sheet.macroEnabled.12"
+    )
+    public @ResponseBody byte[] exportAll() throws IOException {
+        return IOUtils.toByteArray(billExporter.exportAll());
     }
 
 }

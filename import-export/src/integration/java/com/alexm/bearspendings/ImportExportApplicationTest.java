@@ -14,6 +14,7 @@ import org.assertj.core.groups.Tuple;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.util.ResourceUtils;
 
 import java.io.FileNotFoundException;
@@ -27,7 +28,8 @@ import static org.junit.jupiter.api.Assertions.*;
  * @author AlexM
  * Date: 4/20/20
  **/
-@SpringBootTest
+@ActiveProfiles("import-export")
+@SpringBootTest(classes = ImportExportApplication.class)
 class ImportExportApplicationTest {
 
     private static final String ORDER_DATE_FIELD = "orderDate";

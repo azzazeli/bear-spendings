@@ -14,6 +14,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.event.ContextStartedEvent;
 import org.springframework.context.event.EventListener;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.util.ResourceUtils;
 
@@ -37,8 +38,9 @@ import static org.mockito.Mockito.verify;
  * @author AlexM
  * Date: 4/30/20
  **/
+@ActiveProfiles("import-export")
 @Slf4j
-@SpringBootTest()
+@SpringBootTest(classes = ImportExportApplication.class)
 class ImportToolTest {
     //todo: run this test without h2
     Path out1;
