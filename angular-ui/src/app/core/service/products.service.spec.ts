@@ -7,6 +7,7 @@ import {HttpClient} from '@angular/common/http';
 import {StoreProduct} from "../model/store-product.model";
 import {LoggerModule, NgxLoggerLevel} from "ngx-logger";
 import {StoreService} from "./store.service";
+import {environment} from "../../../environments/environment";
 
 describe('ProductsServiceTest', () => {
   let productService: ProductsService;
@@ -64,7 +65,7 @@ describe('ProductsServiceTest', () => {
     //when
     productService.searchProductsBy(productPrefix).subscribe();
     //then
-    const req = httpTestingController.expectOne(`api/products?startWith=${productPrefix}`);
+    const req = httpTestingController.expectOne(`${environment.API_URL}${environment.PRODUCTS_URL}?startWith=${productPrefix}`);
     expect(req.request.method).toEqual('GET');
 
   });

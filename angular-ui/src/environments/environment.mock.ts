@@ -5,12 +5,15 @@ export const environment = {
 
   dateFormat: 'YYYY-MM-DD',
 
-  apiUrl: 'assets/',
+  API_URL: 'assets/',
 
   BILLS_URL: 'bills.json',
+  EXPORT_ALL_BILLS_URL: 'bills/export-all/export.xlsm',
 
   STORES_URL: 'stores.json',
-  TOP_PRODUCTS: 'top_products',
+  TOP_PRODUCTS_URL: 'top_products',
+
+  PRODUCTS_URL: 'products',
 
   TOP_STORE_PRODUCTS_URL: 'top-store-products.json'
 

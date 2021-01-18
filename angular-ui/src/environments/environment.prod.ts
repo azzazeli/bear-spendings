@@ -5,11 +5,12 @@ export const environment = {
 
   dateFormat: 'YYYY-MM-DD',
 
-  apiUrl: 'dummy',
+  API_URL: 'dummy',
   BILLS_URL: 'bills',
+  EXPORT_ALL_BILLS_URL: 'export_all',
 
   STORES_URL: 'stores',
-  TOP_PRODUCTS: 'top_products',
+  TOP_PRODUCTS_URL: 'top_products',
 
   PRODUCTS_URL: 'products',
 

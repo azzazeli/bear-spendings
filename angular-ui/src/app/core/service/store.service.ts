@@ -8,7 +8,7 @@ import {NGXLogger} from "ngx-logger";
 
 @Injectable()
 export class StoreService extends ObservableCacheService<Store>{
-  STORES_URL: string = `${environment.apiUrl}${environment.STORES_URL}`;
+  STORES_URL: string = `${environment.API_URL}${environment.STORES_URL}`;
 
   constructor(private http: HttpClient, protected logger: NGXLogger) {
     super(logger);

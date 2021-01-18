@@ -6,8 +6,8 @@
     "start_mock": "ng serve -c=mock",
     "start_dev": "ng serve -c=dev",
     "build": "ng build -c=production",
-    "test": "ng test",
-    "test-build": "ng test -- --no-watch --no-progress --browsers=ChromeHeadlessCI",
+    "test": "ng test -c=mock",
+    "test-build": "ng test -c=mock -- --no-watch --no-progress --browsers=ChromeHeadlessCI",
     "lint": "ng lint",
     "e2e": "ng e2e"
   },
