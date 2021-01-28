@@ -8,6 +8,7 @@ import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.data.domain.PageRequest;
 
 import java.time.LocalDateTime;
 
@@ -19,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
  * Date: 5/6/20
  **/
 @DataJpaTest
-public class BillRepositoryTest {
+class BillRepositoryTest {
     private final long FIRST_BILL_ID = 1L;
     private final long FIRST_PRODUCT_ID = 1L;
     @Autowired
@@ -78,5 +79,10 @@ public class BillRepositoryTest {
         Bill fromUI = Bill.builder().store(sampleStore()).orderDate(LocalDateTime.now()).build();
         fromUI.addItem(BillItem.builder().pricePerUnit(1.0).quantity(2.0).product(productRepository.getOne(FIRST_PRODUCT_ID)).build());
         assertNotNull(billRepository.save(fromUI));
+    }
+
+    @Test
+    void avoidNPlusOneQueriesForItems() {
+        assertThat(billRepository.findAll(PageRequest.of(0, 10))).isNotNull();
     }
 }
