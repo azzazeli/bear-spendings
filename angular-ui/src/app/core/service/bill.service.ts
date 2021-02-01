@@ -10,7 +10,8 @@ export class BillService {
 
   BILLS_URL = `${environment.API_URL}${environment.BILLS_URL}`;
   ALL_BILLS_COUNT_URL = `${environment.API_URL}${environment.BILLS_URL}/count`;
-  EXPORT_ALL_BILLS_URL = `${this.BILLS_URL}/${environment.EXPORT_ALL_BILLS_URL}`;
+  EXPORT_ALL_BILLS_URL = `${environment.API_URL}${environment.EXPORT_ALL_BILLS_URL}`;
+  // EXPORT_ALL_BILLS_URL = `${this.BILLS_URL}/${environment.EXPORT_ALL_BILLS_URL}`;
 
   constructor(private http: HttpClient, private logger: NGXLogger) {
     this.logger.debug('environment.API_URL:', environment.API_URL);
