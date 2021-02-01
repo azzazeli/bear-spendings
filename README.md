@@ -86,3 +86,9 @@ The script need to enhanced.
 5. stop application
 6. start application
  
+### Browserslist: caniuse-lite is outdated
+
+To fix thi issue run
+```shell
+npx browserslist@latest --update-db
+```
