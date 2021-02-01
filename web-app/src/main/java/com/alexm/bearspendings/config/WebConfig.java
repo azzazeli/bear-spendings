@@ -9,7 +9,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  * @author AlexM
  * Date: 4/13/20
  **/
-@Profile("devdev")
+@Profile("dev")
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
     private static final String ALLOWED_ORIGIN = "http://localhost:4200";
