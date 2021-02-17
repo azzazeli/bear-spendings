@@ -9,6 +9,7 @@ import com.alexm.bearspendings.imports.TestImportProducts;
 import com.alexm.bearspendings.service.BillService;
 import com.alexm.bearspendings.service.ProductService;
 import com.alexm.bearspendings.service.StoreService;
+import com.alexm.bearspendings.service.CategoryService;
 import org.assertj.core.groups.Tuple;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -31,6 +32,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
+import static com.alexm.bearspendings.imports.TestImportCategories.BEBE;
+import static com.alexm.bearspendings.imports.TestImportCategories.HEALTH;
 import static com.alexm.bearspendings.imports.TestImportProducts.*;
 import static com.alexm.bearspendings.imports.excel.ExcelRowProcessor.DATE_PATTERN;
 import static java.time.format.DateTimeFormatter.ofPattern;
@@ -43,7 +46,7 @@ import static org.mockito.Mockito.*;
  * Date: 4/22/20
  **/
 @ExtendWith(MockitoExtension.class)
-public class ExcelBillImporterTest {
+class ExcelBillImporterTest {
     public static final String farmaciaFamiliei = "Farmacia Familiei";
     public static final String alimarket = "Alimarket";
     @Mock
@@ -52,6 +55,8 @@ public class ExcelBillImporterTest {
     BillService mockBillService;
     @Mock
     ProductService mockProductService;
+    @Mock
+    private CategoryService mockCategoryService;
 
     @Captor
     ArgumentCaptor<Iterable<Bill>> iterableBillsCaptor;
@@ -97,8 +102,13 @@ public class ExcelBillImporterTest {
 
         verify(mockStoreService, times(10)).getOrInsert(farmaciaFamiliei);
         verify(mockStoreService, times(22)).getOrInsert(alimarket);
+        verifyCategories();
         verifyProducts();
         verifyBills();
+    }
+
+    private void verifyCategories() {
+        verify(mockCategoryService, times(3)).getOrInsert(HEALTH.categoryName, BEBE.categoryName);
     }
 
     private void verifyBills() {

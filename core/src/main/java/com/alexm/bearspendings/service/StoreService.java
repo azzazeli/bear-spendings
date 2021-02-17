@@ -9,6 +9,7 @@ import java.util.Set;
  * @author AlexM
  * Date: 9/8/19
  **/
+// todo: group StoreService, ProductService, BillService and CategoryService to SpengingService
 public interface StoreService {
     Store defaultStore();
 
