@@ -7,6 +7,7 @@ import com.alexm.bearspendings.entity.BillItem;
 import com.alexm.bearspendings.entity.Product;
 import com.alexm.bearspendings.repository.ProductRepository;
 import com.alexm.bearspendings.repository.StoreRepository;
+import com.alexm.bearspendings.service.CategoryService;
 import com.alexm.bearspendings.service.UnitOfMeasureService;
 import org.springframework.stereotype.Component;
 
@@ -25,11 +26,13 @@ public class BillCmd2BilFunction implements Function<BillCommand, Bill> {
     private final ProductRepository productRepository;
     private final StoreRepository storeRepository;
     private final UnitOfMeasureService unitOfMeasureService;
+    private final CategoryService categoryService;
 
-    public BillCmd2BilFunction(ProductRepository productRepository, StoreRepository storeRepository, UnitOfMeasureService unitOfMeasureService) {
+    public BillCmd2BilFunction(ProductRepository productRepository, StoreRepository storeRepository, UnitOfMeasureService unitOfMeasureService, CategoryService categoryService) {
         this.productRepository = productRepository;
         this.storeRepository = storeRepository;
         this.unitOfMeasureService = unitOfMeasureService;
+        this.categoryService = categoryService;
     }
 
     @Override
@@ -51,6 +54,7 @@ public class BillCmd2BilFunction implements Function<BillCommand, Bill> {
         if (Objects.isNull(billItemCommand.getProductId())) {
             final Product newProduct = Product.builder()
                     .name(billItemCommand.getProductName())
+                    .category(categoryService.defaultCategory())
                     .unit(unitOfMeasureService.defaultUnit())
                     .build();
             return productRepository.save(newProduct);

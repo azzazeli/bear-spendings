@@ -2,9 +2,11 @@
 insert into unit_of_measure(id, name) values (1, 'unit');
 insert into store (id, city, country, location, name) values (1, 'chisinau', 'moldova', '', 'DEFAULT');
 
-insert into product(id, name, unit_id) values (1, 'chefir jlc 1%', 1);
-insert into product(id, name, unit_id) values (2, 'chefir jlc 2.5%', 1);
-insert into product(id, name, unit_id) values (3, 'Inghetata Beriozka 1kg', 1);
+insert into category(id, name) values (1, 'Base category');
+
+insert into product(id, name, unit_id, category_id) values (1, 'chefir jlc 1%', 1, 1);
+insert into product(id, name, unit_id, category_id) values (2, 'chefir jlc 2.5%', 1, 1);
+insert into product(id, name, unit_id, category_id) values (3, 'Inghetata Beriozka 1kg', 1, 1);
 
 insert into bill(id, order_date, store_id, total) values (1, '2019-04-18', 1, 21.0);
 insert into bill(id, order_date, store_id, total) values (2, '2019-04-22', 1, 97.00);

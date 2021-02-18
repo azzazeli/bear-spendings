@@ -18,9 +18,11 @@ import java.util.Set;
 @Getter
 @Setter
 @Entity
+@NoArgsConstructor
 @ToString(callSuper = true, of = {"name"})
 @EqualsAndHashCode(callSuper=true, of = {"name"})
 public class Category extends BaseEntity {
+    public static final String DEFAULT = "Base";
 
     private String name;
     @ManyToOne
@@ -34,8 +36,9 @@ public class Category extends BaseEntity {
     private Set<Product> products = new HashSet<>();
 
     @Builder
-    public Category(Long id, LocalDateTime createdDT, LocalDateTime modifiedDT, String name) {
+    public Category(Long id, LocalDateTime createdDT, LocalDateTime modifiedDT, String name, Category parent) {
         super(id, createdDT, modifiedDT);
         this.name = name;
+        this.parent = parent;
     }
 }
