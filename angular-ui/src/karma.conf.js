@@ -26,15 +26,22 @@ module.exports = function (config) {
     logLevel: config.LOG_INFO,
     autoWatch: true,
     browsers: ['Chrome'],
-    browserDisconnectTimeout: 10000,
-    browserDisconnectTolerance: 3,
-    browserNoActivityTimeout: 60000,
-    flags: [
-      '--disable-web-security',
-      '--disable-gpu',
-      '--no-sandbox',
-      '--headless'
-    ],
+    customLaunchers: {
+      ChromeHeadlessCI: {
+        base: 'ChromeHeadless',
+        flags: [
+          '--no-sandbox',
+          '--headless',
+          '--disable-web-security',
+          '--disable-gpu',
+        ],
+        captureTimeout: 250000,
+        browserDisconnectTolerance: 2,
+        browserDisconnectTimeout: 100000,
+        browserNoActivityTimeout: 80000,
+        autoWatchBatchDelay: 80000
+      }
+    },
     singleRun: false
   });
 };
