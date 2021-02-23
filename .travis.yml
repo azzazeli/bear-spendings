@@ -4,6 +4,6 @@ jdk:
 notifications:
   email:
     recipients:
-      - fagot013@gmail.com
+      - azzazeli@gmail.com
     on_success: always
     on_failure: always
