@@ -1,6 +1,7 @@
 package com.alexm.bearspendings.test;
 
 import com.alexm.bearspendings.dto.ProductCommand;
+import com.alexm.bearspendings.entity.Defaults;
 import com.alexm.bearspendings.entity.Product;
 
 /**
@@ -22,6 +23,6 @@ public enum SAMPLE_PRODUCTS {
         this.id = id;
         this.productName = productName;
         this.productCommand = ProductCommand.builder().id(id).name(productName).build();
-        this.product = Product.builder().id(id).name(productName).build();
+        this.product = Product.builder().id(id).name(productName).category(Defaults.DEFAULT_CATEGORY).build();
     }
 }

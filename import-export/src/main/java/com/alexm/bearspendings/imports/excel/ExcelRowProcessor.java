@@ -1,8 +1,7 @@
 package com.alexm.bearspendings.imports.excel;
 
-import com.alexm.bearspendings.entity.BillItem;
-import com.alexm.bearspendings.entity.Product;
-import com.alexm.bearspendings.entity.Store;
+import com.alexm.bearspendings.entity.*;
+import com.alexm.bearspendings.service.CategoryService;
 import com.alexm.bearspendings.service.ProductService;
 import com.alexm.bearspendings.service.StoreService;
 import lombok.extern.slf4j.Slf4j;
@@ -31,12 +30,15 @@ public class ExcelRowProcessor {
 
     private final StoreService storeService;
     private final ProductService productService;
+    private final CategoryService categoryService;
 
     enum CELL_COLUMN {
         ORDER_DATE_CELL(1),
         STORE_CELL(14),
         PRODUCT_CELL(5),
         QUANTITY_CELL(10),
+        CATEGORY_CELL(8),
+        SUB_CATEGORY_CELL(7),
         PRICE_PER_UNIT_CELL(11);
 
         int index;
@@ -46,9 +48,10 @@ public class ExcelRowProcessor {
         }
     }
 
-    public ExcelRowProcessor(StoreService storeService, ProductService productService) {
+    public ExcelRowProcessor(StoreService storeService, ProductService productService, CategoryService categoryService) {
         this.storeService = storeService;
         this.productService = productService;
+        this.categoryService = categoryService;
     }
 
     public void logRowInDebug(Row row) {
@@ -73,7 +76,8 @@ public class ExcelRowProcessor {
     }
 
     public BillItem processBillItem(Row row) throws ExcelRowProcessingException {
-        Product product = parseProduct(nonEmptyCellValue(row, PRODUCT_CELL));
+        Category category = parseCategory(nonEmptyCellValue(row, CATEGORY_CELL), nonEmptyCellValue(row, SUB_CATEGORY_CELL));
+        Product product = parseProduct(nonEmptyCellValue(row, PRODUCT_CELL),category);
         log.debug("--- product:{}", product);
         BillItem billItem = BillItem.builder().product(product).build();
         final Double pricePerUnit = doubleCellValue(row, PRICE_PER_UNIT_CELL);
@@ -85,8 +89,12 @@ public class ExcelRowProcessor {
         return billItem;
     }
 
-    private Product parseProduct(String productName) {
-        return productService.getOrInsert(productName);
+    private Category parseCategory(String categoryName, String subCategoryName) {
+        return categoryService.getOrInsert(categoryName, subCategoryName);
+    }
+
+    private Product parseProduct(String productName, Category category) {
+        return productService.getOrInsert(productName, category);
     }
 
     private Store parseStore(String storeName) {

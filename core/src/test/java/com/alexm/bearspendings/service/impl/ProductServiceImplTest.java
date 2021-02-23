@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
+import static com.alexm.bearspendings.entity.Defaults.DEFAULT_CATEGORY;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -39,14 +40,15 @@ class ProductServiceImplTest {
     @Test
     void products() {
         when(productRepository.findAll()).thenReturn(Collections.singletonList(
-                Product.builder().name("Lapte").build()
+                Product.builder().name("Lapte").category(DEFAULT_CATEGORY).build()
         ));
-        assertThat(productService.products(), containsInAnyOrder(Product.builder().name("Lapte").build()));
+        assertThat(productService.products(), containsInAnyOrder(
+                Product.builder().name("Lapte").category(DEFAULT_CATEGORY).build()));
     }
 
     @Test
     void product() {
-        when(productRepository.findById(SAMPLE_PRODUCTS.CHEFIR.id)).thenReturn(Optional.of(Product.builder().id(1L).name(SAMPLE_PRODUCTS.CHEFIR.productName).build()));
+        when(productRepository.findById(SAMPLE_PRODUCTS.CHEFIR.id)).thenReturn(Optional.of(SAMPLE_PRODUCTS.CHEFIR.product));
         ProductCommand product = productService.findProduct(SAMPLE_PRODUCTS.CHEFIR.id);
         org.junit.jupiter.api.Assertions.assertEquals(SAMPLE_PRODUCTS.CHEFIR.productName, product.getName());
         verify(productRepository, times(1)) .findById(SAMPLE_PRODUCTS.CHEFIR.id);
@@ -72,11 +74,13 @@ class ProductServiceImplTest {
     void getOrInsert() {
         String avocadoName = "Avocado";
         when(productRepository.findByName(avocadoName)).thenReturn(Optional.empty());
-        final Product avocado = Product.builder().id(1244L).name(avocadoName).build();
+        final Product avocado = Product.builder().id(1244L).name(avocadoName).category(DEFAULT_CATEGORY).build();
         when(productRepository.save(any(Product.class))).thenReturn(avocado);
-        final Product saved = productService.getOrInsert(avocadoName);
+
+        final Product saved = productService.getOrInsert(avocadoName, DEFAULT_CATEGORY);
+
         when(productRepository.findByName(avocadoName)).thenReturn(Optional.of(avocado));
-        final Product second = productService.getOrInsert(avocadoName);
+        final Product second = productService.getOrInsert(avocadoName, DEFAULT_CATEGORY);
         assertEquals(saved.getId(), second.getId());
     }
 }

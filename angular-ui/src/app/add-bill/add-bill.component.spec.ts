@@ -2,7 +2,7 @@ import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
 import {AddBillComponent} from './add-bill.component';
 import {FormArray, ReactiveFormsModule} from '@angular/forms';
-import {LoggerModule, NgxLoggerLevel} from 'ngx-logger';
+import {LoggerModule, LoggerTestingModule, NgxLoggerLevel} from 'ngx-logger';
 import {StoreService} from '../core/service/store.service';
 import {Store} from '../core/model/store.model';
 import {of} from 'rxjs/internal/observable/of';
@@ -27,8 +27,7 @@ describe('AddBillComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [ ReactiveFormsModule, CalendarModule, ToastModule, AutoCompleteModule,
-        LoggerModule.forRoot({level: NgxLoggerLevel.DEBUG})],
+      imports: [ ReactiveFormsModule, CalendarModule, ToastModule, AutoCompleteModule, LoggerTestingModule ],
       providers: [
         MessageService,
         SamplesDataService,

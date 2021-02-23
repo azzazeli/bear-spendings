@@ -1,6 +1,7 @@
 package com.alexm.bearspendings.service;
 
 import com.alexm.bearspendings.dto.ProductCommand;
+import com.alexm.bearspendings.entity.Category;
 import com.alexm.bearspendings.entity.Product;
 
 import java.util.List;
@@ -11,7 +12,7 @@ import java.util.List;
 public interface ProductService {
     List<Product> products();
 
-    Product getOrInsert(String productName);
+    Product getOrInsert(String productName, Category category);
 
     ProductCommand findProduct(Long id);
 

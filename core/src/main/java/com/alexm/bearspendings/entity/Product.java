@@ -26,14 +26,13 @@ public class Product extends BaseEntity {
     @JoinColumn(name = "unit_id", nullable = false)
     private UnitOfMeasure unit;
 
-//    @ManyToOne
     @ManyToOne(optional = false)
     @JoinColumn(name = "category_id")
     private Category category;
 
     @Builder
     public Product(Long id, LocalDateTime createdDT, LocalDateTime modifiedDT,
-                   @NonNull String name, UnitOfMeasure unit, String comment, Category category) {
+                   @NonNull String name, @NonNull Category category, UnitOfMeasure unit, String comment) {
         super(id, createdDT, modifiedDT);
         this.name = name;
         this.comment = comment;

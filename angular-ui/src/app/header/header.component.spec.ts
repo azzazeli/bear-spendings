@@ -1,7 +1,7 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
 import {HeaderComponent} from './header.component';
-import {LoggerModule, NgxLoggerLevel} from 'ngx-logger';
+import {LoggerModule, LoggerTestingModule, NgxLoggerLevel} from 'ngx-logger';
 import {BillService} from '../core/service/bill.service';
 import createSpyObj = jasmine.createSpyObj;
 import {of} from 'rxjs/internal/observable/of';
@@ -13,7 +13,7 @@ describe('HeaderComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [LoggerModule.forRoot({level: NgxLoggerLevel.DEBUG})],
+      imports: [LoggerTestingModule],
       declarations: [ HeaderComponent ],
       providers: [
         {provide: BillService, useValue: createSpyObj('BillService', ['exportAll']) }

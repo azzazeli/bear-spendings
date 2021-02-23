@@ -1,7 +1,6 @@
 package com.alexm.bearspendings.exports.excel;
 
 import com.alexm.bearspendings.TestBills;
-import com.alexm.bearspendings.entity.Store;
 import com.alexm.bearspendings.service.BillService;
 import com.alexm.bearspendings.service.StoreService;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
@@ -23,10 +22,10 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+import static com.alexm.bearspendings.entity.Defaults.DEFAULT_STORE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 
 /**
@@ -42,12 +41,11 @@ class ExcelBillExporterTest {
     StoreService storeService;
     @InjectMocks
     ExcelBillExporter excelBillExporter;
-    private final Store defaultStore = TestBills.defaultStore();
 
     @BeforeEach
     void setup() {
-        when(billService.allBills(eq(0), eq(10))).thenReturn(TestBills.sampleBills());
-        when(storeService.findStore(defaultStore.getId())).thenReturn(defaultStore);
+        when(billService.allBills(0, 10)).thenReturn(TestBills.sampleBills());
+        when(storeService.findStore(DEFAULT_STORE.getId())).thenReturn(DEFAULT_STORE);
     }
 
     @Test
@@ -69,7 +67,7 @@ class ExcelBillExporterTest {
             assertThat(row.getCell(10).getNumericCellValue()).isEqualTo(2.0);
             assertThat(row.getCell(11).getNumericCellValue()).isEqualTo(22.0);
             assertThat(row.getCell(12).getNumericCellValue()).isEqualTo(44.0);
-            assertThat(row.getCell(14).getStringCellValue()).isEqualTo(defaultStore.getName());
+            assertThat(row.getCell(14).getStringCellValue()).isEqualTo(DEFAULT_STORE.getName());
         }
     }
 }

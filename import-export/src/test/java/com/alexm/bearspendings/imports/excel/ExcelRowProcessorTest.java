@@ -3,6 +3,7 @@ package com.alexm.bearspendings.imports.excel;
 import com.alexm.bearspendings.entity.BillItem;
 import com.alexm.bearspendings.entity.Store;
 import com.alexm.bearspendings.imports.excel.ExcelRowProcessor.CELL_COLUMN;
+import com.alexm.bearspendings.service.CategoryService;
 import com.alexm.bearspendings.service.ProductService;
 import com.alexm.bearspendings.service.StoreService;
 import lombok.extern.slf4j.Slf4j;
@@ -24,6 +25,7 @@ import org.springframework.util.ResourceUtils;
 import java.io.IOException;
 import java.time.LocalDate;
 
+import static com.alexm.bearspendings.imports.TestImportCategories.BEBE;
 import static com.alexm.bearspendings.imports.TestImportProducts.Medicamente;
 import static com.alexm.bearspendings.imports.excel.ExcelBillImporterTest.farmaciaFamiliei;
 import static com.alexm.bearspendings.imports.excel.ExcelRowProcessor.CELL_COLUMN.ORDER_DATE_CELL;
@@ -45,6 +47,8 @@ class ExcelRowProcessorTest {
     StoreService mockStoreService;
     @Mock
     ProductService mockProductService;
+    @Mock
+    CategoryService mockCategoryService;
 
     ExcelRowProcessor processor;
     private static Workbook workbook;
@@ -57,7 +61,7 @@ class ExcelRowProcessorTest {
 
     @BeforeEach
     void setup() {
-        processor = new ExcelRowProcessor(mockStoreService, mockProductService);
+        processor = new ExcelRowProcessor(mockStoreService, mockProductService, mockCategoryService);
         Sheet sheet = workbook.getSheetAt(0);
         row = sheet.getRow(1);
     }
@@ -76,10 +80,12 @@ class ExcelRowProcessorTest {
 
     @Test
     void processBillItem() throws Exception {
-        when(mockProductService.getOrInsert(Medicamente.productName)).thenReturn(Medicamente.product());
+        when(mockCategoryService.getOrInsert("Health", "Bebe")).thenReturn(BEBE.category());
+        when(mockProductService.getOrInsert(Medicamente.productName, BEBE.category())).thenReturn(Medicamente.product());
         final BillItem billItem = processor.processBillItem(row);
         assertThat(billItem)
                 .hasFieldOrPropertyWithValue("product.id", Medicamente.id)
+                .hasFieldOrPropertyWithValue("product.category.id", BEBE.id)
                 .hasFieldOrPropertyWithValue("pricePerUnit", 284.99)
                 .hasFieldOrPropertyWithValue("quantity", 1.0)
                 .hasFieldOrPropertyWithValue("bill", null)

@@ -11,6 +11,7 @@ import {AutoCompleteModule} from 'primeng/autocomplete';
 import {Product} from '../../core/model/product.model';
 import {ProductsService} from '../../core/service/products.service';
 import {of} from 'rxjs';
+import {HttpClientTestingModule} from "@angular/common/http/testing";
 
 describe('NewBillItemComponent', () => {
   let component: NewBillItemComponent;
@@ -20,9 +21,10 @@ describe('NewBillItemComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [ReactiveFormsModule,
-        AutoCompleteModule,
-        LoggerModule.forRoot({level: NgxLoggerLevel.DEBUG})],
+      imports: [ReactiveFormsModule, AutoCompleteModule
+        ,HttpClientTestingModule
+         ,LoggerModule.forRoot({level: NgxLoggerLevel.DEBUG})
+      ],
       providers: [
         SamplesDataService,
         NGXLogger,

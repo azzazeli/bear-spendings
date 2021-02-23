@@ -1,6 +1,7 @@
 package com.alexm.bearspendings.service.impl;
 
 import com.alexm.bearspendings.dto.ProductCommand;
+import com.alexm.bearspendings.entity.Category;
 import com.alexm.bearspendings.entity.Product;
 import com.alexm.bearspendings.repository.ProductRepository;
 import com.alexm.bearspendings.service.ProductService;
@@ -49,10 +50,11 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Product getOrInsert(String productName) {
+    public Product getOrInsert(String productName, Category category) {
        return this.repository.findByName(productName)
                .orElseGet(() -> repository.save(Product.builder()
                        .name(productName)
+                       .category(category)
                        .unit(unitOfMeasureService.defaultUnit())
                        .build()));
     }

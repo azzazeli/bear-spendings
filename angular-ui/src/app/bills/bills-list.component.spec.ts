@@ -3,7 +3,7 @@ import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {BillsListComponent} from './bills-list.component';
 import {BillService} from '../core/service/bill.service';
 import {SamplesDataService} from '../core/service/samplesDataService';
-import {LoggerModule, NgxLoggerLevel} from 'ngx-logger';
+import {LoggerModule, LoggerTestingModule, NgxLoggerLevel} from 'ngx-logger';
 import {of} from 'rxjs/internal/observable/of';
 import {TableModule} from 'primeng/table';
 import {StoreService} from '../core/service/store.service';
@@ -20,10 +20,7 @@ describe('BillsListComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [
-        TableModule,
-        LoggerModule.forRoot({level: NgxLoggerLevel.DEBUG})
-      ],
+      imports: [TableModule,LoggerTestingModule],
       providers: [
         SamplesDataService,
         {provide: BillService, useValue: createSpyObj('BillService', ['allBills', 'allBillsCount'])},
