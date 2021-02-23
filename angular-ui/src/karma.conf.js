@@ -34,12 +34,7 @@ module.exports = function (config) {
           '--headless',
           '--disable-web-security',
           '--disable-gpu',
-        ],
-        captureTimeout: 250000,
-        browserDisconnectTolerance: 2,
-        browserDisconnectTimeout: 100000,
-        browserNoActivityTimeout: 80000,
-        autoWatchBatchDelay: 80000
+        ]
       }
     },
     singleRun: false
