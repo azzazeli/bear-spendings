@@ -1,0 +1,12 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="ui_start_dev" type="js.build_tools.npm">
+    <package-json value="$PROJECT_DIR$/angular-ui/package.json" />
+    <command value="run" />
+    <scripts>
+      <script value="start_dev" />
+    </scripts>
+    <node-interpreter value="project" />
+    <envs />
+    <method v="2" />
+  </configuration>
+</component>
