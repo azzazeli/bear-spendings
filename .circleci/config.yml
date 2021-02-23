@@ -4,6 +4,20 @@
 #
 version: 2
 jobs:
+  test:
+    executor: browser-tools/default
+    steps:
+      - browser-tools/install-browser-tools:
+          chrome-version: 85.0.4183.102
+          firefox-version: 80.0.1
+      - run:
+          command: |
+            google-chrome --version
+            firefox --version
+            geckodriver --version
+            chromedriver --version
+            java -jar /usr/local/bin/selenium.jar --version
+          name: Check install
   build:
     docker:
       # specify the version you desire here
