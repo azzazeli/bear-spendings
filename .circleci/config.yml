@@ -45,3 +45,6 @@ jobs:
 
       # run clean build
       - run: gradle clean build
+
+      - store_artifacts:
+          path: web-app/build/lib
