@@ -1,9 +1,0 @@
-language: java
-jdk:
-  - openjdk11
-notifications:
-  email:
-    recipients:
-      - azzazeli@gmail.com
-    on_success: always
-    on_failure: always
