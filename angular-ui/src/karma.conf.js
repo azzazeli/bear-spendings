@@ -23,25 +23,15 @@ module.exports = function (config) {
     reporters: ['progress', 'kjhtml'],
     port: 9876,
     colors: true,
-    logLevel: config.LOG_DEBUG,
+    logLevel: config.LOG_INFO,
     autoWatch: true,
     browsers: ['ChromeHeadless'],
-    captureTimeout: 60000, // it was already there
-    browserDisconnectTimeout : 10000,
-    browserDisconnectTolerance : 1,
-    browserNoActivityTimeout : 60000,//by default 10000
-    browserSocketTimeout: 200000,
     customLaunchers: {
       ChromeHeadlessCI: {
         base: 'ChromeHeadless',
         flags: [
           '--no-sandbox',
-          '--headless',
-          '--disable-web-security',
-          '--disable-gpu',
-          '--disable-translate',
-          '--disable-extensions',
-          '--disable-dev-shm-usage'
+          '--headless'
         ]
       }
     },
