@@ -4,11 +4,10 @@ import com.alexm.bearspendings.entity.Bill;
 import com.alexm.bearspendings.entity.Store;
 import com.alexm.bearspendings.imports.BillImporter;
 import com.alexm.bearspendings.imports.ImportsException;
-import com.alexm.bearspendings.imports.TestImportProducts;
-import com.alexm.bearspendings.imports.excel.ExcelBillImporterTest;
 import com.alexm.bearspendings.service.BillService;
 import com.alexm.bearspendings.service.ProductService;
 import com.alexm.bearspendings.service.StoreService;
+import com.alexm.bearspendings.test.TestProducts;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.groups.Tuple;
 import org.junit.jupiter.api.Test;
@@ -22,12 +21,15 @@ import java.time.LocalDate;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+import static com.alexm.bearspendings.test.TestStores.ALIMARKET;
+import static com.alexm.bearspendings.test.TestStores.FARMACIA_FAMILIEI;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @author AlexM
  * Date: 4/20/20
  **/
+@SuppressWarnings("squid:S5960")
 @ActiveProfiles("import-export")
 @SpringBootTest(classes = ImportExportApplication.class)
 class ImportExportApplicationTest {
@@ -75,16 +77,16 @@ class ImportExportApplicationTest {
         assertEquals(10, bill1.getItems().size());
         Assertions.assertThat(bill1.getItems()).extracting(PRODUCT_ID_FIELD, QUANTITY_FIELD, PRICE_PER_UNIT_FIELD)
                 .containsExactlyInAnyOrder(
-                        Tuple.tuple(TestImportProducts.Medicamente.id, 1.0, 284.99),
-                        Tuple.tuple(TestImportProducts.Calmante.id, 2.0, 10.72),
-                        Tuple.tuple(TestImportProducts.Misc.id, 1.0, 8.12),
-                        Tuple.tuple(TestImportProducts.Misc.id, 9.0, 8.27),
-                        Tuple.tuple(TestImportProducts.Misc.id, 3.0, 19.6203),
-                        Tuple.tuple(TestImportProducts.Pachet.id, 1.0, 0.3),
-                        Tuple.tuple(TestImportProducts.Misc.id, 1.0, 59.9),
-                        Tuple.tuple(TestImportProducts.Misc.id, 1.0, 71.88),
-                        Tuple.tuple(TestImportProducts.Vitamine.id, 1.0, 36.62),
-                        Tuple.tuple(TestImportProducts.Misc.id, 1.0, 172.8));
+                        Tuple.tuple(TestProducts.MEDICAMENTE.id, 1.0, 284.99),
+                        Tuple.tuple(TestProducts.CALMANTE.id, 2.0, 10.72),
+                        Tuple.tuple(TestProducts.MISC.id, 1.0, 8.12),
+                        Tuple.tuple(TestProducts.MISC.id, 9.0, 8.27),
+                        Tuple.tuple(TestProducts.MISC.id, 3.0, 19.6203),
+                        Tuple.tuple(TestProducts.PACHET.id, 1.0, 0.3),
+                        Tuple.tuple(TestProducts.MISC.id, 1.0, 59.9),
+                        Tuple.tuple(TestProducts.MISC.id, 1.0, 71.88),
+                        Tuple.tuple(TestProducts.VITAMINE.id, 1.0, 36.62),
+                        Tuple.tuple(TestProducts.MISC.id, 1.0, 172.8));
         final Optional<Bill> byId2 = billService.findById(2L);
         assertTrue(byId2.isPresent());
         final Bill bill2 = byId2.orElseThrow();
@@ -95,16 +97,16 @@ class ImportExportApplicationTest {
         assertEquals(10, bill2.getItems().size());
         Assertions.assertThat(bill2.getItems()).extracting(PRODUCT_ID_FIELD, QUANTITY_FIELD, PRICE_PER_UNIT_FIELD)
                 .containsExactlyInAnyOrder(
-                        Tuple.tuple(TestImportProducts.AppaMorshinska.id, 2.0, 41.75),
-                        Tuple.tuple(TestImportProducts.Ridiche.id, 0.47, 22.0),
-                        Tuple.tuple(TestImportProducts.Lamii.id, 0.208, 58.0),
-                        Tuple.tuple(TestImportProducts.Banane.id, 0.97, 33.0),
-                        Tuple.tuple(TestImportProducts.Smintina20.id, 1.0, 23.0),
-                        Tuple.tuple(TestImportProducts.ArahideFiesta.id, 1.0, 25.5),
-                        Tuple.tuple(TestImportProducts.Chefir.id, 1.0, 11.5),
-                        Tuple.tuple(TestImportProducts.Lapte05.id, 1.0, 7.25),
-                        Tuple.tuple(TestImportProducts.VarzaNoua.id, 0.614, 23.0),
-                        Tuple.tuple(TestImportProducts.Avocado.id, 0.198, 140.0)
+                        Tuple.tuple(TestProducts.APPA_MORSHINSKA.id, 2.0, 41.75),
+                        Tuple.tuple(TestProducts.RIDICHE.id, 0.47, 22.0),
+                        Tuple.tuple(TestProducts.LAMII.id, 0.208, 58.0),
+                        Tuple.tuple(TestProducts.BANANE.id, 0.97, 33.0),
+                        Tuple.tuple(TestProducts.SMINTINA_20.id, 1.0, 23.0),
+                        Tuple.tuple(TestProducts.ARAHIDE_FIESTA.id, 1.0, 25.5),
+                        Tuple.tuple(TestProducts.CHEFIR.id, 1.0, 11.5),
+                        Tuple.tuple(TestProducts.LAPTE_05.id, 1.0, 7.25),
+                        Tuple.tuple(TestProducts.VARZA_NOUA.id, 0.614, 23.0),
+                        Tuple.tuple(TestProducts.AVOCADO.id, 0.198, 140.0)
                 );
 
         final Optional<Bill> byId3 = billService.findById(3L);
@@ -116,30 +118,30 @@ class ImportExportApplicationTest {
                 .hasFieldOrPropertyWithValue(TOTAL_FIELD, 329.62);
         Assertions.assertThat(bill3.getItems()).extracting(PRODUCT_ID_FIELD, QUANTITY_FIELD, PRICE_PER_UNIT_FIELD)
                 .containsExactlyInAnyOrder(
-                        Tuple.tuple(TestImportProducts.Brinzica.id, 4.0, 5.75),
-                        Tuple.tuple(TestImportProducts.Smintina20.id, 1.0, 23.0),
-                        Tuple.tuple(TestImportProducts.Bere.id, 1.0, 32.0),
-                        Tuple.tuple(TestImportProducts.Bere.id, 1.0, 24.9),
-                        Tuple.tuple(TestImportProducts.Drojdie.id, 3.0, 7.1),
-                        Tuple.tuple(TestImportProducts.Chefir.id, 1.0, 15.0),
-                        Tuple.tuple(TestImportProducts.AppaMorshinska.id, 2.0, 41.75),
-                        Tuple.tuple(TestImportProducts.Banane.id, 0.624, 33.00),
-                        Tuple.tuple(TestImportProducts.Avocado.id, 0.202, 140.0),
-                        Tuple.tuple(TestImportProducts.Ceapa.id, 1.384, 15.0),
-                        Tuple.tuple(TestImportProducts.Grapefruit.id, 1.242, 26.0),
-                        Tuple.tuple(TestImportProducts.PiineFranzela.id, 1.0, 5.0)
+                        Tuple.tuple(TestProducts.BRINZICA.id, 4.0, 5.75),
+                        Tuple.tuple(TestProducts.SMINTINA_20.id, 1.0, 23.0),
+                        Tuple.tuple(TestProducts.BERE.id, 1.0, 32.0),
+                        Tuple.tuple(TestProducts.BERE.id, 1.0, 24.9),
+                        Tuple.tuple(TestProducts.DROJDIE.id, 3.0, 7.1),
+                        Tuple.tuple(TestProducts.CHEFIR.id, 1.0, 15.0),
+                        Tuple.tuple(TestProducts.APPA_MORSHINSKA.id, 2.0, 41.75),
+                        Tuple.tuple(TestProducts.BANANE.id, 0.624, 33.00),
+                        Tuple.tuple(TestProducts.AVOCADO.id, 0.202, 140.0),
+                        Tuple.tuple(TestProducts.CEAPA.id, 1.384, 15.0),
+                        Tuple.tuple(TestProducts.GRAPEFRUIT.id, 1.242, 26.0),
+                        Tuple.tuple(TestProducts.PIINE_FRANZELA.id, 1.0, 5.0)
                 );
     }
 
     private void verifyProducts() {
-        Stream.of(TestImportProducts.values()).forEach(testProduct ->
+        Stream.of(TestProducts.values()).forEach(testProduct ->
                 assertNotNull(productService.findStartWith(testProduct.productName))); //todo: use findByName
     }
 
     private void verifyStores() {
         Store store = storeService.findStore(1L);
-        assertEquals(ExcelBillImporterTest.farmaciaFamiliei, store.getName());
+        assertEquals(FARMACIA_FAMILIEI.storeName, store.getName());
         store = storeService.findStore(2L);
-        assertEquals(ExcelBillImporterTest.alimarket, store.getName());
+        assertEquals(ALIMARKET.storeName, store.getName());
     }
 }

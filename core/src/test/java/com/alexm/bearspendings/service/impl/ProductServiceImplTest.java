@@ -4,7 +4,6 @@ import com.alexm.bearspendings.dto.ProductCommand;
 import com.alexm.bearspendings.entity.Product;
 import com.alexm.bearspendings.repository.ProductRepository;
 import com.alexm.bearspendings.service.UnitOfMeasureService;
-import com.alexm.bearspendings.test.SAMPLE_PRODUCTS;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.Test;
@@ -19,6 +18,7 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import static com.alexm.bearspendings.entity.Defaults.DEFAULT_CATEGORY;
+import static com.alexm.bearspendings.test.TestProducts.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -48,10 +48,10 @@ class ProductServiceImplTest {
 
     @Test
     void product() {
-        when(productRepository.findById(SAMPLE_PRODUCTS.CHEFIR.id)).thenReturn(Optional.of(SAMPLE_PRODUCTS.CHEFIR.product));
-        ProductCommand product = productService.findProduct(SAMPLE_PRODUCTS.CHEFIR.id);
-        org.junit.jupiter.api.Assertions.assertEquals(SAMPLE_PRODUCTS.CHEFIR.productName, product.getName());
-        verify(productRepository, times(1)) .findById(SAMPLE_PRODUCTS.CHEFIR.id);
+        when(productRepository.findById(CHEFIR.id)).thenReturn(Optional.of(CHEFIR.product));
+        ProductCommand product = productService.findProduct(CHEFIR.id);
+        org.junit.jupiter.api.Assertions.assertEquals(CHEFIR.productName, product.getName());
+        verify(productRepository, times(1)) .findById(CHEFIR.id);
     }
 
     @Test
@@ -63,11 +63,11 @@ class ProductServiceImplTest {
     void findStartWith() {
         //given
         when(productRepository.findByNameStartsWithIgnoreCase("cA"))
-                .thenReturn(Lists.list(SAMPLE_PRODUCTS.CARTOFI.product, SAMPLE_PRODUCTS.CARNE.product));
+                .thenReturn(Lists.list(CARTOFI.product, CALMANTE.product));
         //when
         final List<ProductCommand> productCommands = productService.findStartWith("cA");
         //then
-        Assertions.assertThat(productCommands).extracting(ProductCommand::getId).containsExactly(1L, 2L);
+        Assertions.assertThat(productCommands).extracting(ProductCommand::getId).containsExactly(22L, 2L);
     }
 
     @Test

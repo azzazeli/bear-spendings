@@ -13,7 +13,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.NoSuchElementException;
 
-import static com.alexm.bearspendings.test.SAMPLE_PRODUCTS.*;
+import static com.alexm.bearspendings.test.TestProducts.*;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -40,7 +40,7 @@ class ProductControllerTest {
         when(productService.findProduct(CHEFIR.id)).thenReturn(CHEFIR.productCommand);
         when(productService.findProduct(UNKNOWN_PRODUCT)).thenThrow(NoSuchElementException.class);
         when(productService.findStartWith("ca")).thenReturn(Lists.list(
-           CARNE.productCommand, CARTOFI.productCommand
+           CALMANTE.productCommand, CARTOFI.productCommand
         ));
     }
 
@@ -61,8 +61,8 @@ class ProductControllerTest {
         mockMvc.perform(get(PRODUCTS_URL + "?startWith=ca"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(2))
-                .andExpect(jsonPath("$.[0].id").value(CARNE.id))
-                .andExpect(jsonPath("$.[0].name").value(CARNE.productName))
+                .andExpect(jsonPath("$.[0].id").value(CALMANTE.id))
+                .andExpect(jsonPath("$.[0].name").value(CALMANTE.productName))
                 .andExpect(jsonPath("$.[1].id").value(CARTOFI.id))
                 .andExpect(jsonPath("$.[1].name").value(CARTOFI.productName))
                 .andDo(print());

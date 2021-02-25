@@ -6,12 +6,12 @@ import com.alexm.bearspendings.entity.Product;
 import com.alexm.bearspendings.entity.Store;
 import com.alexm.bearspendings.imports.ImportsConfig;
 import com.alexm.bearspendings.imports.ImportsException;
-import com.alexm.bearspendings.imports.TestImportCategories;
-import com.alexm.bearspendings.imports.TestImportProducts;
 import com.alexm.bearspendings.service.BillService;
 import com.alexm.bearspendings.service.CategoryService;
 import com.alexm.bearspendings.service.ProductService;
 import com.alexm.bearspendings.service.StoreService;
+import com.alexm.bearspendings.test.TestCategories;
+import com.alexm.bearspendings.test.TestProducts;
 import org.assertj.core.groups.Tuple;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -34,9 +34,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
-import static com.alexm.bearspendings.imports.TestImportCategories.*;
-import static com.alexm.bearspendings.imports.TestImportProducts.*;
 import static com.alexm.bearspendings.imports.excel.ExcelRowProcessor.DATE_PATTERN;
+import static com.alexm.bearspendings.test.TestCategories.*;
+import static com.alexm.bearspendings.test.TestProducts.*;
+import static com.alexm.bearspendings.test.TestStores.ALIMARKET;
+import static com.alexm.bearspendings.test.TestStores.FARMACIA_FAMILIEI;
 import static java.time.format.DateTimeFormatter.ofPattern;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -47,9 +49,7 @@ import static org.mockito.Mockito.*;
  * Date: 4/22/20
  **/
 @ExtendWith(MockitoExtension.class)
-public class ExcelBillImporterTest {
-    public static final String farmaciaFamiliei = "Farmacia Familiei";
-    public static final String alimarket = "Alimarket";
+class ExcelBillImporterTest {
     @Mock
     StoreService mockStoreService;
     @Mock
@@ -71,8 +71,8 @@ public class ExcelBillImporterTest {
         importsConfig.setBillsBatchSize(2);
         ExcelRowProcessor rowProcessor = new ExcelRowProcessor(mockStoreService, mockProductService, mockCategoryService);
         importer = new ExcelBillImporter(mockBillService, rowProcessor, importsConfig);
-        storesMap.put(farmaciaFamiliei, Store.builder().id(100L).name(farmaciaFamiliei).build());
-        storesMap.put(alimarket, Store.builder().id(200L).name(alimarket).build());
+        storesMap.put(FARMACIA_FAMILIEI.storeName, Store.builder().id(100L).name(FARMACIA_FAMILIEI.storeName).build());
+        storesMap.put(ALIMARKET.storeName, Store.builder().id(200L).name(ALIMARKET.storeName).build());
     }
 
     @Test
@@ -88,13 +88,13 @@ public class ExcelBillImporterTest {
     void imports() throws FileNotFoundException, ImportsException {
         when(mockCategoryService.getOrInsert(anyString(), anyString())).thenAnswer( invocation -> {
             final String subCategoryName = invocation.getArgument(1);
-            return TestImportCategories.of(subCategoryName);
+            return TestCategories.of(subCategoryName);
         });
 
         when(mockProductService.getOrInsert(anyString(), any(Category.class))).thenAnswer(invocation -> {
             final Object name = invocation.getArgument(0);
             final Category category = invocation.getArgument(1);
-            return Stream.of(TestImportProducts.values())
+            return Stream.of(TestProducts.values())
                     .filter(testProduct -> testProduct.productName.equals(name.toString()))
                     .map(testProduct -> Product.builder().id(testProduct.id).name(testProduct.productName).category(category).build())
                     .findFirst().orElseThrow();
@@ -107,8 +107,8 @@ public class ExcelBillImporterTest {
 
         importer.imports(file.toPath());
 
-        verify(mockStoreService, times(10)).getOrInsert(farmaciaFamiliei);
-        verify(mockStoreService, times(22)).getOrInsert(alimarket);
+        verify(mockStoreService, times(10)).getOrInsert(FARMACIA_FAMILIEI.storeName);
+        verify(mockStoreService, times(22)).getOrInsert(ALIMARKET.storeName);
         verifyCategories();
         verifyProducts();
         verifyBills();
@@ -116,7 +116,7 @@ public class ExcelBillImporterTest {
 
     private void verifyCategories() {
         verify(mockCategoryService, times(3)).getOrInsert(HEALTH.categoryName, BEBE.categoryName);
-        verify(mockCategoryService, times(6)).getOrInsert(HEALTH.categoryName, MISC.categoryName);
+        verify(mockCategoryService, times(6)).getOrInsert(HEALTH.categoryName, TestCategories.MISC.categoryName);
         verify(mockCategoryService, times(1)).getOrInsert(HOUSEHOLD.categoryName, CONSUMABLE.categoryName);
         verify(mockCategoryService, times(4)).getOrInsert(FOOD_AND_DRINK.categoryName, FRUITS.categoryName);
         verify(mockCategoryService, times(5)).getOrInsert(FOOD_AND_DRINK.categoryName, LEGUME.categoryName);
@@ -142,37 +142,37 @@ public class ExcelBillImporterTest {
         Bill bill = iterator.next();
         assertThat(bill)
                 .hasFieldOrPropertyWithValue("orderDate", orderDate("20/4/10"))
-                .hasFieldOrPropertyWithValue("store.id", storesMap.get(farmaciaFamiliei).getId());
+                .hasFieldOrPropertyWithValue("store.id", storesMap.get(FARMACIA_FAMILIEI.storeName).getId());
         assertThat(bill.getItems()).extracting("product.id", "quantity", "pricePerUnit")
                     .containsExactlyInAnyOrder(
-                            Tuple.tuple(Medicamente.id, 1.0, 284.99),
-                            Tuple.tuple(Calmante.id, 2.0, 10.72),
-                            Tuple.tuple(Misc.id, 1.0, 8.12),
-                            Tuple.tuple(Misc.id, 9.0, 8.27),
-                            Tuple.tuple(Misc.id, 3.0, 19.6203),
-                            Tuple.tuple(Pachet.id, 1.0, 0.3),
-                            Tuple.tuple(Misc.id, 1.0, 59.9),
-                            Tuple.tuple(Misc.id, 1.0, 71.88),
-                            Tuple.tuple(Vitamine.id, 1.0, 36.62),
-                            Tuple.tuple(Misc.id, 1.0, 172.8)
+                            Tuple.tuple(MEDICAMENTE.id, 1.0, 284.99),
+                            Tuple.tuple(CALMANTE.id, 2.0, 10.72),
+                            Tuple.tuple(TestProducts.MISC.id, 1.0, 8.12),
+                            Tuple.tuple(TestProducts.MISC.id, 9.0, 8.27),
+                            Tuple.tuple(TestProducts.MISC.id, 3.0, 19.6203),
+                            Tuple.tuple(PACHET.id, 1.0, 0.3),
+                            Tuple.tuple(TestProducts.MISC.id, 1.0, 59.9),
+                            Tuple.tuple(TestProducts.MISC.id, 1.0, 71.88),
+                            Tuple.tuple(VITAMINE.id, 1.0, 36.62),
+                            Tuple.tuple(TestProducts.MISC.id, 1.0, 172.8)
                     );
 
         bill = iterator.next();
         assertThat(bill)
                 .hasFieldOrPropertyWithValue("orderDate", orderDate("20/4/10"))
-                .hasFieldOrPropertyWithValue("store.id", storesMap.get(alimarket).getId());
+                .hasFieldOrPropertyWithValue("store.id", storesMap.get(ALIMARKET.storeName).getId());
         assertThat(bill.getItems()).extracting("product.id", "quantity", "pricePerUnit")
                 .containsExactlyInAnyOrder(
-                        Tuple.tuple(AppaMorshinska.id, 2.0, 41.75),
-                        Tuple.tuple(Ridiche.id, 0.47, 22.0),
-                        Tuple.tuple(Lamii.id, 0.208, 58.0),
-                        Tuple.tuple(Banane.id, 0.97, 33.0),
-                        Tuple.tuple(Smintina20.id, 1.0, 23.0),
-                        Tuple.tuple(ArahideFiesta.id, 1.0, 25.5),
-                        Tuple.tuple(Chefir.id, 1.0, 11.5),
-                        Tuple.tuple(Lapte05.id, 1.0, 7.25),
-                        Tuple.tuple(VarzaNoua.id, 0.614, 23.0),
-                        Tuple.tuple(Avocado.id, 0.198, 140.0)
+                        Tuple.tuple(APPA_MORSHINSKA.id, 2.0, 41.75),
+                        Tuple.tuple(RIDICHE.id, 0.47, 22.0),
+                        Tuple.tuple(LAMII.id, 0.208, 58.0),
+                        Tuple.tuple(BANANE.id, 0.97, 33.0),
+                        Tuple.tuple(SMINTINA_20.id, 1.0, 23.0),
+                        Tuple.tuple(ARAHIDE_FIESTA.id, 1.0, 25.5),
+                        Tuple.tuple(CHEFIR.id, 1.0, 11.5),
+                        Tuple.tuple(LAPTE_05.id, 1.0, 7.25),
+                        Tuple.tuple(VARZA_NOUA.id, 0.614, 23.0),
+                        Tuple.tuple(AVOCADO.id, 0.198, 140.0)
                 );
 
         assertEquals(1 , secondBatch.spliterator().estimateSize());
@@ -180,21 +180,21 @@ public class ExcelBillImporterTest {
 
         assertThat(bill)
                 .hasFieldOrPropertyWithValue("orderDate", orderDate("20/4/05"))
-                .hasFieldOrPropertyWithValue("store.id", storesMap.get(alimarket).getId());
+                .hasFieldOrPropertyWithValue("store.id", storesMap.get(ALIMARKET.storeName).getId());
         assertThat(bill.getItems()).extracting("product.id", "quantity", "pricePerUnit")
                 .containsExactlyInAnyOrder(
-                        Tuple.tuple(Brinzica.id, 4.0, 5.75),
-                        Tuple.tuple(Smintina20.id, 1.0, 23.0),
-                        Tuple.tuple(Bere.id, 1.0, 32.0),
-                        Tuple.tuple(Bere.id, 1.0, 24.9),
-                        Tuple.tuple(Drojdie.id, 3.0, 7.1),
-                        Tuple.tuple(Chefir.id, 1.0, 15.0),
-                        Tuple.tuple(AppaMorshinska.id, 2.0, 41.75),
-                        Tuple.tuple(Banane.id, 0.624, 33.00),
-                        Tuple.tuple(Avocado.id, 0.202, 140.0),
-                        Tuple.tuple(Ceapa.id, 1.384, 15.0),
-                        Tuple.tuple(Grapefruit.id, 1.242, 26.0),
-                        Tuple.tuple(PiineFranzela.id, 1.0, 5.0)
+                        Tuple.tuple(BRINZICA.id, 4.0, 5.75),
+                        Tuple.tuple(SMINTINA_20.id, 1.0, 23.0),
+                        Tuple.tuple(BERE.id, 1.0, 32.0),
+                        Tuple.tuple(BERE.id, 1.0, 24.9),
+                        Tuple.tuple(DROJDIE.id, 3.0, 7.1),
+                        Tuple.tuple(CHEFIR.id, 1.0, 15.0),
+                        Tuple.tuple(APPA_MORSHINSKA.id, 2.0, 41.75),
+                        Tuple.tuple(BANANE.id, 0.624, 33.00),
+                        Tuple.tuple(AVOCADO.id, 0.202, 140.0),
+                        Tuple.tuple(CEAPA.id, 1.384, 15.0),
+                        Tuple.tuple(GRAPEFRUIT.id, 1.242, 26.0),
+                        Tuple.tuple(PIINE_FRANZELA.id, 1.0, 5.0)
                 );
     }
 
@@ -203,27 +203,27 @@ public class ExcelBillImporterTest {
     }
 
     private void verifyProducts() {
-        verify(mockProductService, times(1)).getOrInsert(Medicamente.productName, BEBE.category());
-        verify(mockProductService, times(1)).getOrInsert(Calmante.productName, MISC.category());
-        verify(mockProductService, times(5)).getOrInsert(Misc.productName, MISC.category());
-        verify(mockProductService, times(1)).getOrInsert(Misc.productName, BEBE.category());
-        verify(mockProductService, times(1)).getOrInsert(Pachet.productName, CONSUMABLE.category());
-        verify(mockProductService, times(1)).getOrInsert(Vitamine.productName, BEBE.category());
-        verify(mockProductService, times(2)).getOrInsert(AppaMorshinska.productName, APPA.category());
-        verify(mockProductService, times(1)).getOrInsert(Ridiche.productName, LEGUME.category());
-        verify(mockProductService, times(1)).getOrInsert(Lamii.productName, FRUITS.category());
-        verify(mockProductService, times(2)).getOrInsert(Banane.productName, FRUITS.category());
-        verify(mockProductService, times(2)).getOrInsert(Smintina20.productName, LACTATE.category());
-        verify(mockProductService, times(1)).getOrInsert(ArahideFiesta.productName, SNACKS.category());
-        verify(mockProductService, times(2)).getOrInsert(Chefir.productName, LACTATE.category());
-        verify(mockProductService, times(1)).getOrInsert(Lapte05.productName, LACTATE.category());
-        verify(mockProductService, times(1)).getOrInsert(VarzaNoua.productName, LEGUME.category());
-        verify(mockProductService, times(2)).getOrInsert(Avocado.productName, LEGUME.category());
-        verify(mockProductService, times(1)).getOrInsert(Brinzica.productName, DESERT.category());
-        verify(mockProductService, times(2)).getOrInsert(Bere.productName, ALCOHOL.category());
-        verify(mockProductService, times(1)).getOrInsert(Drojdie.productName, MISC2.category());
-        verify(mockProductService, times(1)).getOrInsert(Grapefruit.productName, FRUITS.category());
-        verify(mockProductService, times(1)).getOrInsert(PiineFranzela.productName, PIINE.category());
+        verify(mockProductService, times(1)).getOrInsert(MEDICAMENTE.productName, BEBE.category());
+        verify(mockProductService, times(1)).getOrInsert(CALMANTE.productName, TestCategories.MISC.category());
+        verify(mockProductService, times(5)).getOrInsert(TestProducts.MISC.productName, TestCategories.MISC.category());
+        verify(mockProductService, times(1)).getOrInsert(TestProducts.MISC.productName, BEBE.category());
+        verify(mockProductService, times(1)).getOrInsert(PACHET.productName, CONSUMABLE.category());
+        verify(mockProductService, times(1)).getOrInsert(VITAMINE.productName, BEBE.category());
+        verify(mockProductService, times(2)).getOrInsert(APPA_MORSHINSKA.productName, APPA.category());
+        verify(mockProductService, times(1)).getOrInsert(RIDICHE.productName, LEGUME.category());
+        verify(mockProductService, times(1)).getOrInsert(LAMII.productName, FRUITS.category());
+        verify(mockProductService, times(2)).getOrInsert(BANANE.productName, FRUITS.category());
+        verify(mockProductService, times(2)).getOrInsert(SMINTINA_20.productName, LACTATE.category());
+        verify(mockProductService, times(1)).getOrInsert(ARAHIDE_FIESTA.productName, SNACKS.category());
+        verify(mockProductService, times(2)).getOrInsert(CHEFIR.productName, LACTATE.category());
+        verify(mockProductService, times(1)).getOrInsert(LAPTE_05.productName, LACTATE.category());
+        verify(mockProductService, times(1)).getOrInsert(VARZA_NOUA.productName, LEGUME.category());
+        verify(mockProductService, times(2)).getOrInsert(AVOCADO.productName, LEGUME.category());
+        verify(mockProductService, times(1)).getOrInsert(BRINZICA.productName, DESERT.category());
+        verify(mockProductService, times(2)).getOrInsert(BERE.productName, ALCOHOL.category());
+        verify(mockProductService, times(1)).getOrInsert(DROJDIE.productName, MISC2.category());
+        verify(mockProductService, times(1)).getOrInsert(GRAPEFRUIT.productName, FRUITS.category());
+        verify(mockProductService, times(1)).getOrInsert(PIINE_FRANZELA.productName, PIINE.category());
     }
 
     @Test

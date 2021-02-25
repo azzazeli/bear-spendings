@@ -1,7 +1,6 @@
 package com.alexm.bearspendings.imports.excel;
 
 import com.alexm.bearspendings.entity.BillItem;
-import com.alexm.bearspendings.entity.Store;
 import com.alexm.bearspendings.imports.excel.ExcelRowProcessor.CELL_COLUMN;
 import com.alexm.bearspendings.service.CategoryService;
 import com.alexm.bearspendings.service.ProductService;
@@ -25,12 +24,12 @@ import org.springframework.util.ResourceUtils;
 import java.io.IOException;
 import java.time.LocalDate;
 
-import static com.alexm.bearspendings.imports.TestImportCategories.BEBE;
-import static com.alexm.bearspendings.imports.TestImportProducts.Medicamente;
-import static com.alexm.bearspendings.imports.excel.ExcelBillImporterTest.farmaciaFamiliei;
 import static com.alexm.bearspendings.imports.excel.ExcelRowProcessor.CELL_COLUMN.ORDER_DATE_CELL;
 import static com.alexm.bearspendings.imports.excel.ExcelRowProcessor.CELL_COLUMN.STORE_CELL;
 import static com.alexm.bearspendings.imports.excel.ExcelRowProcessor.DATE_PATTERN;
+import static com.alexm.bearspendings.test.TestCategories.BEBE;
+import static com.alexm.bearspendings.test.TestProducts.MEDICAMENTE;
+import static com.alexm.bearspendings.test.TestStores.FARMACIA_FAMILIEI;
 import static java.time.format.DateTimeFormatter.ofPattern;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -69,22 +68,19 @@ class ExcelRowProcessorTest {
     @Test
     void processBill() throws Exception {
         log.info("test");
-        long storeId = 1200L;
-        when(mockStoreService.getOrInsert(farmaciaFamiliei)).thenReturn(
-                Store.builder().id(storeId).name(farmaciaFamiliei).build()
-        );
+        when(mockStoreService.getOrInsert(FARMACIA_FAMILIEI.storeName)).thenReturn(FARMACIA_FAMILIEI.store);
         final ImportBill importBill = processor.processBill(row);
-        assertThat(importBill).hasFieldOrPropertyWithValue("store.id", storeId)
+        assertThat(importBill).hasFieldOrPropertyWithValue("store.id", FARMACIA_FAMILIEI.storeId)
                 .hasFieldOrPropertyWithValue("orderDate", orderDate("20/4/10"));
     }
 
     @Test
     void processBillItem() throws Exception {
         when(mockCategoryService.getOrInsert("Health", "Bebe")).thenReturn(BEBE.category());
-        when(mockProductService.getOrInsert(Medicamente.productName, BEBE.category())).thenReturn(Medicamente.product());
+        when(mockProductService.getOrInsert(MEDICAMENTE.productName, BEBE.category())).thenReturn(MEDICAMENTE.product);
         final BillItem billItem = processor.processBillItem(row);
         assertThat(billItem)
-                .hasFieldOrPropertyWithValue("product.id", Medicamente.id)
+                .hasFieldOrPropertyWithValue("product.id", MEDICAMENTE.id)
                 .hasFieldOrPropertyWithValue("product.category.id", BEBE.id)
                 .hasFieldOrPropertyWithValue("pricePerUnit", 284.99)
                 .hasFieldOrPropertyWithValue("quantity", 1.0)

@@ -1,4 +1,4 @@
-package com.alexm.bearspendings;
+package com.alexm.bearspendings.test;
 
 import com.alexm.bearspendings.dto.BillCommand;
 import com.alexm.bearspendings.dto.BillItemCommand;
@@ -15,6 +15,9 @@ import static com.alexm.bearspendings.entity.Defaults.DEFAULT_STORE;
  * Date: 1/5/21
  **/
 public class TestBills {
+
+    private TestBills() {
+    }
 
     public static List<BillCommand> sampleBills() {
         List<BillCommand> bills = new LinkedList<>();
