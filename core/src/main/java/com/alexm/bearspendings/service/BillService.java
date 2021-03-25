@@ -12,6 +12,8 @@ import java.util.Optional;
 public interface BillService {
     List<BillCommand> allBills(int page, int size);
 
+    List<Bill> bills(int page, int size);
+
     Bill addBill(BillCommand bill);
 
     Long allBillsCount();

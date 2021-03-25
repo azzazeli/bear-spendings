@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
  * Date: 8/16/19
  **/
 @Component
-public class BillCmd2BilFunction implements Function<BillCommand, Bill> {
+public class BillCmd2Bil implements Function<BillCommand, Bill> {
 
     //todo: must work with services
     private final ProductRepository productRepository;
@@ -28,7 +28,7 @@ public class BillCmd2BilFunction implements Function<BillCommand, Bill> {
     private final UnitOfMeasureService unitOfMeasureService;
     private final CategoryService categoryService;
 
-    public BillCmd2BilFunction(ProductRepository productRepository, StoreRepository storeRepository, UnitOfMeasureService unitOfMeasureService, CategoryService categoryService) {
+    public BillCmd2Bil(ProductRepository productRepository, StoreRepository storeRepository, UnitOfMeasureService unitOfMeasureService, CategoryService categoryService) {
         this.productRepository = productRepository;
         this.storeRepository = storeRepository;
         this.unitOfMeasureService = unitOfMeasureService;
@@ -41,11 +41,13 @@ public class BillCmd2BilFunction implements Function<BillCommand, Bill> {
                 .store(storeRepository.getOne(billCommand.getStoreId()))
                 .orderDate(billCommand.getOrderDate())
                 .items(
-                        billCommand.getItems().stream().map(uiBillItem -> BillItem.builder()
-                                .product(newOrExistingProduct(uiBillItem))
-                                .pricePerUnit(uiBillItem.getPricePerUnit())
-                                .quantity(uiBillItem.getQuantity())
-                                .build()).collect(Collectors.toSet())
+                        billCommand.getItems().stream()
+                                .map(uiBillItem -> BillItem.builder()
+                                        .product(newOrExistingProduct(uiBillItem))
+                                        .pricePerUnit(uiBillItem.getPricePerUnit())
+                                        .quantity(uiBillItem.getQuantity())
+                                        .build())
+                                .collect(Collectors.toSet())
                 )
                 .build();
     }

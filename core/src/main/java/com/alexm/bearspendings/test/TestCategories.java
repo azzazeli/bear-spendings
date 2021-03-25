@@ -10,14 +10,14 @@ import java.util.Arrays;
  **/
 public enum TestCategories {
     HEALTH(2L, "Health"),
-    BEBE(   3L, "Bebe"),
+    BEBE(   3L, 2L,"Bebe"),
     MISC(4L, "Misc"),
     HOUSEHOLD(5L, "Household"),
     FOOD_AND_DRINK(6L, "Food & Drink"),
     CONSUMABLE(7L, "Consumable"),
     APPA(8L, "Appa"),
-    LEGUME(9L, "Legume"),
-    FRUITS(10L, "Fruits"),
+    LEGUME(9L, 6L,"Legume"),
+    FRUITS(10L, 6L,"Fruits"),
     LACTATE(11L, "Lactate"),
     SNACKS(12L, "Snacks"),
     DESERT(13L, "Desert"),
@@ -25,11 +25,17 @@ public enum TestCategories {
     PIINE(15L, "Piine"),
     MISC2(16L, "misc");
 
+    Long parentId;
     public final Long id;
     public final String categoryName;
 
     TestCategories(Long id, String name) {
+        this(id, null, name);
+    }
+
+    TestCategories(Long id, Long parentId, String name) {
         this.id = id;
+        this.parentId = parentId;
         this.categoryName = name;
     }
 
@@ -42,6 +48,18 @@ public enum TestCategories {
     }
 
     public Category category() {
-        return Category.builder().id(this.id).name(this.categoryName).build();
+        return categoryBuilder(id, categoryName).parent(byId(parentId)).build();
+    }
+
+    private Category.CategoryBuilder categoryBuilder(Long catId, String name) {
+        return Category.builder().id(catId).name(name);
+    }
+
+    private Category byId(Long catId){
+        return Arrays.stream(TestCategories.values())
+                .filter(testCategory -> testCategory.id.equals(catId))
+                .map(testCategory -> categoryBuilder(testCategory.id, testCategory.categoryName).build())
+                .findFirst()
+                .orElse(null);
     }
 }

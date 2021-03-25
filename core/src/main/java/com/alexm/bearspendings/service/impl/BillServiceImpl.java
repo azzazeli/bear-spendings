@@ -4,8 +4,9 @@ import com.alexm.bearspendings.dto.BillCommand;
 import com.alexm.bearspendings.entity.Bill;
 import com.alexm.bearspendings.repository.BillRepository;
 import com.alexm.bearspendings.service.BillService;
-import com.alexm.bearspendings.service.impl.map.Bill2BillCmdFunction;
+import com.alexm.bearspendings.service.impl.map.Bill2BillCmd;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -15,8 +16,9 @@ import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
+
+import static java.util.stream.Collectors.toList;
 
 /**
  * @author AlexM created on 7/11/19
@@ -26,26 +28,37 @@ import java.util.stream.StreamSupport;
 public class BillServiceImpl implements BillService {
     private final BillRepository billRepository;
     private final Function<BillCommand, Bill> uiBill2BilFunction;
-    private final Bill2BillCmdFunction bill2BillCmdFunction;
+    private final Bill2BillCmd bill2BillCmd;
 
 
     public BillServiceImpl(BillRepository billRepository,
                            Function<BillCommand, Bill> uiBill2BilFunction,
-                           Bill2BillCmdFunction bill2BillCmdFunction) {
+                           Bill2BillCmd bill2BillCmd) {
         this.billRepository = billRepository;
         this.uiBill2BilFunction = uiBill2BilFunction;
-        this.bill2BillCmdFunction = bill2BillCmdFunction;
+        this.bill2BillCmd = bill2BillCmd;
     }
 
     @Transactional
     @Override
     public List<BillCommand> allBills(int page, int size) {
-        Sort byOrderDateDesc = Sort.by(Sort.Direction.DESC, "id", "orderDate");
-        Pageable pageable = PageRequest.of(page, size, byOrderDateDesc);
-        return StreamSupport.stream(billRepository.findAll(pageable).spliterator(), false)
-                .map(bill2BillCmdFunction)
-                .collect(Collectors.toList());
+        Page<Bill> all = billRepository.findAll(pageable(page, size));
+        return StreamSupport.stream(all.spliterator(), false)
+                .map(bill2BillCmd)
+                .collect(toList());
     }
+
+    private Pageable pageable(int page, int size) {
+        Sort byOrderDateDesc = Sort.by(Sort.Direction.DESC, "id", "orderDate");
+        return PageRequest.of(page, size, byOrderDateDesc);
+    }
+
+    @Override
+    public List<Bill> bills(int page, int size) {
+        return billRepository.allGraph(pageable(page, size)).stream().collect(toList());
+    }
+
+
 
     @Override
     public Bill addBill(BillCommand billCommand) {

@@ -13,7 +13,6 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 @Builder
 @EqualsAndHashCode(callSuper = true, of = {"product", "quantity", "pricePerUnit"})
-@SuppressWarnings("JpaDataSourceORMInspection")
 public class BillItem extends BaseEntity {
 
     @NotNull

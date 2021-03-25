@@ -12,10 +12,10 @@ import java.util.stream.Collectors;
  * Date: 5/9/20
  **/
 @Component
-public class Bill2BillCmdFunction implements Function<Bill, BillCommand> {
+public class Bill2BillCmd implements Function<Bill, BillCommand> {
     private final BillItem2BillItemCmd billItem2BillItemCmd;
 
-    public Bill2BillCmdFunction(BillItem2BillItemCmd billItem2BillItemCmd) {
+    public Bill2BillCmd(BillItem2BillItemCmd billItem2BillItemCmd) {
         this.billItem2BillItemCmd = billItem2BillItemCmd;
     }
 

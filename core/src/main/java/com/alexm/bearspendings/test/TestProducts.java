@@ -25,7 +25,7 @@ public enum TestProducts {
     CHEFIR(12L, "Chefir", LACTATE.category()),
     LAPTE_05(13L, "Lapte, 0.5l", LACTATE.category()),
     VARZA_NOUA(14L, "Varza noua", LEGUME.category()),
-    AVOCADO(15L, "Avocado", FOOD_AND_DRINK.category()),
+    AVOCADO(15L, "Avocado", FRUITS.category()),
     BRINZICA(16L, "Brinzica", LACTATE.category()),
     BERE(17L, "Bere", ALCOHOL.category()),
     DROJDIE(18L, "Drojdie uscata", TestCategories.MISC.category()),

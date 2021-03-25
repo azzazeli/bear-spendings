@@ -137,4 +137,16 @@ class BillServiceImplTest {
     private Store sampleStore() {
         return storeRepository.getOne(FIRST_STORE_ID);
     }
+
+    @Test
+    void bills() {
+        List<Bill> all = billService.bills(0, 10);
+        Bill bill = all.get(0);
+        assertNotNull(bill.getStore().getName());
+        BillItem item = bill.getItems().iterator().next();
+        Product product = item.getProduct();
+        assertNotNull(product.getName());
+        assertNotNull(product.getCategory().getName());
+        assertNotNull(product.getCategory().getParent().getName());
+    }
 }

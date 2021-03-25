@@ -8,6 +8,7 @@ import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
 import java.time.LocalDateTime;
@@ -59,7 +60,6 @@ class BillRepositoryTest {
 
     }
 
-
     @Test
     void calculatedTotalOnSave() {
         final Bill bill = Bill.builder()
@@ -84,5 +84,12 @@ class BillRepositoryTest {
     @Test
     void avoidNPlusOneQueriesForItems() {
         assertThat(billRepository.findAll(PageRequest.of(0, 10))).isNotNull();
+    }
+
+
+    @Test
+    void allGraph() {
+        Page<Bill> page = billRepository.allGraph(PageRequest.of(0, 10));
+        assertNotNull(page);
     }
 }

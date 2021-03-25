@@ -1,6 +1,9 @@
 package com.alexm.bearspendings.imports.excel;
 
-import com.alexm.bearspendings.entity.*;
+import com.alexm.bearspendings.entity.BillItem;
+import com.alexm.bearspendings.entity.Category;
+import com.alexm.bearspendings.entity.Product;
+import com.alexm.bearspendings.entity.Store;
 import com.alexm.bearspendings.service.CategoryService;
 import com.alexm.bearspendings.service.ProductService;
 import com.alexm.bearspendings.service.StoreService;
@@ -32,19 +35,24 @@ public class ExcelRowProcessor {
     private final ProductService productService;
     private final CategoryService categoryService;
 
-    enum CELL_COLUMN {
+    public enum CELL_COLUMN {
         ORDER_DATE_CELL(1),
         STORE_CELL(14),
         PRODUCT_CELL(5),
         QUANTITY_CELL(10),
         CATEGORY_CELL(8),
         SUB_CATEGORY_CELL(7),
+        TOTAL_PRICE_CELL(12),
         PRICE_PER_UNIT_CELL(11);
 
         int index;
 
         CELL_COLUMN(int index) {
             this.index = index;
+        }
+
+        public int index() {
+            return index;
         }
     }
 

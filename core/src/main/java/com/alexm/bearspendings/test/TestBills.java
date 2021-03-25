@@ -1,7 +1,7 @@
 package com.alexm.bearspendings.test;
 
-import com.alexm.bearspendings.dto.BillCommand;
-import com.alexm.bearspendings.dto.BillItemCommand;
+import com.alexm.bearspendings.entity.Bill;
+import com.alexm.bearspendings.entity.BillItem;
 import com.google.common.collect.ImmutableSet;
 
 import java.time.LocalDateTime;
@@ -19,37 +19,41 @@ public class TestBills {
     private TestBills() {
     }
 
-    public static List<BillCommand> sampleBills() {
-        List<BillCommand> bills = new LinkedList<>();
+    public static List<Bill> sampleBills() {
+        List<Bill> bills = new LinkedList<>();
         bills.add(bill1());
         bills.add(bill2());
         return bills;
     }
 
-    private static BillCommand bill1() {
-        return BillCommand.builder()
+    private static Bill bill1() {
+        return Bill.builder()
                 .orderDate(LocalDateTime.of(2021, 1, 4, 14, 10))
-                .storeId(DEFAULT_STORE.getId())
+                .store(DEFAULT_STORE)
                 .items(ImmutableSet.of(billItem1(),billItem2())).build();
     }
 
-    private static BillCommand bill2() {
-        return BillCommand.builder()
+    private static Bill bill2() {
+        return Bill.builder()
                 .orderDate(LocalDateTime.of(2021, 1, 5, 14, 10))
-                .storeId(DEFAULT_STORE.getId())
+                .store(DEFAULT_STORE)
                 .items(ImmutableSet.of(billItem1(),billItem2())).build();
     }
 
-    private static BillItemCommand billItem1() {
-        return BillItemCommand.builder()
-                .id(1L)
+    private static BillItem billItem1() {
+        return BillItem.builder()
+//                .sd(1L)
+                .product(TestProducts.AVOCADO.product)
+                .quantity(1.0)
+                .pricePerUnit(89.0)
+                .totalPrice(89.0)
                 .build();
     }
 
-    private static BillItemCommand billItem2() {
-        return BillItemCommand.builder()
-                .id(2L)
-                .productName("HEIDI")
+    private static BillItem billItem2() {
+        return BillItem.builder()
+//                .id(2L)
+                .product(TestProducts.LAMII.product)
                 .pricePerUnit(22.0)
                 .quantity(2.0)
                 .totalPrice(44.0)

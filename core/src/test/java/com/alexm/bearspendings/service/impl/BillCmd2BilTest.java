@@ -4,6 +4,7 @@ import com.alexm.bearspendings.dto.BillCommand;
 import com.alexm.bearspendings.dto.BillItemCommand;
 import com.alexm.bearspendings.entity.Bill;
 import com.alexm.bearspendings.entity.BillItem;
+import com.alexm.bearspendings.repository.BillRepository;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import org.junit.jupiter.api.Assertions;
@@ -24,10 +25,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * Date: 9/10/19
  **/
 @SpringBootTest
-class BillCmd2BilFunctionTest {
+class BillCmd2BilTest {
 
     @Autowired
-    BillCmd2BilFunction billCmd2BilFunction;
+    BillCmd2Bil billCmd2BilFunction;
+
+    @Autowired
+    BillRepository billRepository;
 
     @Transactional
     @DisplayName("transform UiBill that contains existing product to Bill")
@@ -55,6 +59,8 @@ class BillCmd2BilFunctionTest {
         );
         BillCommand billCommand = BillCommand.builder().storeId(1L).total(total).items(items).build();
         Bill bill = billCmd2BilFunction.apply(billCommand);
+
+        assertEquals(2, bill.getItems().size());
         for (BillItem billItem : bill.getItems()) {
             Assertions.assertTrue(ImmutableList.of(lapte, piine).contains(billItem.getProduct().getName()));
             assertThat(bill.getItems()).extracting("product.id").doesNotContainNull();
