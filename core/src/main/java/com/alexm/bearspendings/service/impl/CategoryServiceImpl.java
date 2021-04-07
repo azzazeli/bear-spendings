@@ -3,9 +3,9 @@ package com.alexm.bearspendings.service.impl;
 import com.alexm.bearspendings.entity.Category;
 import com.alexm.bearspendings.repository.CategoryRepository;
 import com.alexm.bearspendings.service.CategoryService;
-import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 /**
  * @author AlexM
@@ -22,9 +22,19 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public Category getOrInsert(@NonNull String categoryName, @NonNull String subCategoryName) {
-        log.debug("get or insert category: {} , subcategory: {}", categoryName, subCategoryName);
-        return categoryRepository.findOneByName(subCategoryName).orElseGet(() -> createSubcategory(categoryName, subCategoryName));
+    public Category getOrInsert(String... categoryNames) {
+        Category category = null;
+        for (String name : categoryNames) {
+            if (!StringUtils.isEmpty(name)) {
+                Category finalCategory = category;
+                category = categoryRepository.findOneByName(name).orElseGet(() -> createCategory(name, finalCategory));
+            }
+        }
+        return category;
+    }
+
+    private Category createCategory(String name, Category parent) {
+        return categoryRepository.save(Category.builder().name(name).parent(parent).build());
     }
 
     @Override
@@ -32,11 +42,5 @@ public class CategoryServiceImpl implements CategoryService {
         return categoryRepository.findOneByName(Category.DEFAULT)
                 .orElseGet(() -> categoryRepository.save(Category.builder().name(Category.DEFAULT).build()));
 
-    }
-
-    private Category createSubcategory(String categoryName, String subCategoryName) {
-        final Category parentCategory = categoryRepository.findOneByName(categoryName).orElseGet(() ->
-                categoryRepository.save(Category.builder().name(categoryName).build()));
-        return categoryRepository.save(Category.builder().name(subCategoryName).parent(parentCategory).build());
     }
 }

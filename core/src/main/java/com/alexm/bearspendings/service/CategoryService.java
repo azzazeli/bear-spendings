@@ -8,10 +8,10 @@ import com.alexm.bearspendings.entity.Category;
  **/
 public interface CategoryService {
     /**
-     * Create category hierarchy category -> subcategory.
+     * Create category hierarchy category -> subcategory -> subSubcategory.
      * @return subcategory
      */
-    Category getOrInsert(String categoryName, String subCategoryName);
+    Category getOrInsert(String ...categoryName);
 
     Category defaultCategory();
 }

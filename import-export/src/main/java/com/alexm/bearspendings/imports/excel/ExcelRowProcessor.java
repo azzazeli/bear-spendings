@@ -7,19 +7,23 @@ import com.alexm.bearspendings.entity.Store;
 import com.alexm.bearspendings.service.CategoryService;
 import com.alexm.bearspendings.service.ProductService;
 import com.alexm.bearspendings.service.StoreService;
+import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.stream.Stream;
 
 import static com.alexm.bearspendings.imports.excel.ExcelRowProcessingException.ERROR_CODE.*;
 import static com.alexm.bearspendings.imports.excel.ExcelRowProcessor.CELL_COLUMN.*;
 import static java.util.Objects.isNull;
+import static java.util.function.Predicate.not;
 
 /**
  * @author AlexM
@@ -41,6 +45,7 @@ public class ExcelRowProcessor {
         PRODUCT_CELL(5),
         QUANTITY_CELL(10),
         CATEGORY_CELL(8),
+        SUB_SUB_CATEGORY_CELL(6),
         SUB_CATEGORY_CELL(7),
         TOTAL_PRICE_CELL(12),
         PRICE_PER_UNIT_CELL(11);
@@ -84,7 +89,8 @@ public class ExcelRowProcessor {
     }
 
     public BillItem processBillItem(Row row) throws ExcelRowProcessingException {
-        Category category = parseCategory(nonEmptyCellValue(row, CATEGORY_CELL), nonEmptyCellValue(row, SUB_CATEGORY_CELL));
+        Category category = parseCategory(nonEmptyCellValue(row, CATEGORY_CELL), nonEmptyCellValue(row, SUB_CATEGORY_CELL),
+                row.getCell(SUB_SUB_CATEGORY_CELL.index).getStringCellValue());
         Product product = parseProduct(nonEmptyCellValue(row, PRODUCT_CELL),category);
         log.debug("--- product:{}", product);
         BillItem billItem = BillItem.builder().product(product).build();
@@ -97,8 +103,12 @@ public class ExcelRowProcessor {
         return billItem;
     }
 
-    private Category parseCategory(String categoryName, String subCategoryName) {
-        return categoryService.getOrInsert(categoryName, subCategoryName);
+    private Category parseCategory(@NonNull String categoryName, @NonNull String subCategoryName,@Nullable String subSubCategoryName) {
+        return categoryService.getOrInsert(Stream
+                .of(categoryName, subCategoryName, subSubCategoryName)
+                .filter(not(StringUtils::isEmpty))
+                .toArray(String[]::new)
+        );
     }
 
     private Product parseProduct(String productName, Category category) {

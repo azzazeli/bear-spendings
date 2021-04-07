@@ -43,6 +43,17 @@ class CategoryServiceImplTest {
         verify(categoryRepository, times(1)).save(category(babeCategoryName));
         assertNotNull(subCategory);
         assertEquals(healthCategory(), subCategory.getParent());
+    }
+
+    @Test
+    void emptySubCategory() {
+        doReturn(Optional.empty()).when(categoryRepository).findOneByName(healthCategoryName);
+        doReturn(healthCategory()).when(categoryRepository).save(category(healthCategoryName));
+
+        final Category category = categoryService.getOrInsert(healthCategoryName, "");
+        assertNotNull(category);
+        verify(categoryRepository, times(1)).findOneByName(healthCategoryName);
+        verify(categoryRepository, times(1)).save(category(healthCategoryName));
 
     }
 

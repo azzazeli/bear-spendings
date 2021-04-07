@@ -23,7 +23,10 @@ public enum TestCategories {
     DESERT(13L, "Desert"),
     ALCOHOL(14L, "Alcohol"),
     PIINE(15L, "Piine"),
-    MISC2(16L, "misc");
+    MISC2(16L, "misc"),
+    IAURT_CHEFIR(17L, "Iaurt / Chefir"),
+    LAPTE(18L, "Lapte"),
+    SMINTINA(19L, "Smintina");
 
     Long parentId;
     public final Long id;
@@ -39,9 +42,9 @@ public enum TestCategories {
         this.categoryName = name;
     }
 
-    public static Category of(String subCategoryName) {
+    public static Category of(String name) {
         return Arrays.stream(TestCategories.values())
-                .filter(cat -> cat.categoryName.equals(subCategoryName))
+                .filter(cat -> cat.categoryName.equals(name))
                 .findFirst()
                 .map(testCategory -> Category.builder().id(testCategory.id).name(testCategory.categoryName).build())
                 .orElseThrow();

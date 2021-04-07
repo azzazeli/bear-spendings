@@ -35,6 +35,7 @@ import java.util.Map;
 import java.util.stream.Stream;
 
 import static com.alexm.bearspendings.imports.excel.ExcelRowProcessor.DATE_PATTERN;
+import static com.alexm.bearspendings.test.TestCategories.MISC;
 import static com.alexm.bearspendings.test.TestCategories.*;
 import static com.alexm.bearspendings.test.TestProducts.*;
 import static com.alexm.bearspendings.test.TestStores.ALIMARKET;
@@ -86,10 +87,8 @@ class ExcelBillImporterTest {
 
     @Test
     void imports() throws FileNotFoundException, ImportsException {
-        when(mockCategoryService.getOrInsert(anyString(), anyString())).thenAnswer( invocation -> {
-            final String subCategoryName = invocation.getArgument(1);
-            return TestCategories.of(subCategoryName);
-        });
+        when(mockCategoryService.getOrInsert(any())).thenAnswer(invocation ->
+                TestCategories.of(invocation.getArguments().length > 2 ? invocation.getArgument(2) : invocation.getArgument(1)));
 
         when(mockProductService.getOrInsert(anyString(), any(Category.class))).thenAnswer(invocation -> {
             final Object name = invocation.getArgument(0);
@@ -116,13 +115,15 @@ class ExcelBillImporterTest {
 
     private void verifyCategories() {
         verify(mockCategoryService, times(3)).getOrInsert(HEALTH.categoryName, BEBE.categoryName);
-        verify(mockCategoryService, times(6)).getOrInsert(HEALTH.categoryName, TestCategories.MISC.categoryName);
+        verify(mockCategoryService, times(6)).getOrInsert(HEALTH.categoryName, MISC.categoryName);
         verify(mockCategoryService, times(1)).getOrInsert(HOUSEHOLD.categoryName, CONSUMABLE.categoryName);
         verify(mockCategoryService, times(4)).getOrInsert(FOOD_AND_DRINK.categoryName, FRUITS.categoryName);
         verify(mockCategoryService, times(5)).getOrInsert(FOOD_AND_DRINK.categoryName, LEGUME.categoryName);
-        verify(mockCategoryService, times(5)).getOrInsert(FOOD_AND_DRINK.categoryName, LACTATE.categoryName);
+        verify(mockCategoryService, times(2)).getOrInsert(FOOD_AND_DRINK.categoryName, LACTATE.categoryName, "Smintina");
+        verify(mockCategoryService, times(2)).getOrInsert(FOOD_AND_DRINK.categoryName, LACTATE.categoryName, "Iaurt / Chefir");
+        verify(mockCategoryService, times(1)).getOrInsert(FOOD_AND_DRINK.categoryName, LACTATE.categoryName, "Lapte");
         verify(mockCategoryService, times(1)).getOrInsert(FOOD_AND_DRINK.categoryName, SNACKS.categoryName);
-        verify(mockCategoryService, times(1)).getOrInsert(FOOD_AND_DRINK.categoryName, DESERT.categoryName);
+        verify(mockCategoryService, times(1)).getOrInsert(FOOD_AND_DRINK.categoryName, DESERT.categoryName, MISC.categoryName);
         verify(mockCategoryService, times(2)).getOrInsert(FOOD_AND_DRINK.categoryName, ALCOHOL.categoryName);
         verify(mockCategoryService, times(1)).getOrInsert(FOOD_AND_DRINK.categoryName, MISC2.categoryName);
         verify(mockCategoryService, times(1)).getOrInsert(FOOD_AND_DRINK.categoryName, PIINE.categoryName);
@@ -204,8 +205,8 @@ class ExcelBillImporterTest {
 
     private void verifyProducts() {
         verify(mockProductService, times(1)).getOrInsert(MEDICAMENTE.productName, BEBE.category());
-        verify(mockProductService, times(1)).getOrInsert(CALMANTE.productName, TestCategories.MISC.category());
-        verify(mockProductService, times(5)).getOrInsert(TestProducts.MISC.productName, TestCategories.MISC.category());
+        verify(mockProductService, times(1)).getOrInsert(CALMANTE.productName, MISC.category());
+        verify(mockProductService, times(5)).getOrInsert(TestProducts.MISC.productName, MISC.category());
         verify(mockProductService, times(1)).getOrInsert(TestProducts.MISC.productName, BEBE.category());
         verify(mockProductService, times(1)).getOrInsert(PACHET.productName, CONSUMABLE.category());
         verify(mockProductService, times(1)).getOrInsert(VITAMINE.productName, BEBE.category());
@@ -213,13 +214,13 @@ class ExcelBillImporterTest {
         verify(mockProductService, times(1)).getOrInsert(RIDICHE.productName, LEGUME.category());
         verify(mockProductService, times(1)).getOrInsert(LAMII.productName, FRUITS.category());
         verify(mockProductService, times(2)).getOrInsert(BANANE.productName, FRUITS.category());
-        verify(mockProductService, times(2)).getOrInsert(SMINTINA_20.productName, LACTATE.category());
+        verify(mockProductService, times(2)).getOrInsert(SMINTINA_20.productName, SMINTINA.category());
         verify(mockProductService, times(1)).getOrInsert(ARAHIDE_FIESTA.productName, SNACKS.category());
-        verify(mockProductService, times(2)).getOrInsert(CHEFIR.productName, LACTATE.category());
-        verify(mockProductService, times(1)).getOrInsert(LAPTE_05.productName, LACTATE.category());
+        verify(mockProductService, times(2)).getOrInsert(CHEFIR.productName, IAURT_CHEFIR.category());
+        verify(mockProductService, times(1)).getOrInsert(LAPTE_05.productName, LAPTE.category());
         verify(mockProductService, times(1)).getOrInsert(VARZA_NOUA.productName, LEGUME.category());
         verify(mockProductService, times(2)).getOrInsert(AVOCADO.productName, LEGUME.category());
-        verify(mockProductService, times(1)).getOrInsert(BRINZICA.productName, DESERT.category());
+        verify(mockProductService, times(1)).getOrInsert(BRINZICA.productName, MISC.category());
         verify(mockProductService, times(2)).getOrInsert(BERE.productName, ALCOHOL.category());
         verify(mockProductService, times(1)).getOrInsert(DROJDIE.productName, MISC2.category());
         verify(mockProductService, times(1)).getOrInsert(GRAPEFRUIT.productName, FRUITS.category());
