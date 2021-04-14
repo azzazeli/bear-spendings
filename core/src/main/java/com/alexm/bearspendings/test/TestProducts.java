@@ -20,7 +20,7 @@ public enum TestProducts {
     RIDICHE(7L, "Ridiche", LEGUME.category()),
     LAMII(8L, "Lamii", FRUITS.category()),
     BANANE(9L, "Banane", FRUITS.category()),
-    SMINTINA_20(10L, "Smintina 20%", LACTATE.category()),
+    SMINTINA_20(10L, "Smintina 20%", SMINTINA.category()),
     ARAHIDE_FIESTA(11L, "Arahide Fiesta, cu sare, 130g", SNACKS.category()),
     CHEFIR(12L, "Chefir", LACTATE.category()),
     LAPTE_05(13L, "Lapte, 0.5l", LACTATE.category()),

@@ -24,8 +24,7 @@ import java.time.format.DateTimeFormatter;
 
 import static com.alexm.bearspendings.entity.Defaults.DEFAULT_STORE;
 import static com.alexm.bearspendings.imports.excel.ExcelRowProcessor.CELL_COLUMN.*;
-import static com.alexm.bearspendings.test.TestCategories.FOOD_AND_DRINK;
-import static com.alexm.bearspendings.test.TestCategories.FRUITS;
+import static com.alexm.bearspendings.test.TestCategories.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -61,19 +60,32 @@ class ExcelBillExporterTest {
         assertTrue(export.exists());
         try (Workbook workbook = new XSSFWorkbook(export)) {
             Sheet sheet = workbook.getSheetAt(0);
-            assertEquals(5, sheet.getLastRowNum());
-            final Row row = sheet.getRow(3);
-            assertThat(row.getCell(ORDER_DATE_CELL.index()).getStringCellValue()).isEqualTo("2021/04/01");
-            assertThat(row.getCell(2).getNumericCellValue()).isEqualTo(4);
-            assertThat(row.getCell(3).getNumericCellValue()).isEqualTo(1);
-            assertThat(row.getCell(4).getNumericCellValue()).isEqualTo(2021);
-            assertThat(row.getCell(PRODUCT_CELL.index()).getStringCellValue()).isEqualTo("Lamii");
-            assertThat(row.getCell(QUANTITY_CELL.index()).getNumericCellValue()).isEqualTo(2.0);
-            assertThat(row.getCell(PRICE_PER_UNIT_CELL.index()).getNumericCellValue()).isEqualTo(22.0);
-            assertThat(row.getCell(TOTAL_PRICE_CELL.index()).getNumericCellValue()).isEqualTo(44.0);
-            assertThat(row.getCell(STORE_CELL.index()).getStringCellValue()).isEqualTo(DEFAULT_STORE.getName());
-            assertThat(row.getCell(SUB_CATEGORY_CELL.index()).getStringCellValue()).isEqualTo(FRUITS.categoryName);
-            assertThat(row.getCell(CATEGORY_CELL.index()).getStringCellValue()).isEqualTo(FOOD_AND_DRINK.categoryName);
+            assertEquals(6, sheet.getLastRowNum());
+            assertRow4(sheet.getRow(3));
+            assertRow7(sheet.getRow(6));
         }
+    }
+
+    private void assertRow7(Row row) {
+        assertThat(row.getCell(QUANTITY_CELL.index()).getNumericCellValue()).isEqualTo(1.0);
+        assertThat(row.getCell(PRICE_PER_UNIT_CELL.index()).getNumericCellValue()).isEqualTo(39.0);
+        assertThat(row.getCell(TOTAL_PRICE_CELL.index()).getNumericCellValue()).isEqualTo(39.0);
+        assertThat(row.getCell(CATEGORY_CELL.index()).getStringCellValue()).isEqualTo(FOOD_AND_DRINK.categoryName);
+        assertThat(row.getCell(SUB_CATEGORY_CELL.index()).getStringCellValue()).isEqualTo(LACTATE.categoryName);
+        assertThat(row.getCell(SUB_SUB_CATEGORY_CELL.index()).getStringCellValue()).isEqualTo(SMINTINA.categoryName);
+    }
+
+    private void assertRow4(Row row) {
+        assertThat(row.getCell(ORDER_DATE_CELL.index()).getStringCellValue()).isEqualTo("2021/04/01");
+        assertThat(row.getCell(2).getNumericCellValue()).isEqualTo(4);
+        assertThat(row.getCell(3).getNumericCellValue()).isEqualTo(1);
+        assertThat(row.getCell(4).getNumericCellValue()).isEqualTo(2021);
+        assertThat(row.getCell(PRODUCT_CELL.index()).getStringCellValue()).isEqualTo("Lamii");
+        assertThat(row.getCell(QUANTITY_CELL.index()).getNumericCellValue()).isEqualTo(2.0);
+        assertThat(row.getCell(PRICE_PER_UNIT_CELL.index()).getNumericCellValue()).isEqualTo(22.0);
+        assertThat(row.getCell(TOTAL_PRICE_CELL.index()).getNumericCellValue()).isEqualTo(44.0);
+        assertThat(row.getCell(STORE_CELL.index()).getStringCellValue()).isEqualTo(DEFAULT_STORE.getName());
+        assertThat(row.getCell(SUB_CATEGORY_CELL.index()).getStringCellValue()).isEqualTo(FRUITS.categoryName);
+        assertThat(row.getCell(CATEGORY_CELL.index()).getStringCellValue()).isEqualTo(FOOD_AND_DRINK.categoryName);
     }
 }

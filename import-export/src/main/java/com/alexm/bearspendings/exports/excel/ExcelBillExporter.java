@@ -2,6 +2,7 @@ package com.alexm.bearspendings.exports.excel;
 
 import com.alexm.bearspendings.entity.Bill;
 import com.alexm.bearspendings.entity.BillItem;
+import com.alexm.bearspendings.entity.Product;
 import com.alexm.bearspendings.exports.BillExporter;
 import com.alexm.bearspendings.service.BillService;
 import lombok.SneakyThrows;
@@ -60,15 +61,31 @@ public class ExcelBillExporter implements BillExporter {
         row.createCell(column++).setCellValue(bill.getOrderDate().getMonthValue());
         row.createCell(column++).setCellValue(bill.getOrderDate().getYear());
         row.createCell(column++).setCellValue(billItem.getProduct().getName());
-        column+=1; // skip product type
-        row.createCell(column++).setCellValue(billItem.getProduct().getCategory().getName());
-        row.createCell(column++).setCellValue(billItem.getProduct().getCategory().getParent().getName());
+        column = fillCategories(billItem, row, column);
         column+=1; // skip price local currency
         row.createCell(column++).setCellValue(billItem.getQuantity());
         row.createCell(column++).setCellValue(billItem.getPricePerUnit());
         row.createCell(column++).setCellValue(billItem.getTotalPrice());
         column++; //skip Total, EUR column
         row.createCell(column).setCellValue(bill.getStore().getName());
+    }
+
+    private int fillCategories(BillItem billItem, Row row, int column) {
+        if (hasProductType(billItem.getProduct())) {
+            row.createCell(column++).setCellValue(billItem.getProduct().getCategory().getName());
+            row.createCell(column++).setCellValue(billItem.getProduct().getCategory().getParent().getName());
+            row.createCell(column++).setCellValue(billItem.getProduct().getCategory().getParent().getParent().getName());
+        }
+        else {
+            column++;
+            row.createCell(column++).setCellValue(billItem.getProduct().getCategory().getName());
+            row.createCell(column++).setCellValue(billItem.getProduct().getCategory().getParent().getName());
+        }
+        return column;
+    }
+
+    private boolean hasProductType(Product product) {
+        return product.getCategory().getParent().getParent() != null;
     }
 
 }

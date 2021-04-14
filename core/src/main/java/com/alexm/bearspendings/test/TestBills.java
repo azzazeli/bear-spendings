@@ -37,12 +37,11 @@ public class TestBills {
         return Bill.builder()
                 .orderDate(LocalDateTime.of(2021, 1, 5, 14, 10))
                 .store(DEFAULT_STORE)
-                .items(ImmutableSet.of(billItem1(),billItem2())).build();
+                .items(ImmutableSet.of(billItem1(),billItem2(), billItem3())).build();
     }
 
     private static BillItem billItem1() {
         return BillItem.builder()
-//                .sd(1L)
                 .product(TestProducts.AVOCADO.product)
                 .quantity(1.0)
                 .pricePerUnit(89.0)
@@ -52,11 +51,19 @@ public class TestBills {
 
     private static BillItem billItem2() {
         return BillItem.builder()
-//                .id(2L)
                 .product(TestProducts.LAMII.product)
                 .pricePerUnit(22.0)
                 .quantity(2.0)
                 .totalPrice(44.0)
+                .build();
+    }
+
+    private static BillItem billItem3() {
+        return BillItem.builder()
+                .product(TestProducts.SMINTINA_20.product)
+                .pricePerUnit(39.0)
+                .quantity(1.0)
+                .totalPrice(39.0)
                 .build();
     }
 }

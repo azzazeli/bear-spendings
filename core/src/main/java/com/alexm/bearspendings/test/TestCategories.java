@@ -18,7 +18,7 @@ public enum TestCategories {
     APPA(8L, "Appa"),
     LEGUME(9L, 6L,"Legume"),
     FRUITS(10L, 6L,"Fruits"),
-    LACTATE(11L, "Lactate"),
+    LACTATE(11L, 6L,"Lactate"),
     SNACKS(12L, "Snacks"),
     DESERT(13L, "Desert"),
     ALCOHOL(14L, "Alcohol"),
@@ -26,7 +26,7 @@ public enum TestCategories {
     MISC2(16L, "misc"),
     IAURT_CHEFIR(17L, "Iaurt / Chefir"),
     LAPTE(18L, "Lapte"),
-    SMINTINA(19L, "Smintina");
+    SMINTINA(19L, 11L,"Smintina");
 
     Long parentId;
     public final Long id;
@@ -61,8 +61,16 @@ public enum TestCategories {
     private Category byId(Long catId){
         return Arrays.stream(TestCategories.values())
                 .filter(testCategory -> testCategory.id.equals(catId))
-                .map(testCategory -> categoryBuilder(testCategory.id, testCategory.categoryName).build())
+                .map(this::toCategory)
                 .findFirst()
                 .orElse(null);
+    }
+
+    private Category toCategory(TestCategories testCategory) {
+        final Category build = categoryBuilder(testCategory.id, testCategory.categoryName).build();
+        if (testCategory.parentId != null) {
+            build.setParent(byId(testCategory.parentId));
+        }
+        return build;
     }
 }
